@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Arboria";
+  src: url("/fonts/Arboria-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Arboria";
+  src: url("/fonts/Arboria-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Arboria";
+  src: url("/fonts/Arboria-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --primary: #c43725;
+  --secondary-plum: #362f3b;
+  --secondary-navy: #1c3b54;
+  --secondary-ochre: #ab8054;
+  --bg-cream: #f5f0eb;
+  --bg-dark: #000000;
+  --bg-warm-white: #ffffff;
+  --border-light: #d9d9d9;
+  --text-dark: #000000;
+  --text-light: #ffffff;
+  --text-muted-dark: #444444;
+  --text-muted-light: #d8d8d8;
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+  }
+
+  .font-primary {
+    font-family: "Arboria", "Inter", sans-serif;
+  }
+
+  .font-display {
+    font-family: "Barlow Condensed", "Arboria", sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
