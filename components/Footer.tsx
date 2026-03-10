@@ -10,7 +10,7 @@ export function Footer() {
       />
 
       <span className="text-[13px] font-light tracking-[1px] text-[var(--text-muted-light)]">
-        Atlanta&apos;s reimagined downtown landmark &mdash; Opening Spring 2026
+        Downtown Atlanta&apos;s common ground. Opening May 2026.
       </span>
 
       <div className="w-10 h-px bg-white/20" />

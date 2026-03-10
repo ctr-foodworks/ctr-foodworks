@@ -7,17 +7,17 @@ export function SignupBreak() {
         {/* Left — bold statement */}
         <div className="flex flex-col justify-center gap-6 px-6 py-16 lg:px-[60px] lg:py-[100px] lg:w-[640px]">
           <span className="text-[11px] font-semibold tracking-[6px] text-white/60">
-            ATLANTA &mdash; SPRING 2026
+            ATLANTA &nbsp;&middot;&nbsp; MAY 2026
           </span>
           <h2 className="font-display text-[64px] font-black leading-[0.9] tracking-[-1px] text-white lg:text-[96px]">
-            ONE
+            FOOD.
             <br />
-            STAGE.
+            CULTURE.
             <br />
-            ONE CITY.
+            COMMUNITY.
           </h2>
           <p className="text-[14px] font-light leading-[1.8] text-white/70 max-w-[380px]">
-            Entertainment, retail, and culture under one roof. Opening invitations are limited — get on the list before it fills up.
+            12 dining concepts, world-class culture, and a reimagined landmark. All under one iconic roof. Opening May 2026. Get on the list.
           </p>
         </div>
 
@@ -38,7 +38,7 @@ export function SignupBreak() {
             REQUEST EARLY ACCESS
           </span>
           <p className="text-[14px] font-light text-white/70">
-            Event announcements, brand previews, and your invitation to opening night.
+            Opening events, brand activations, dining previews, and your invitation to opening night.
           </p>
         </div>
 

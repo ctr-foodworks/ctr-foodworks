@@ -1,8 +1,8 @@
 export function Countdown() {
   const stats = [
-    { number: "3", label: "EXPERIENCES" },
-    { number: "2", label: "WORLD EVENTS" },
-    { number: "1", label: "LANDMARK" },
+    { number: "12", label: "DINING CONCEPTS" },
+    { number: "$50M", label: "IN RENOVATIONS" },
+    { number: "1", label: "ICONIC LANDMARK" },
   ];
 
   return (
@@ -12,9 +12,9 @@ export function Countdown() {
       </span>
 
       <h2 className="font-display text-[36px] font-bold leading-[1.1] text-center text-[var(--text-dark)] max-w-[700px] lg:text-[48px]">
-        Something extraordinary
+        A landmark reopening
         <br />
-        is taking shape.
+        as Atlanta&apos;s common ground.
       </h2>
 
       <div className="w-10 h-px bg-[var(--primary)]" />

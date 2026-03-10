@@ -18,18 +18,19 @@ export function About() {
         <div className="w-10 h-px bg-[var(--primary)]" />
 
         <p className="text-[15px] font-light leading-[1.9] text-white/70 max-w-[460px]">
-          Atlanta&apos;s reimagined downtown landmark is where world-class
-          entertainment, vibrant retail, and a thriving business community
-          converge. As home to CTR Culture — a platform for civic storytelling
-          and public art — The Center transforms this historic space into a
-          living stage for creativity and connection.
+          The reimagined former CNN Center reopens as downtown Atlanta&apos;s
+          newest gathering space and common ground. A globally recognized
+          landmark, once closed off as a single-tenant fortress, now
+          transformed into an open, welcoming destination for locals and
+          visitors, anchored by CTR Food Works&apos; 24,000-square-foot
+          eat-and-gather destination and Mastro&apos;s Ocean Club.
         </p>
 
         <p className="text-[15px] font-light leading-[1.9] text-white/70 max-w-[460px]">
-          With major events like the FIFA World Cup and Super Bowl LXII on the
-          horizon, The Center pulses with energy — hosting watch parties,
-          showcasing local talent, and welcoming brands and changemakers to be
-          part of Atlanta&apos;s cultural future.
+          As Atlanta prepares for the FIFA World Cup 2026&trade;, The CTR
+          serves as home base for ATL House and the city&apos;s official FIFA
+          Volunteer Headquarters, an always-on destination built for locals
+          first, powered by culture, and designed for all-day experiences.
         </p>
 
         <div className="flex flex-col gap-1.5 pt-2">

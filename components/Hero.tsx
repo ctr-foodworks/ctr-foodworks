@@ -27,12 +27,12 @@ export function Hero() {
             <div className="flex items-center gap-4">
               <span className="h-2 w-2 rounded-full bg-[var(--primary)]" />
               <span className="text-[13px] font-semibold tracking-[4px] text-[var(--primary)]">
-                OPENING SPRING 2026
+                OPENING MAY 2026
               </span>
             </div>
 
             <p className="font-display text-[24px] text-[var(--text-dark)] lg:text-[32px]">
-              Atlanta&apos;s reimagined downtown landmark
+              Downtown Atlanta&apos;s common ground
             </p>
 
             <div className="flex flex-col gap-1.5">
@@ -75,8 +75,7 @@ export function Hero() {
             <div className="h-0.5 w-10 bg-[var(--primary)]" />
 
             <p className="max-w-[420px] text-[15px] font-light leading-[1.7] text-white/80">
-              Get exclusive access to opening events, brand activations, and
-              Atlanta&apos;s cultural future.
+              Get exclusive access to opening events, dining previews, and brand activations at Atlanta&apos;s reimagined landmark.
             </p>
 
             <form className="flex w-full max-w-[420px]" onSubmit={(e) => e.preventDefault()}>

@@ -52,7 +52,7 @@ function SectionHeader() {
           SNEAK PEEK
         </span>
         <h2 className="font-display text-[30px] text-[var(--text-dark)] lg:text-[36px]">
-          A taste of what&apos;s coming.
+          A taste of what&apos;s coming to CTR Food Works.
         </h2>
       </div>
       <a
