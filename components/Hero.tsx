@@ -18,21 +18,21 @@ export function Hero() {
           <div className="lg:hidden" />
 
           <div className="flex flex-col gap-6 lg:gap-7">
-            <h1 className="text-[80px] font-black leading-[0.85] tracking-[-3px] text-[var(--text-dark)] sm:text-[110px] lg:text-[170px] lg:tracking-[-5px]">
-              THE
-              <br />
-              CENTER
-            </h1>
+            <img 
+              src="/logos/ctr-food-works_primary-black.svg" 
+              alt="CTR Food Works" 
+              className="w-full max-w-[500px] block"
+            />
 
             <div className="flex items-center gap-4">
               <span className="h-2 w-2 rounded-full bg-[var(--primary)]" />
               <span className="text-[13px] font-semibold tracking-[4px] text-[var(--primary)]">
-                OPENING MAY 2026
+                OPENING SPRING 2026
               </span>
             </div>
 
             <p className="font-display text-[24px] text-[var(--text-dark)] lg:text-[32px]">
-              Downtown Atlanta&apos;s common ground
+              Downtown Atlanta&apos;s Food Hall
             </p>
 
             <div className="flex flex-col gap-1.5">

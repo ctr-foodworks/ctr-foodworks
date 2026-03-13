@@ -5,19 +5,19 @@ export function SignupBreak() {
     <section className="relative w-full bg-[var(--primary)] overflow-hidden">
       <div className="relative flex flex-col lg:flex-row items-stretch">
         {/* Left — bold statement */}
-        <div className="flex flex-col justify-center gap-6 px-6 py-16 lg:px-[60px] lg:py-[100px] lg:w-[640px]">
+        <div className="flex flex-col justify-center gap-6 px-6 py-16 lg:px-[60px] lg:py-[100px] lg:w-[720px] xl:w-[800px]">
           <span className="text-[11px] font-semibold tracking-[6px] text-white/60">
             ATLANTA &nbsp;&middot;&nbsp; MAY 2026
           </span>
-          <h2 className="font-display text-[64px] font-black leading-[0.9] tracking-[-1px] text-white lg:text-[96px]">
-            FOOD.
+          <h2 className="font-display text-[48px] sm:text-[56px] font-black leading-[0.9] tracking-[-1px] text-white lg:text-[72px] xl:text-[84px] break-words">
+            ENTERTAINMENT.
             <br />
             CULTURE.
             <br />
             COMMUNITY.
           </h2>
           <p className="text-[14px] font-light leading-[1.8] text-white/70 max-w-[380px]">
-            12 dining concepts, world-class culture, and a reimagined landmark. All under one iconic roof. Opening May 2026. Get on the list.
+            CTR Food Works sits at the center of Atlanta’s downtown district, surrounded by major sports venues, cultural landmarks, and some of the city’s most exciting destinations. Whether you&apos;re heading to a game, exploring the city, or meeting friends downtown, CTR Food Works is the perfect place to start — or end — the night.
           </p>
         </div>
 

@@ -1,7 +1,7 @@
 export function Countdown() {
   const stats = [
-    { number: "12", label: "DINING CONCEPTS" },
-    { number: "$50M", label: "IN RENOVATIONS" },
+    { number: "11", label: "DINING CONCEPTS" },
+    { number: "1", label: "EXTRAORDINARY BAR" },
     { number: "1", label: "ICONIC LANDMARK" },
   ];
 
@@ -11,10 +11,8 @@ export function Countdown() {
         SPRING 2026
       </span>
 
-      <h2 className="font-display text-[36px] font-bold leading-[1.1] text-center text-[var(--text-dark)] max-w-[700px] lg:text-[48px]">
-        A landmark reopening
-        <br />
-        as Atlanta&apos;s common ground.
+      <h2 className="font-display text-[30px] font-light leading-[1.3] text-center text-[var(--text-dark)] max-w-[800px] lg:text-[36px]">
+        CTR Food Works brings together a curated collection of chef-driven kitchens and communal dining in a unique space.
       </h2>
 
       <div className="w-10 h-px bg-[var(--primary)]" />

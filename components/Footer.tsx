@@ -10,7 +10,7 @@ export function Footer() {
       />
 
       <span className="text-[13px] font-light tracking-[1px] text-[var(--text-muted-light)]">
-        Downtown Atlanta&apos;s common ground. Opening May 2026.
+        Downtown Atlanta&apos;s Food Hall. Opening Spring 2026.
       </span>
 
       <div className="w-10 h-px bg-white/20" />
@@ -18,7 +18,7 @@ export function Footer() {
       <div className="flex flex-col items-center gap-2 text-center">
         <span className="text-[11px] font-medium tracking-[4px] text-white/40">HOURS</span>
         <span className="text-[12px] font-light text-[var(--text-muted-light)]">Sunday &ndash; Wednesday &nbsp;&middot;&nbsp; 11 AM &ndash; 9 PM</span>
-        <span className="text-[12px] font-light text-[var(--text-muted-light)]">Thursday &ndash; Saturday &nbsp;&middot;&nbsp; 11 AM &ndash; 10 PM</span>
+        <span className="text-[12px] font-light text-[var(--text-muted-light)]">Thursday &ndash; Saturday &nbsp;&middot;&nbsp; 11 AM &ndash; LATE</span>
       </div>
 
       <div className="w-10 h-px bg-white/20" />
@@ -30,7 +30,7 @@ export function Footer() {
       </div>
 
       <span className="text-[11px] font-light text-[var(--text-muted-light)]">
-        &copy; 2026 The Center, Atlanta. All rights reserved.
+        &copy; 2026 The Center Food Works, Atlanta. All rights reserved.
       </span>
     </footer>
   );

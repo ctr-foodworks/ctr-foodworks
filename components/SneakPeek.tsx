@@ -55,12 +55,6 @@ function SectionHeader() {
           A taste of what&apos;s coming to CTR Food Works.
         </h2>
       </div>
-      <a
-        href="#"
-        className="text-[12px] font-medium tracking-[3px] whitespace-nowrap text-[var(--primary)] transition-opacity hover:opacity-80"
-      >
-        FOLLOW ALONG &nbsp;&rarr;
-      </a>
     </div>
   );
 }
