@@ -38,7 +38,7 @@ export function About() {
       {/* Right — image */}
       <div className="relative min-h-[300px] w-full overflow-hidden lg:flex-1">
         <img
-          src="/images/CNN_Atrium Rendering_2026-01-09.jpg"
+          src="/images/260218 Food Hall Rendering_View_002 (1).webp"
           alt="The Center atrium"
           className="absolute inset-0 h-full w-full object-cover"
         />

@@ -58,7 +58,7 @@ export function Hero() {
         <div className="relative min-h-[100svh] w-full overflow-hidden bg-[var(--bg-dark)] lg:min-h-0 lg:flex-1">
           <div
             className="absolute inset-0 bg-cover bg-center opacity-50 lg:opacity-30"
-            style={{ backgroundImage: "url('/images/CNN_Atrium Rendering_2026-01-09.jpg')" }}
+            style={{ backgroundImage: "url('/images/260218 Food Hall Rendering_View_002 (1).webp')" }}
           />
 
           <div className="relative flex h-full flex-col justify-end gap-8 px-6 pb-16 pt-20 lg:justify-center lg:px-[60px] lg:py-16">
