@@ -1,9 +1,23 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { NavBar } from "@/components/NavBar";
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "The Center — Opening Soon",
-  description: "Atlanta's reimagined downtown landmark — where world-class entertainment, vibrant retail, and a thriving business community converge. Opening Spring 2026.",
+  metadataBase: new URL("https://ctrfoodworks.com"),
+  title: {
+    default: "CTR Food Works — Downtown Atlanta's Food Hall",
+    template: "%s · CTR Food Works",
+  },
+  description:
+    "Downtown Atlanta's Food Hall. 11 chef-driven dining concepts and 1 extraordinary bar inside the reimagined former CNN Center. Opening Spring 2026.",
+  openGraph: {
+    title: "CTR Food Works — Downtown Atlanta's Food Hall",
+    description:
+      "11 chef-driven dining concepts and 1 extraordinary bar inside the reimagined former CNN Center. Opening Spring 2026.",
+    siteName: "CTR Food Works",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -36,11 +50,20 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body className="h-full font-primary bg-[var(--bg-warm-white)]">
+        <NavBar />
         {children}
+        <Footer />
       </body>
     </html>
   );

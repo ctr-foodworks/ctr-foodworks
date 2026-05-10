@@ -1,96 +1,89 @@
-"use client";
+import { WaitlistForm } from "./WaitlistForm";
 
 export function Hero() {
   return (
-    <section className="relative w-full overflow-hidden bg-[var(--bg-warm-white)] lg:h-[900px]">
-      <nav className="absolute left-0 top-0 z-10 flex h-[80px] w-full items-center justify-between px-6 lg:px-[60px]">
-        <img
-          src="/logos/ctr-inline-black.svg"
-          alt="CTR Food Works"
-          className="h-4 w-auto lg:h-7"
-        />
-      </nav>
-
+    <section className="relative w-full overflow-hidden bg-[var(--bg-warm-white)] lg:h-[100svh] lg:min-h-[760px]">
       <div className="flex flex-col lg:h-full lg:flex-row">
-        {/* Left panel */}
-        <div className="flex h-[100svh] w-full flex-col justify-between px-6 pb-12 pt-[80px] lg:h-full lg:w-[820px] lg:px-[60px] lg:pb-[100px] lg:justify-end lg:gap-7">
-          {/* Spacer for nav on mobile */}
-          <div className="lg:hidden" />
-
-          <div className="flex flex-col gap-6 lg:gap-7">
-            <img 
-              src="/logos/ctr-food-works_primary-black.svg" 
-              alt="CTR Food Works" 
-              className="w-full max-w-[500px] block"
+        {/* Left panel — brand + statement */}
+        <div className="flex h-[100svh] w-full flex-col justify-between px-6 pb-12 pt-[100px] lg:h-full lg:w-[820px] lg:flex-shrink-0 lg:justify-end lg:gap-10 lg:px-[60px] lg:pb-[100px] lg:pt-[120px]">
+          <div className="flex flex-col gap-7">
+            <img
+              src="/logos/ctr-food-works_primary-black.svg"
+              alt="CTR Food Works"
+              className="block w-full max-w-[460px]"
             />
 
             <div className="flex items-center gap-4">
               <span className="h-2 w-2 rounded-full bg-[var(--primary)]" />
-              <span className="text-[13px] font-semibold tracking-[4px] text-[var(--primary)]">
-                OPENING SPRING 2026
+              <span className="text-[12px] font-semibold tracking-[5px] uppercase text-[var(--primary)]">
+                Opening Spring 2026
               </span>
             </div>
 
-            <p className="font-display text-[24px] text-[var(--text-dark)] lg:text-[32px]">
-              Downtown Atlanta&apos;s Food Hall
+            <p className="font-display text-[26px] leading-[1.1] text-[var(--text-dark)] lg:text-[36px]">
+              Downtown Atlanta&apos;s Food Hall.
             </p>
 
-            <div className="flex flex-col gap-1.5">
-              <span className="text-[13px] font-light text-[var(--text-muted-dark)]">
-                Downtown Atlanta
+            <p className="max-w-[440px] text-[14px] font-light leading-[1.8] text-[var(--text-muted-dark)]">
+              11 chef-driven dining concepts and 1 extraordinary bar, inside the
+              reimagined former CNN Center. Built for everyday dining,
+              celebration, and discovery.
+            </p>
+
+            <div className="flex flex-col gap-1.5 pt-2">
+              <span className="text-[10px] font-semibold tracking-[4px] uppercase text-[var(--text-muted-dark)]/70">
+                Address
               </span>
-              <span className="text-[13px] font-light text-[var(--text-muted-dark)]">
+              <span className="text-[13px] font-light text-[var(--text-dark)]">
                 190 Marietta St. NW, Atlanta, GA 30303
               </span>
             </div>
           </div>
 
-          {/* Scroll hint on mobile */}
           <div className="flex items-center gap-3 lg:hidden">
             <div className="h-px w-8 bg-[var(--primary)]" />
-            <span className="text-[11px] font-medium tracking-[4px] text-[var(--text-muted-dark)]">
-              JOIN THE WAITLIST
+            <span className="text-[10px] font-semibold tracking-[4px] uppercase text-[var(--text-muted-dark)]">
+              Scroll to explore
             </span>
           </div>
         </div>
 
-        {/* Right panel */}
+        {/* Right panel — image + waitlist CTA */}
         <div className="relative min-h-[100svh] w-full overflow-hidden bg-[var(--bg-dark)] lg:min-h-0 lg:flex-1">
           <div
             className="absolute inset-0 bg-cover bg-center opacity-50 lg:opacity-30"
-            style={{ backgroundImage: "url('/images/260218 Food Hall Rendering_View_002 (1).webp')" }}
+            style={{
+              backgroundImage:
+                "url('/images/260218 Food Hall Rendering_View_002 (1).webp')",
+            }}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.85) 100%)",
+            }}
           />
 
-          <div className="relative flex h-full flex-col justify-end gap-8 px-6 pb-16 pt-20 lg:justify-center lg:px-[60px] lg:py-16">
-            <span className="text-[11px] font-medium tracking-[5px] text-white/60">
-              BE THE FIRST TO KNOW
+          <div className="relative flex h-full flex-col justify-end gap-8 px-6 pb-16 pt-24 lg:justify-center lg:px-[60px] lg:py-16">
+            <span className="text-[10px] font-semibold tracking-[5px] uppercase text-white/55">
+              Be the First to Know
             </span>
 
-            <h2 className="max-w-[500px] text-[52px] font-extrabold leading-[0.9] tracking-[-1px] text-white lg:text-[56px]">
+            <h2 className="max-w-[520px] font-display text-[56px] font-black leading-[0.88] text-white lg:text-[88px]">
               JOIN THE
               <br />
-              WAITLIST
+              WAITLIST.
             </h2>
 
-            <div className="h-0.5 w-10 bg-[var(--primary)]" />
+            <div className="h-[2px] w-12 bg-[var(--primary)]" />
 
-            <p className="max-w-[420px] text-[15px] font-light leading-[1.7] text-white/80">
-              Get exclusive access to opening events, dining previews, and brand activations at Atlanta&apos;s reimagined landmark.
+            <p className="max-w-[440px] text-[14px] font-light leading-[1.8] text-white/65">
+              Get exclusive access to opening events, dining previews, and brand
+              activations at Atlanta&apos;s reimagined landmark.
             </p>
 
-            <form className="flex w-full max-w-[420px]" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="h-[52px] flex-1 rounded-l-[4px] border-none bg-white/10 px-5 text-[14px] font-light text-white outline-none placeholder:text-white/40"
-              />
-              <button
-                type="submit"
-                className="h-[52px] cursor-pointer rounded-r-[4px] bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[2px] text-white transition-opacity hover:opacity-90"
-              >
-                NOTIFY ME
-              </button>
-            </form>
+            <WaitlistForm variant="dark" buttonLabel="Notify Me" />
           </div>
         </div>
       </div>
