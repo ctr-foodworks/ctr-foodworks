@@ -122,5 +122,3 @@ export const vendors: Vendor[] = [
       "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
 ];
-
-export const featuredVendors = vendors.slice(0, 6);
