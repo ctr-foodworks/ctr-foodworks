@@ -25,7 +25,7 @@ export default function Home() {
         }
         ctaHref="/dining"
         ctaLabel="Meet the lineup"
-        tone="dark"
+        tone="grey"
       />
       <SignupBreak />
     </main>
