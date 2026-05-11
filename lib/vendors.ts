@@ -11,6 +11,7 @@ export const vendors: Vendor[] = [
     imageUrl:
       "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
     logoUrl: "/logos/vendors/southern-belle-chicken-co.png",
+    logoLargeUrl: "/logos/vendors/southern-belle-chicken-co-large.png",
   },
   {
     slug: "morellis",

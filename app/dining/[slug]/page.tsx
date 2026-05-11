@@ -85,11 +85,20 @@ export default async function VendorDetailPage({
         <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-20">
           {/* Left — Logo + About */}
           <div className="flex flex-col gap-7">
-            <VendorLogo
-              name={vendor.name}
-              logoUrl={vendor.logoUrl}
-              size="lg"
-            />
+            {vendor.logoLargeUrl ? (
+              // Wide / wordmark logo — render at natural aspect, capped height
+              <img
+                src={vendor.logoLargeUrl}
+                alt={`${vendor.name} logo`}
+                className="h-20 w-auto max-w-[420px] object-contain lg:h-24"
+              />
+            ) : (
+              <VendorLogo
+                name={vendor.name}
+                logoUrl={vendor.logoUrl}
+                size="lg"
+              />
+            )}
             <Eyebrow tone="primary">About</Eyebrow>
             <DisplayHeading size="md" className="text-[var(--text-dark)]">
               {vendor.name.toUpperCase()}

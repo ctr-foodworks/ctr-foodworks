@@ -10,6 +10,11 @@ export type Vendor = {
   /** Path under public/logos/vendors/. Optional — VendorLogo renders a
    *  styled placeholder if the file at this path doesn't exist yet. */
   logoUrl?: string;
+  /** Optional wide/wordmark version of the logo for the detail-page
+   *  About section. When set, the detail page uses this instead of the
+   *  square logoUrl at natural aspect. The card-overlay always uses
+   *  logoUrl regardless. */
+  logoLargeUrl?: string;
   /** Optional larger photo for the vendor's detail-page hero.
    *  Falls back to imageUrl when not provided. */
   heroImage?: string;
