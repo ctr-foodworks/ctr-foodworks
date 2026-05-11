@@ -3,58 +3,55 @@ import type { Vendor } from "@/lib/types";
 
 type Props = {
   vendor: Vendor;
+  index: number;
 };
 
-export function VendorCard({ vendor }: Props) {
+export function VendorCard({ vendor, index }: Props) {
   const accent = accentVar[vendor.accent];
+  const number = String(index + 1).padStart(2, "0");
+
   return (
     <article
       id={vendor.slug}
-      className="group relative flex flex-col overflow-hidden bg-[#0c0c0a] transition-colors duration-300 hover:bg-[#161613]"
-      style={{ borderColor: "rgba(242,238,230,0.06)" }}
+      className="group flex flex-col gap-7 bg-[var(--bg-dark)] lg:gap-8"
     >
-      <div className="relative h-[220px] overflow-hidden lg:h-[260px]">
+      {/* Image */}
+      <div className="relative aspect-[4/3] overflow-hidden bg-[#0c0c0a]">
         <img
           src={vendor.imageUrl}
           alt={vendor.name}
-          className="h-full w-full object-cover saturate-[0.85] transition-all duration-500 group-hover:scale-[1.04] group-hover:saturate-100"
+          className="absolute inset-0 h-full w-full object-cover saturate-[0.9] transition-all duration-700 ease-out group-hover:saturate-100"
         />
-        <div
-          className="absolute inset-x-0 bottom-0 h-[60%]"
-          style={{
-            background:
-              "linear-gradient(to top, rgba(12,12,10,0.92), rgba(12,12,10,0))",
-          }}
-        />
-        <span
-          className="absolute left-5 top-5 inline-block px-2 py-1 text-[9px] font-semibold tracking-[3px] uppercase text-white"
-          style={{ backgroundColor: accent }}
-        >
-          {vendor.tagline.split("·")[0].trim()}
-        </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-6 lg:p-7">
-        <h3
-          className="font-display text-[28px] font-black uppercase leading-[0.95] tracking-[-0.5px] text-white lg:text-[32px]"
-        >
-          {vendor.name}
-        </h3>
-        <span
-          className="text-[10px] font-semibold tracking-[3px] uppercase"
-          style={{ color: accent }}
-        >
-          {vendor.tagline}
-        </span>
-        <p className="text-[13px] font-light leading-[1.7] text-white/55">
+      {/* Content */}
+      <div className="flex flex-col gap-3 px-1 pb-2 lg:gap-4 lg:px-2">
+        <div className="flex items-baseline gap-4">
+          <span
+            className="text-[12px] font-semibold tracking-[3px] uppercase"
+            style={{ color: accent }}
+          >
+            {number}
+          </span>
+          <span className="text-[10px] font-semibold tracking-[3px] uppercase text-white/55">
+            {vendor.tagline}
+          </span>
+        </div>
+
+        <div className="relative inline-flex flex-col items-start gap-0">
+          <h3 className="font-display text-[32px] font-black uppercase leading-[0.95] tracking-[-0.5px] text-white lg:text-[40px]">
+            {vendor.name}
+          </h3>
+          <span
+            className="mt-2 block h-[2px] w-0 transition-all duration-500 ease-out group-hover:w-16"
+            style={{ backgroundColor: accent }}
+          />
+        </div>
+
+        <p className="max-w-[460px] text-[14px] font-light leading-[1.7] text-white/60 lg:text-[15px]">
           {vendor.description}
         </p>
       </div>
-
-      <div
-        className="h-[3px] w-0 transition-all duration-500 group-hover:w-full"
-        style={{ backgroundColor: accent }}
-      />
     </article>
   );
 }
