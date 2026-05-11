@@ -18,11 +18,11 @@ export function Hero() {
           {/* Middle — headline + body + address */}
           <div className="flex flex-col gap-8 py-10 lg:gap-10 lg:py-0">
             <DisplayHeading as="h1" size="xl">
-              Downtown
+              DOWNTOWN
               <br />
-              Atlanta&rsquo;s
+              ATLANTA&rsquo;S
               <br />
-              Food Hall.
+              FOOD HALL.
             </DisplayHeading>
 
             <p className="max-w-[420px] text-[15px] font-light leading-[1.7] text-[var(--text-muted-dark)] lg:text-[16px]">
