@@ -43,7 +43,7 @@ export const vendors: Vendor[] = [
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1565299507177-b0ac66763828?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/la-tropical.svg",
+    logoUrl: "/logos/vendors/la-tropical.png",
   },
   {
     slug: "fuzzys",
@@ -54,7 +54,7 @@ export const vendors: Vendor[] = [
     accent: "navy",
     imageUrl:
       "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/fuzzys.svg",
+    logoUrl: "/logos/vendors/fuzzys.jpg",
   },
   {
     slug: "eggflip",
@@ -120,7 +120,7 @@ export const vendors: Vendor[] = [
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1551183053-bf91a1d81141?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/flora-ditalia.svg",
+    logoUrl: "/logos/vendors/flora-ditalia.png",
   },
   {
     slug: "dessertbox",
