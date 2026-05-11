@@ -79,3 +79,17 @@
     transform: translateY(0);
   }
 }
+
+/* Soft-edge fade for an image so it dissolves into its container background
+   instead of meeting it at a hard line. Vertical fade on mobile (image stacks
+   above text), horizontal fade on lg+ (image left, text right). */
+.fade-into-bg {
+  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+}
+@media (min-width: 1024px) {
+  .fade-into-bg {
+    -webkit-mask-image: linear-gradient(to right, black 50%, transparent 100%);
+    mask-image: linear-gradient(to right, black 50%, transparent 100%);
+  }
+}
