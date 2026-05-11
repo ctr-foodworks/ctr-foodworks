@@ -106,9 +106,7 @@ export default function VisitPage() {
       <section className="w-full bg-[var(--bg-dark)] px-6 py-[80px] text-white lg:px-[60px] lg:py-[120px]">
         <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
           <div className="flex flex-col gap-6">
-            <Eyebrow tone="dark" className="!text-[var(--secondary-ochre)]">
-              Hours
-            </Eyebrow>
+            <Eyebrow tone="primary">Hours</Eyebrow>
             <DisplayHeading size="md" className="text-white">
               OPEN LATE.
               <br />
@@ -228,9 +226,7 @@ export default function VisitPage() {
         className="grid w-full grid-cols-1 bg-[var(--bg-dark)] text-white lg:grid-cols-2"
       >
         <div className="order-2 flex flex-col justify-center gap-6 px-6 pb-[80px] lg:order-1 lg:px-[60px] lg:py-[120px]">
-          <Eyebrow tone="light" className="!text-[var(--secondary-ochre)]">
-            Private Events
-          </Eyebrow>
+          <Eyebrow tone="primary">Private Events</Eyebrow>
           <DisplayHeading size="md" className="text-white">
             BUY OUT
             <br />

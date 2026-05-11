@@ -32,9 +32,7 @@ export function PageHero({ eyebrow, title, description, imageUrl, imageAlt }: Pr
         </>
       )}
       <div className="relative z-10 flex min-h-[420px] flex-col justify-end gap-6 px-6 py-20 lg:min-h-[520px] lg:px-[60px] lg:py-24">
-        <Eyebrow tone="light" className="!text-[var(--secondary-ochre)]">
-          {eyebrow}
-        </Eyebrow>
+        <Eyebrow tone="primary">{eyebrow}</Eyebrow>
         <DisplayHeading size="xl" as="h1" className="max-w-[800px] text-white">
           {title}
         </DisplayHeading>

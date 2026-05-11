@@ -58,7 +58,7 @@ export function WaitlistForm({
   const helperColor =
     variant === "dark"
       ? status === "success"
-        ? "text-[var(--secondary-ochre)]"
+        ? "text-[var(--primary)]"
         : "text-white/55"
       : status === "success"
         ? "text-[var(--primary)]"

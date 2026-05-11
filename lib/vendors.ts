@@ -7,7 +7,7 @@ export const vendors: Vendor[] = [
     tagline: "Southern Fried · World Travelled",
     description:
       "Atlanta's most well-travelled bird. Classic Southern fried chicken elevated with global spices — comfort food with a passport and a serious crunch.",
-    accent: "ochre",
+    accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
@@ -17,7 +17,7 @@ export const vendors: Vendor[] = [
     tagline: "Artisan Ice Cream",
     description:
       "A beloved Atlanta institution in a spectacular new home. Morelli's legendary hand-crafted ice creams and rotating seasonal scoops, right here in the hall.",
-    accent: "ochre",
+    accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1576506295286-5cda18df43e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
@@ -37,7 +37,7 @@ export const vendors: Vendor[] = [
     tagline: "Latin Kitchen",
     description:
       "Sunshine on a plate. Slow-roasted meats, bright ceviches, and bold salsas drawing from the vibrant cooking traditions of Latin America.",
-    accent: "ochre",
+    accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1565299507177-b0ac66763828?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
@@ -57,7 +57,7 @@ export const vendors: Vendor[] = [
     tagline: "All-Day Breakfast",
     description:
       "Breakfast done right, all day long. Loaded sandwiches, fluffy omelets, avocado toasts, and pancake stacks. Because mornings should never have to end.",
-    accent: "ochre",
+    accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1525351484163-7529414344d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
@@ -87,7 +87,7 @@ export const vendors: Vendor[] = [
     tagline: "Burgers & Hot Dogs",
     description:
       "Two American icons, side by side. Crispy-edged smash burgers and snappy all-beef franks with every topping imaginable. The classic never gets old.",
-    accent: "ochre",
+    accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },
@@ -117,7 +117,7 @@ export const vendors: Vendor[] = [
     tagline: "Pastry Shop",
     description:
       "The sweetest stop in the hall. Seasonal tarts, laminated croissants, signature cakes, and confections that change with the calendar and sell out by noon on weekends.",
-    accent: "ochre",
+    accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
   },

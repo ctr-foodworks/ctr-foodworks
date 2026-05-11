@@ -30,13 +30,11 @@ export function BarFeature() {
 
       {/* Copy */}
       <div className="flex flex-col justify-center gap-7 px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
-        <Eyebrow tone="light" className="!text-[var(--secondary-ochre)]">
-          The Bar
-        </Eyebrow>
+        <Eyebrow tone="primary">The Bar</Eyebrow>
         <DisplayHeading size="lg" as="h2" className="text-white">
           CTR BAR.
         </DisplayHeading>
-        <div className="h-[2px] w-12 bg-[var(--secondary-ochre)]" />
+        <div className="h-[2px] w-12 bg-[var(--primary)]" />
         <p className="max-w-[480px] text-[15px] font-light leading-[1.8] text-white/65 lg:text-[16px]">
           The heartbeat of the hall. Rotating Georgia craft beers, thoughtfully built seasonal cocktails, and natural wines for the adventurous palate. The place where every great food-hall story begins — and usually ends.
         </p>
@@ -63,7 +61,7 @@ export function BarFeature() {
               <span className="text-[10px] font-semibold tracking-[3px] uppercase text-white/45">
                 Happy Hour
               </span>
-              <span className="text-[14px] font-medium text-[var(--secondary-ochre)]">
+              <span className="text-[14px] font-medium text-[var(--primary)]">
                 {happyHour}
               </span>
             </li>
