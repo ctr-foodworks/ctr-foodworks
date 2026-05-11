@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, MapPin } from "lucide-react";
 import { PageHero } from "@/components/marketing/PageHero";
 import { HoursTable } from "@/components/marketing/HoursTable";
 import { CTAStrip } from "@/components/marketing/CTAStrip";
@@ -15,8 +15,6 @@ export const metadata: Metadata = {
 };
 
 const SKETCH_BUILDING_PROMPT = `Architectural pencil sketch of a large multi-story modern building exterior, the reimagined former CNN Center in downtown Atlanta. Glass and steel facade with horizontal banding, a wide atrium entrance, set against a clean white background. Fine pencil lines, structural shading on the facade, no human figures, no text, no signage, no color. Hand-drawn architectural rendering style, like a vintage architect's perspective sketch. White background. 4:5 portrait aspect.`;
-
-const SKETCH_MAP_PROMPT = `Hand-drawn pencil illustration of a downtown Atlanta street map, top-down perspective, sparse linework on a white background. Show a grid of streets and blocks with four labeled landmarks rendered as small sketched icons: "Mercedes-Benz Stadium" (southwest corner), "State Farm Arena" (northwest), "Centennial Olympic Park" (center, drawn as a green square with the Olympic rings), and a star marked "CTR Food Works · 190 Marietta St. NW" near the center. Vintage cartographer / urban planner style, black pencil on white paper, fine linework, no color, no shading washes. 3:2 landscape.`;
 
 const SKETCH_ATRIUM_PROMPT = `Architectural pencil sketch of a multi-level indoor atrium / food hall interior. Skylit ceiling, mezzanine balconies on two upper floors, large trees and hanging plants, scattered modern dining tables and chairs on the ground floor. Hand-drawn perspective from one corner looking across the space. Fine pencil linework with light structural shading on columns and railings. No people, no text, no signage, no color. White background. 3:2 landscape aspect, vintage architectural rendering style.`;
 
@@ -170,7 +168,7 @@ export default function VisitPage() {
         </div>
       </section>
 
-      {/* §5 — The Neighborhood (cream, text left + map right) */}
+      {/* §5 — The Neighborhood (cream, text left + Google Maps right) */}
       <section className="grid w-full grid-cols-1 bg-[var(--bg-cream)] lg:grid-cols-2">
         <div className="order-2 flex flex-col justify-center gap-6 px-6 pb-[80px] lg:order-1 lg:px-[60px] lg:py-[120px]">
           <Eyebrow tone="primary">The Neighborhood</Eyebrow>
@@ -185,14 +183,42 @@ export default function VisitPage() {
           <p className="max-w-[480px] text-[15px] font-light leading-[1.8] text-[var(--text-muted-dark)]">
             World Cup matches. NBA playoffs. SEC championships. Concerts at State Farm Arena. CTR sits inside the cluster — order food, walk out, catch the game, walk back.
           </p>
+
+          <div className="mt-4 flex flex-col gap-3 border-t border-[var(--text-dark)]/10 pt-6">
+            <span className="text-[10px] font-semibold tracking-[4px] uppercase text-[var(--text-muted-dark)]">
+              Address
+            </span>
+            <p className="flex items-start gap-2.5 text-[14px] font-light leading-[1.6] text-[var(--text-dark)]">
+              <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-[var(--primary)]" />
+              <span>
+                190 Marietta St NW
+                <br />
+                Atlanta, GA 30303
+              </span>
+            </p>
+            <a
+              href="https://maps.app.goo.gl/jLpHdXxgj1179wXZ7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex w-fit items-center gap-2 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:text-[var(--primary)]"
+            >
+              <span className="border-b border-[var(--text-dark)]/30 pb-1 group-hover:border-[var(--primary)]">
+                Open in Google Maps
+              </span>
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+            </a>
+          </div>
         </div>
         <div className="order-1 p-6 lg:order-2 lg:p-[60px] lg:py-[120px]">
-          <SketchPlaceholder
-            src="/images/sketches/downtown-map.png"
-            alt="Hand-drawn map of downtown Atlanta showing CTR Food Works and nearby landmarks"
-            prompt={SKETCH_MAP_PROMPT}
-            aspect="landscape"
-          />
+          <div className="relative aspect-[3/2] w-full overflow-hidden border border-[var(--text-dark)]/10 bg-[var(--bg-dark)]">
+            <iframe
+              title="CTR Food Works on Google Maps — 190 Marietta St NW, Atlanta GA 30303"
+              src="https://maps.google.com/maps?q=190+Marietta+St+NW+Atlanta+GA+30303&z=15&output=embed"
+              className="absolute inset-0 h-full w-full"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
         </div>
       </section>
 
