@@ -76,8 +76,8 @@ export default function VisitPage() {
         imageAlt="CTR Food Works entrance rendering"
       />
 
-      {/* §2 — The Building (cream, image left + text right) */}
-      <section className="grid w-full grid-cols-1 bg-[var(--bg-cream)] lg:grid-cols-2">
+      {/* §2 — The Building (warm cream #f9f4f0, image left + text right) */}
+      <section className="grid w-full grid-cols-1 bg-[#f9f4f0] lg:grid-cols-2">
         <div className="order-1 p-6 lg:order-1 lg:p-[60px] lg:py-[120px]">
           <SketchPlaceholder
             src="/images/sketches/building-exterior.png"
