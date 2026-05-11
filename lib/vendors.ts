@@ -10,7 +10,7 @@ export const vendors: Vendor[] = [
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/southern-belle-chicken-co.svg",
+    logoUrl: "/logos/vendors/southern-belle-chicken-co.png",
   },
   {
     slug: "morellis",
@@ -21,7 +21,7 @@ export const vendors: Vendor[] = [
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1576506295286-5cda18df43e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/morellis.svg",
+    logoUrl: "/logos/vendors/morellis.jpg",
   },
   {
     slug: "the-sparrow",
@@ -65,7 +65,7 @@ export const vendors: Vendor[] = [
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1525351484163-7529414344d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/eggflip.svg",
+    logoUrl: "/logos/vendors/eggflip.png",
   },
   {
     slug: "sushiflip",
@@ -98,7 +98,7 @@ export const vendors: Vendor[] = [
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/patty-and-franks.svg",
+    logoUrl: "/logos/vendors/patty-and-franks.png",
   },
   {
     slug: "mimi-taqueria",
