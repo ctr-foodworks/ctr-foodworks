@@ -19,10 +19,12 @@ export function FifaBanner() {
           className="pointer-events-none absolute -bottom-[10%] left-1/2 h-[55%] w-[200%] -translate-x-1/2 rounded-[50%] lg:hidden"
           style={{ backgroundColor: FIFA_RED }}
         />
-        {/* Red curve — desktop */}
+        {/* Red leaf — desktop. Wider and less tall than before so the left
+            edge curves visibly into the section (leaf/teardrop shape like
+            the FIFA brand) instead of looking like a flat half-circle */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-[10%] top-1/2 hidden h-[200%] w-[65%] -translate-y-1/2 rounded-[50%] lg:block"
+          className="pointer-events-none absolute -right-[25%] top-1/2 hidden h-[140%] w-[85%] -translate-y-1/2 rounded-[50%] lg:block"
           style={{ backgroundColor: FIFA_RED }}
         />
         {/* Lime corner — mobile */}
@@ -31,10 +33,11 @@ export function FifaBanner() {
           className="pointer-events-none absolute -bottom-[5%] -right-[10%] h-[18%] w-[35%] rounded-[50%] lg:hidden"
           style={{ backgroundColor: FIFA_LIME }}
         />
-        {/* Lime corner — desktop */}
+        {/* Lime corner — desktop. Bigger so it reads as a proper wedge
+            in the bottom-right, not a hairline sliver */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-[20%] -right-[2%] hidden h-[65%] w-[10%] rounded-[50%] lg:block"
+          className="pointer-events-none absolute -bottom-[45%] -right-[5%] hidden h-[110%] w-[22%] rounded-[50%] lg:block"
           style={{ backgroundColor: FIFA_LIME }}
         />
 
