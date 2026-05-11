@@ -1,9 +1,10 @@
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
 
-const FIFA_PURPLE = "#5C16E5";
-const FIFA_RED = "#E51D2A";
-const FIFA_LIME = "#C7F31E";
+// FIFA 2026 brand-mark palette — sampled to the saturated reference
+const FIFA_PURPLE = "#6F00E8";
+const FIFA_RED = "#DC0A18";
+const FIFA_LIME = "#C4F12A";
 
 export function FifaBanner() {
   return (
@@ -13,31 +14,33 @@ export function FifaBanner() {
         className="relative w-full overflow-hidden"
         style={{ backgroundColor: FIFA_PURPLE }}
       >
-        {/* Red curve — mobile */}
+        {/* Desktop — precise SVG composition.
+            1920×500 viewBox with the two gigantic ellipses centered well
+            outside the canvas; we only see arcs. preserveAspectRatio="slice"
+            keeps the curves proportionally identical as the section width
+            scales between lg and xl. */}
+        <svg
+          viewBox="0 0 1920 500"
+          preserveAspectRatio="xMidYMid slice"
+          aria-hidden="true"
+          className="absolute inset-0 hidden h-full w-full lg:block"
+        >
+          <rect width="1920" height="500" fill={FIFA_PURPLE} />
+          <ellipse cx="1850" cy="720" rx="650" ry="420" fill={FIFA_LIME} />
+          <ellipse cx="1700" cy="230" rx="920" ry="360" fill={FIFA_RED} />
+        </svg>
+
+        {/* Mobile — CSS shapes (the wide SVG viewBox doesn't reduce
+            cleanly to a narrow mobile column, so we keep the mobile
+            composition as separate positioned divs). */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -bottom-[10%] left-1/2 h-[55%] w-[200%] -translate-x-1/2 rounded-[50%] lg:hidden"
           style={{ backgroundColor: FIFA_RED }}
         />
-        {/* Red leaf — desktop. Wider and less tall than before so the left
-            edge curves visibly into the section (leaf/teardrop shape like
-            the FIFA brand) instead of looking like a flat half-circle */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-[25%] top-1/2 hidden h-[140%] w-[85%] -translate-y-1/2 rounded-[50%] lg:block"
-          style={{ backgroundColor: FIFA_RED }}
-        />
-        {/* Lime corner — mobile */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -bottom-[5%] -right-[10%] h-[18%] w-[35%] rounded-[50%] lg:hidden"
-          style={{ backgroundColor: FIFA_LIME }}
-        />
-        {/* Lime corner — desktop. Bigger so it reads as a proper wedge
-            in the bottom-right, not a hairline sliver */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-[45%] -right-[5%] hidden h-[110%] w-[22%] rounded-[50%] lg:block"
           style={{ backgroundColor: FIFA_LIME }}
         />
 
@@ -66,9 +69,6 @@ export function FifaBanner() {
 
       {/* BOTTOM — single editorial block, B&W photo fading into the dark bg */}
       <article className="grid w-full grid-cols-1 bg-[var(--bg-dark)] text-white lg:grid-cols-2">
-        {/* Image — left on desktop, top on mobile. Grayscale + soft-edge mask
-            so it dissolves into the section background rather than meeting it
-            at a hard line. */}
         <div className="relative aspect-[3/2] overflow-hidden lg:aspect-auto lg:min-h-[640px]">
           <img
             src="/images/mbappe.jpg"
@@ -77,7 +77,6 @@ export function FifaBanner() {
           />
         </div>
 
-        {/* Text — right on desktop, below on mobile */}
         <div className="flex flex-col justify-center gap-6 px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
           <Eyebrow tone="light">Match Venue · Atlanta</Eyebrow>
           <DisplayHeading size="md" as="h3" className="text-white">
