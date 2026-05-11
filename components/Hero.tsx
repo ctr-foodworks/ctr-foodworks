@@ -17,7 +17,7 @@ export function Hero() {
 
           {/* Middle — headline + body + address */}
           <div className="flex flex-col gap-8 py-10 lg:gap-10 lg:py-0">
-            <DisplayHeading as="h1" size="xl">
+            <DisplayHeading as="h1" size="lg">
               DOWNTOWN
               <br />
               ATLANTA&rsquo;S
@@ -49,43 +49,48 @@ export function Hero() {
           </div>
         </div>
 
-        {/* RIGHT — image + waitlist overlay */}
+        {/* RIGHT — image + waitlist CTA */}
         <div className="relative min-h-[100svh] w-full overflow-hidden bg-[var(--bg-dark)] lg:min-h-0">
           <img
             src="/images/260218 Food Hall Rendering_View_002 (1).webp"
             alt="CTR Food Works atrium rendering"
             className="absolute inset-0 h-full w-full object-cover"
           />
+          {/* Two-stop gradient: legible up top for the headline, dark at the bottom behind the form */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to bottom right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.6) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.75) 100%)",
             }}
           />
 
-          <div className="relative z-10 flex h-full flex-col justify-center gap-7 px-6 py-20 lg:px-[60px] lg:py-16 xl:px-[80px]">
-            <DisplayHeading
-              as="h2"
-              size="xl"
-              className="text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
-            >
-              JOIN THE
-              <br />
-              WAITLIST.
-            </DisplayHeading>
+          <div className="relative z-10 flex h-full min-h-[100svh] flex-col justify-between gap-10 px-6 pt-[110px] pb-14 lg:min-h-0 lg:px-[60px] lg:pt-[140px] lg:pb-20 xl:px-[80px]">
+            {/* Top — headline cluster */}
+            <div className="flex flex-col gap-5">
+              <Eyebrow tone="light">Be the First to Know</Eyebrow>
+              <DisplayHeading
+                as="h2"
+                size="lg"
+                className="text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+              >
+                JOIN THE
+                <br />
+                WAITLIST.
+              </DisplayHeading>
+              <div className="h-[2px] w-12 bg-[var(--primary)]" />
+              <p className="max-w-[420px] text-[15px] font-light leading-[1.7] text-white/75 drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)] lg:text-[16px]">
+                Get exclusive access to opening events, dining previews, and brand activations at Atlanta&apos;s reimagined landmark.
+              </p>
+            </div>
 
-            <p className="text-[18px] font-light text-white/85 drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)] lg:text-[22px]">
-              Be the first to know.
-            </p>
-
-            <div className="h-[3px] w-12 bg-[var(--primary)]" />
-
-            <div className="mt-2">
+            {/* Bottom — form, anchored over the cleanest part of the image */}
+            <div>
               <WaitlistForm
                 variant="light"
                 buttonLabel="Notify Me"
-                className="shadow-[0_20px_60px_-10px_rgba(0,0,0,0.5)]"
+                showHelper={false}
+                className="shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
               />
             </div>
           </div>

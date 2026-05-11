@@ -8,6 +8,7 @@ type Props = {
   variant?: Variant;
   className?: string;
   buttonLabel?: string;
+  showHelper?: boolean;
 };
 
 const inputClass: Record<Variant, string> = {
@@ -20,6 +21,7 @@ export function WaitlistForm({
   variant = "dark",
   className = "",
   buttonLabel = "Notify Me",
+  showHelper = true,
 }: Props) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
@@ -84,11 +86,11 @@ export function WaitlistForm({
       </form>
       {message ? (
         <p className={`text-[12px] font-light ${helperColor}`}>{message}</p>
-      ) : (
+      ) : showHelper ? (
         <p className={`text-[11px] font-light ${variant === "dark" ? "text-white/40" : "text-[var(--text-muted-dark)]"}`}>
           No spam. Unsubscribe any time. Opening events only.
         </p>
-      )}
+      ) : null}
     </div>
   );
 }
