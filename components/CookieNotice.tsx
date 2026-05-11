@@ -41,20 +41,17 @@ export function CookieNotice() {
       aria-describedby="cookie-desc"
       className="fixed bottom-4 left-4 right-4 z-[60] animate-[fadeUp_0.45s_ease-out] sm:bottom-6 sm:left-auto sm:right-6 sm:max-w-[420px]"
     >
-      <div className="relative overflow-hidden bg-[var(--bg-dark)] text-white shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]">
-        {/* Top accent rule */}
-        <div className="h-[2px] w-full bg-[var(--primary)]" />
-
+      <div className="relative overflow-hidden border border-[var(--text-dark)] bg-white text-[var(--text-dark)] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.25)]">
         <div className="flex flex-col gap-4 p-6 lg:p-7">
           <span
             id="cookie-title"
-            className="text-[10px] font-semibold tracking-[4px] uppercase text-[var(--secondary-ochre)]"
+            className="text-[10px] font-semibold tracking-[4px] uppercase text-[var(--text-dark)]"
           >
             Privacy & Cookies
           </span>
           <p
             id="cookie-desc"
-            className="text-[13px] font-light leading-[1.7] text-white/70"
+            className="text-[13px] font-light leading-[1.7] text-[var(--text-muted-dark)]"
           >
             We use cookies to enhance your visit, remember your preferences, and understand how you use the site. You&apos;re in control — choose what&apos;s right for you.
           </p>
@@ -62,21 +59,21 @@ export function CookieNotice() {
             <button
               type="button"
               onClick={() => accept("necessary")}
-              className="h-[42px] flex-1 cursor-pointer border border-white/25 px-5 text-[11px] font-semibold tracking-[3px] uppercase text-white/80 transition-colors hover:bg-white hover:text-[var(--text-dark)]"
+              className="h-[42px] flex-1 cursor-pointer border border-[var(--text-dark)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
             >
               Necessary only
             </button>
             <button
               type="button"
               onClick={() => accept("all")}
-              className="h-[42px] flex-1 cursor-pointer bg-[var(--primary)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
+              className="h-[42px] flex-1 cursor-pointer bg-[var(--text-dark)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[var(--primary)]"
             >
               Accept all
             </button>
           </div>
           <a
             href="#"
-            className="self-start text-[11px] font-medium text-white/40 underline decoration-white/20 underline-offset-4 transition-colors hover:text-white/70"
+            className="self-start text-[11px] font-medium text-[var(--text-muted-dark)] underline decoration-[var(--text-dark)]/30 underline-offset-4 transition-colors hover:text-[var(--text-dark)]"
           >
             Read our privacy policy
           </a>
