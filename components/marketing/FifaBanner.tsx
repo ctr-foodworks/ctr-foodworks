@@ -15,10 +15,13 @@ export function FifaBanner() {
         style={{ backgroundColor: FIFA_PURPLE }}
       >
         {/* Desktop — precise SVG composition.
-            1920×500 viewBox with the two gigantic ellipses centered well
-            outside the canvas; we only see arcs. preserveAspectRatio="slice"
-            keeps the curves proportionally identical as the section width
-            scales between lg and xl. */}
+            1920×500 viewBox with two gigantic ellipses centered outside the
+            canvas; we only see arcs. The red is shifted up (cy=80, ry=300)
+            so its bottom edge ends around y=380 — that leaves the bottom
+            ~25% of the canvas free for the lime ellipse to peek out from
+            underneath in the bottom-right corner (instead of being fully
+            covered by the red, like before). preserveAspectRatio="slice"
+            keeps the curve proportions stable across lg → xl. */}
         <svg
           viewBox="0 0 1920 500"
           preserveAspectRatio="xMidYMid slice"
@@ -27,7 +30,7 @@ export function FifaBanner() {
         >
           <rect width="1920" height="500" fill={FIFA_PURPLE} />
           <ellipse cx="1850" cy="720" rx="650" ry="420" fill={FIFA_LIME} />
-          <ellipse cx="1700" cy="230" rx="920" ry="360" fill={FIFA_RED} />
+          <ellipse cx="1700" cy="80" rx="920" ry="300" fill={FIFA_RED} />
         </svg>
 
         {/* Mobile — CSS shapes (the wide SVG viewBox doesn't reduce
