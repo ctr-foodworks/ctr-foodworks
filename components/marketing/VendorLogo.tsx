@@ -13,8 +13,8 @@ type Props = {
 };
 
 const sizeClass: Record<Size, string> = {
-  sm: "h-12 w-12 text-[12px] lg:h-14 lg:w-14 lg:text-[13px]",
-  lg: "h-20 w-20 text-[18px] lg:h-24 lg:w-24 lg:text-[20px]",
+  sm: "h-16 w-16 text-[16px] lg:h-20 lg:w-20 lg:text-[18px]",
+  lg: "h-24 w-24 text-[22px] lg:h-28 lg:w-28 lg:text-[24px]",
 };
 
 function initialsFor(name: string): string {
@@ -46,11 +46,11 @@ export function VendorLogo({
   const dims = sizeClass[size];
 
   if (failed || !logoUrl) {
-    // Styled placeholder badge: warm cream disc, black border, vendor initials
+    // Styled placeholder badge: warm cream square, black border, initials
     return (
       <div
         aria-label={`${name} logo placeholder`}
-        className={`flex items-center justify-center rounded-full border border-[var(--text-dark)] bg-[#f9f4f0] font-display font-black tracking-[-0.5px] text-[var(--text-dark)] ${dims} ${className}`}
+        className={`flex items-center justify-center rounded-md border border-[var(--text-dark)] bg-[#f9f4f0] font-display font-black tracking-[-0.5px] text-[var(--text-dark)] ${dims} ${className}`}
       >
         {initialsFor(name)}
       </div>
@@ -63,7 +63,7 @@ export function VendorLogo({
       src={logoUrl}
       alt={`${name} logo`}
       onError={() => setFailed(true)}
-      className={`rounded-full bg-[#f9f4f0] object-contain p-2 ${dims} ${className}`}
+      className={`rounded-md bg-[#f9f4f0] object-contain p-2.5 ${dims} ${className}`}
     />
   );
 }
