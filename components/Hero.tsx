@@ -56,35 +56,37 @@ export function Hero() {
             alt="CTR Food Works atrium rendering"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          {/* Two-stop gradient: legible up top for the headline, dark at the bottom behind the form */}
+          {/* Gradient — light at the very top (let the photo breathe) and
+              heavy in the lower 60% where all the content lives so the
+              headline + body copy read against the busy bar/dining area */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.75) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.9) 100%)",
             }}
           />
 
-          <div className="relative z-10 flex h-full min-h-[100svh] flex-col justify-between gap-10 px-6 pt-[110px] pb-14 lg:min-h-0 lg:px-[60px] lg:pt-[140px] lg:pb-20 xl:px-[80px]">
-            {/* Top — headline cluster */}
+          <div className="relative z-10 flex h-full min-h-[100svh] flex-col justify-end gap-10 px-6 pt-[110px] pb-14 lg:min-h-0 lg:gap-12 lg:px-[60px] lg:pt-[140px] lg:pb-20 xl:px-[80px]">
+            {/* Headline cluster — anchored to the bottom alongside the form */}
             <div className="flex flex-col gap-5">
               <Eyebrow tone="light">Be the First to Know</Eyebrow>
               <DisplayHeading
                 as="h2"
                 size="lg"
-                className="text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+                className="text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]"
               >
                 JOIN THE
                 <br />
                 WAITLIST.
               </DisplayHeading>
               <div className="h-[2px] w-12 bg-[var(--primary)]" />
-              <p className="max-w-[420px] text-[15px] font-light leading-[1.7] text-white/75 drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)] lg:text-[16px]">
+              <p className="max-w-[440px] text-[15px] font-normal leading-[1.7] text-white/95 drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)] lg:text-[16px]">
                 Get exclusive access to opening events, dining previews, and brand activations at Atlanta&apos;s reimagined landmark.
               </p>
             </div>
 
-            {/* Bottom — form, anchored over the cleanest part of the image */}
+            {/* Form */}
             <div>
               <WaitlistForm
                 variant="light"
