@@ -11,7 +11,7 @@ const pour = [
 
 export function BarFeature() {
   return (
-    <section className="grid w-full grid-cols-1 bg-[var(--bg-dark)] text-white lg:grid-cols-2">
+    <section className="grid w-full grid-cols-1 bg-[#161616] text-white lg:grid-cols-2">
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:min-h-[680px]">
         <img
