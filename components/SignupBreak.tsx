@@ -35,7 +35,7 @@ export function SignupBreak() {
       <div className="flex flex-col gap-8 bg-[var(--secondary-plum)] px-6 py-12 lg:flex-row lg:items-center lg:justify-between lg:px-[60px]">
         <div className="flex max-w-[480px] flex-col gap-1.5">
           <span className="text-[11px] font-semibold tracking-[5px] uppercase text-white/60">
-            Request Early Access
+            Join Us
           </span>
           <p className="text-[14px] font-light leading-[1.7] text-white/70">
             Opening events, brand activations, dining previews, and your invitation to opening night.

@@ -13,7 +13,7 @@ const visitLinks = [
 const connectLinks = [
   { href: "/about", label: "Our Story" },
   { href: "/about#fifa", label: "FIFA World Cup 2026™" },
-  { href: "/#waitlist", label: "Join the Waitlist" },
+  { href: "/#waitlist", label: "Join Us" },
   { href: "mailto:press@ctrfoodworks.com", label: "Press Inquiries" },
   { href: "mailto:hello@ctrfoodworks.com", label: "Contact" },
 ];

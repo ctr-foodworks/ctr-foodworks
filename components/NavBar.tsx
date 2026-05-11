@@ -62,7 +62,7 @@ export function NavBar() {
               href="/#waitlist"
               className="hidden h-[40px] items-center bg-[var(--primary)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d] lg:inline-flex"
             >
-              Join Waitlist
+              Join Us
             </Link>
 
             <button
@@ -93,7 +93,7 @@ export function NavBar() {
               href="/#waitlist"
               className="bg-[var(--primary)] px-6 py-5 text-[14px] font-semibold tracking-[3px] uppercase text-white"
             >
-              Join Waitlist
+              Join Us
             </Link>
           </nav>
         </div>

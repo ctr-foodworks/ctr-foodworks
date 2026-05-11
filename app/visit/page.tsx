@@ -279,16 +279,16 @@ export default function VisitPage() {
 
       {/* §8 — Final CTA */}
       <CTAStrip
-        eyebrow="Be the First to Know"
+        eyebrow="Join Us"
         title={
           <>
-            Join the
+            Stay in the
             <br />
-            waitlist.
+            loop.
           </>
         }
         ctaHref="/#waitlist"
-        ctaLabel="Get Early Access"
+        ctaLabel="Join Us"
         tone="primary"
       />
     </main>

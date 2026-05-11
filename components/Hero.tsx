@@ -1,5 +1,5 @@
-import { MapPin } from "lucide-react";
-import { WaitlistForm } from "./WaitlistForm";
+import Link from "next/link";
+import { MapPin, ArrowRight } from "lucide-react";
 import { Eyebrow } from "./ui/Eyebrow";
 import { DisplayHeading } from "./ui/DisplayHeading";
 
@@ -67,18 +67,16 @@ export function Hero() {
             }}
           />
 
-          <div className="relative z-10 flex h-full min-h-[100svh] flex-col justify-end gap-10 px-6 pt-[110px] pb-14 lg:min-h-0 lg:gap-12 lg:px-[60px] lg:pt-[140px] lg:pb-20 xl:px-[80px]">
-            {/* Headline cluster — anchored to the bottom alongside the form */}
+          <div className="relative z-10 flex h-full min-h-[100svh] flex-col justify-end gap-8 px-6 pt-[110px] pb-14 lg:min-h-0 lg:gap-10 lg:px-[60px] lg:pt-[140px] lg:pb-20 xl:px-[80px]">
+            {/* Headline cluster — anchored to the bottom */}
             <div className="flex flex-col gap-5">
-              <Eyebrow tone="light">Be the First to Know</Eyebrow>
+              <Eyebrow tone="light">Opening Spring 2026</Eyebrow>
               <DisplayHeading
                 as="h2"
                 size="lg"
                 className="text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]"
               >
-                JOIN THE
-                <br />
-                WAITLIST.
+                JOIN US.
               </DisplayHeading>
               <div className="h-[2px] w-12 bg-[var(--primary)]" />
               <p className="max-w-[440px] text-[15px] font-normal leading-[1.7] text-white/95 drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)] lg:text-[16px]">
@@ -86,14 +84,15 @@ export function Hero() {
               </p>
             </div>
 
-            {/* Form */}
+            {/* Single CTA button — scrolls to the SignupBreak section below */}
             <div>
-              <WaitlistForm
-                variant="light"
-                buttonLabel="Notify Me"
-                showHelper={false}
-                className="shadow-[0_24px_60px_-12px_rgba(0,0,0,0.55)]"
-              />
+              <Link
+                href="/#waitlist"
+                className="group inline-flex items-center gap-3 bg-[var(--primary)] px-7 py-4 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
+              >
+                Join Us
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
             </div>
           </div>
         </div>
