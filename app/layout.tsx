@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { NavBar } from "@/components/NavBar";
 import { Footer } from "@/components/Footer";
+import { CookieNotice } from "@/components/CookieNotice";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ctrfoodworks.com"),
@@ -64,6 +65,7 @@ export default function RootLayout({
         <NavBar />
         {children}
         <Footer />
+        <CookieNotice />
       </body>
     </html>
   );
