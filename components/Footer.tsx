@@ -29,7 +29,7 @@ export function Footer() {
       {/* Top accent strip */}
       <div className="border-b border-white/10 px-6 py-5 lg:px-[60px]">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <span className="text-[10px] font-semibold tracking-[4px] uppercase text-[var(--secondary-ochre)]">
+          <span className="text-[10px] font-semibold tracking-[4px] uppercase text-white/75">
             Opening Spring 2026 · Downtown Atlanta
           </span>
           <span className="text-[10px] font-light tracking-[3px] uppercase text-white/35">
@@ -73,10 +73,10 @@ export function Footer() {
               {hours.map((row) => (
                 <li
                   key={row.days}
-                  className={`text-[12px] font-light leading-[1.5] ${
+                  className={`text-[12px] leading-[1.5] ${
                     row.emphasis
-                      ? "text-[var(--secondary-ochre)]"
-                      : "text-white/55"
+                      ? "font-medium text-white"
+                      : "font-light text-white/55"
                   }`}
                 >
                   {row.days} · {row.hours}
@@ -132,14 +132,14 @@ export function Footer() {
           <a
             href="https://instagram.com"
             aria-label="Instagram"
-            className="transition-colors hover:text-[var(--secondary-ochre)]"
+            className="transition-colors hover:text-white"
           >
             <Instagram className="h-[18px] w-[18px]" />
           </a>
           <a
             href="https://facebook.com"
             aria-label="Facebook"
-            className="transition-colors hover:text-[var(--secondary-ochre)]"
+            className="transition-colors hover:text-white"
           >
             <Facebook className="h-[18px] w-[18px]" />
           </a>
@@ -165,7 +165,7 @@ function FooterColumn({ title, items }: ColumnProps) {
           <li key={item.href + item.label}>
             <Link
               href={item.href}
-              className="text-[13px] font-light leading-[1.5] text-white/60 transition-colors hover:text-[var(--secondary-ochre)]"
+              className="text-[13px] font-light leading-[1.5] text-white/60 transition-colors hover:text-white"
             >
               {item.label}
             </Link>
