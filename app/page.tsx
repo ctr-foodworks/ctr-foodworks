@@ -5,6 +5,7 @@ import { SignupBreak } from "@/components/SignupBreak";
 import { Ticker } from "@/components/marketing/Ticker";
 import { FifaBanner } from "@/components/marketing/FifaBanner";
 import { CTAStrip } from "@/components/marketing/CTAStrip";
+import { PullQuote } from "@/components/marketing/PullQuote";
 
 export default function Home() {
   return (
@@ -12,6 +13,10 @@ export default function Home() {
       <Hero />
       <Ticker />
       <Countdown />
+      <PullQuote
+        quote="A culinary destination built for everyday dining, celebration, and discovery — at the heart of Atlanta."
+        attribution="CTR Food Works"
+      />
       <About />
       <FifaBanner />
       <CTAStrip

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/marketing/PageHero";
 import { FifaBanner } from "@/components/marketing/FifaBanner";
 import { CTAStrip } from "@/components/marketing/CTAStrip";
+import { PullQuote } from "@/components/marketing/PullQuote";
 import { Countdown } from "@/components/Countdown";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
@@ -62,18 +63,10 @@ export default function AboutPage() {
 
       <Countdown />
 
-      {/* Pull quote */}
-      <section className="w-full bg-[var(--secondary-plum)] px-6 py-[80px] text-white lg:px-[60px] lg:py-[100px]">
-        <div className="mx-auto flex max-w-[920px] flex-col gap-6">
-          <div className="h-[3px] w-12 bg-[var(--primary)]" />
-          <blockquote className="font-display text-[28px] font-medium italic leading-[1.4] text-white/90 lg:text-[40px]">
-            &ldquo;A culinary destination built for everyday dining, celebration, and discovery — at the heart of Atlanta.&rdquo;
-          </blockquote>
-          <cite className="text-[10px] font-semibold not-italic tracking-[4px] uppercase text-white/40">
-            — CTR Food Works
-          </cite>
-        </div>
-      </section>
+      <PullQuote
+        quote="A culinary destination built for everyday dining, celebration, and discovery — at the heart of Atlanta."
+        attribution="CTR Food Works"
+      />
 
       <FifaBanner />
 
