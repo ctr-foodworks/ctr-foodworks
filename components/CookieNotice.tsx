@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "ctr-cookie-consent";
+const FADE_OUT_MS = 450;
 
 type Consent = "all" | "necessary";
 
 export function CookieNotice() {
-  const [visible, setVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
     try {
@@ -16,7 +18,7 @@ export function CookieNotice() {
     } catch {
       // localStorage unavailable (private mode, etc.) — still show the notice
     }
-    const t = window.setTimeout(() => setVisible(true), 600);
+    const t = window.setTimeout(() => setMounted(true), 600);
     return () => window.clearTimeout(t);
   }, []);
 
@@ -29,17 +31,24 @@ export function CookieNotice() {
     } catch {
       // ignore
     }
-    setVisible(false);
+    setLeaving(true);
+    window.setTimeout(() => setMounted(false), FADE_OUT_MS);
   };
 
-  if (!visible) return null;
+  if (!mounted) return null;
 
   return (
     <div
       role="dialog"
       aria-labelledby="cookie-title"
       aria-describedby="cookie-desc"
-      className="fixed bottom-4 left-4 right-4 z-[60] animate-[fadeUp_0.45s_ease-out] sm:bottom-6 sm:left-auto sm:right-6 sm:max-w-[420px]"
+      aria-hidden={leaving}
+      style={{ transitionDuration: `${FADE_OUT_MS}ms` }}
+      className={`fixed bottom-4 left-4 right-4 z-[60] transition-all ease-out sm:bottom-6 sm:left-auto sm:right-6 sm:max-w-[420px] ${
+        leaving
+          ? "pointer-events-none translate-y-3 opacity-0"
+          : "animate-[fadeUp_0.45s_ease-out] translate-y-0 opacity-100"
+      }`}
     >
       <div className="relative overflow-hidden border border-[var(--text-dark)] bg-white text-[var(--text-dark)] shadow-[0_24px_60px_-12px_rgba(0,0,0,0.25)]">
         <div className="flex flex-col gap-4 p-6 lg:p-7">
@@ -59,14 +68,16 @@ export function CookieNotice() {
             <button
               type="button"
               onClick={() => accept("necessary")}
-              className="h-[42px] flex-1 cursor-pointer border border-[var(--text-dark)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
+              disabled={leaving}
+              className="h-[42px] flex-1 cursor-pointer border border-[var(--text-dark)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white disabled:cursor-default"
             >
               Necessary only
             </button>
             <button
               type="button"
               onClick={() => accept("all")}
-              className="h-[42px] flex-1 cursor-pointer bg-[var(--text-dark)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[var(--primary)]"
+              disabled={leaving}
+              className="h-[42px] flex-1 cursor-pointer bg-[var(--text-dark)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[var(--primary)] disabled:cursor-default"
             >
               Accept all
             </button>
