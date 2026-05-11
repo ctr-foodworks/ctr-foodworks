@@ -1,5 +1,7 @@
 import { MapPin } from "lucide-react";
 import { WaitlistForm } from "./WaitlistForm";
+import { Eyebrow } from "./ui/Eyebrow";
+import { DisplayHeading } from "./ui/DisplayHeading";
 
 export function Hero() {
   return (
@@ -9,21 +11,19 @@ export function Hero() {
         <div className="relative flex min-h-[100svh] flex-col justify-between bg-[var(--bg-warm-white)] px-6 pb-14 pt-[110px] lg:min-h-0 lg:px-[60px] lg:pb-20 lg:pt-[140px] xl:px-[80px]">
           {/* Top — eyebrow */}
           <div className="flex flex-col gap-2">
-            <span className="text-[12px] font-semibold tracking-[5px] uppercase text-[var(--primary)]">
-              Opening Spring 2026
-            </span>
+            <Eyebrow tone="primary">Opening Spring 2026</Eyebrow>
             <div className="h-[2px] w-12 bg-[var(--primary)]" />
           </div>
 
           {/* Middle — headline + body + address */}
           <div className="flex flex-col gap-8 py-10 lg:gap-10 lg:py-0">
-            <h1 className="font-display text-[64px] font-black leading-[0.9] tracking-[-2px] text-[var(--text-dark)] sm:text-[80px] lg:text-[96px] xl:text-[112px]">
+            <DisplayHeading as="h1" size="xl">
               Downtown
               <br />
               Atlanta&rsquo;s
               <br />
               Food Hall.
-            </h1>
+            </DisplayHeading>
 
             <p className="max-w-[420px] text-[15px] font-light leading-[1.7] text-[var(--text-muted-dark)] lg:text-[16px]">
               11 chef-driven dining concepts and 1 extraordinary bar, inside the reimagined former CNN Center.
@@ -65,11 +65,15 @@ export function Hero() {
           />
 
           <div className="relative z-10 flex h-full flex-col justify-center gap-7 px-6 py-20 lg:px-[60px] lg:py-16 xl:px-[80px]">
-            <h2 className="font-display text-[64px] font-black leading-[0.92] tracking-[-1.5px] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] sm:text-[80px] lg:text-[88px] xl:text-[104px]">
+            <DisplayHeading
+              as="h2"
+              size="xl"
+              className="text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
+            >
               JOIN THE
               <br />
               WAITLIST.
-            </h2>
+            </DisplayHeading>
 
             <p className="text-[18px] font-light text-white/85 drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)] lg:text-[22px]">
               Be the first to know.
