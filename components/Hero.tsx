@@ -3,10 +3,10 @@ import { WaitlistForm } from "./WaitlistForm";
 
 export function Hero() {
   return (
-    <section className="relative w-full overflow-hidden bg-[var(--bg-warm-white)] lg:h-[100svh] lg:min-h-[760px]">
-      <div className="grid grid-cols-1 lg:h-full lg:grid-cols-[5fr_7fr]">
+    <section className="relative w-full bg-[var(--bg-warm-white)] lg:min-h-[100svh]">
+      <div className="grid grid-cols-1 lg:min-h-[100svh] lg:grid-cols-[5fr_7fr]">
         {/* LEFT — statement panel */}
-        <div className="relative flex min-h-[100svh] flex-col justify-between bg-[var(--bg-warm-white)] px-6 pb-10 pt-[110px] lg:min-h-0 lg:px-[60px] lg:pb-12 lg:pt-[140px] xl:px-[80px]">
+        <div className="relative flex min-h-[100svh] flex-col justify-between bg-[var(--bg-warm-white)] px-6 pb-14 pt-[110px] lg:min-h-0 lg:px-[60px] lg:pb-20 lg:pt-[140px] xl:px-[80px]">
           {/* Top — eyebrow */}
           <div className="flex flex-col gap-2">
             <span className="text-[12px] font-semibold tracking-[5px] uppercase text-[var(--primary)]">
