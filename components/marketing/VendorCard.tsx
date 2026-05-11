@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { accentVar } from "@/lib/accent";
 import type { Vendor } from "@/lib/types";
+import { VendorLogo } from "./VendorLogo";
 
 type Props = {
   vendor: Vendor;
@@ -11,47 +13,58 @@ export function VendorCard({ vendor, index }: Props) {
   const number = String(index + 1).padStart(2, "0");
 
   return (
-    <article
+    <Link
       id={vendor.slug}
-      className="group flex flex-col gap-7 bg-[var(--bg-dark)] lg:gap-8"
+      href={`/dining/${vendor.slug}`}
+      aria-label={`${vendor.name} — ${vendor.tagline}`}
+      className="group flex flex-col gap-7 bg-[var(--bg-dark)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--bg-dark)] lg:gap-8"
     >
-      {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-[#0c0c0a]">
-        <img
-          src={vendor.imageUrl}
-          alt={vendor.name}
-          className="absolute inset-0 h-full w-full object-cover saturate-[0.9] transition-all duration-700 ease-out group-hover:saturate-100"
-        />
-      </div>
-
-      {/* Content */}
-      <div className="flex flex-col gap-3 px-1 pb-2 lg:gap-4 lg:px-2">
-        <div className="flex items-baseline gap-4">
-          <span
-            className="text-[12px] font-semibold tracking-[3px] uppercase"
-            style={{ color: accent }}
-          >
-            {number}
-          </span>
-          <span className="text-[10px] font-semibold tracking-[3px] uppercase text-white/55">
-            {vendor.tagline}
-          </span>
-        </div>
-
-        <div className="relative inline-flex flex-col items-start gap-0">
-          <h3 className="font-display text-[32px] font-black uppercase leading-[0.95] tracking-[-0.5px] text-white lg:text-[40px]">
-            {vendor.name}
-          </h3>
-          <span
-            className="mt-2 block h-[2px] w-0 transition-all duration-500 ease-out group-hover:w-16"
-            style={{ backgroundColor: accent }}
+      <article className="contents">
+        {/* Image with logo overlay */}
+        <div className="relative aspect-[4/3] overflow-hidden bg-[#0c0c0a]">
+          <img
+            src={vendor.imageUrl}
+            alt={vendor.name}
+            className="absolute inset-0 h-full w-full object-cover saturate-[0.9] transition-all duration-700 ease-out group-hover:saturate-100"
           />
+          <div className="absolute right-4 top-4 drop-shadow-[0_6px_18px_rgba(0,0,0,0.5)] lg:right-5 lg:top-5">
+            <VendorLogo
+              name={vendor.name}
+              logoUrl={vendor.logoUrl}
+              size="sm"
+            />
+          </div>
         </div>
 
-        <p className="max-w-[460px] text-[14px] font-light leading-[1.7] text-white/60 lg:text-[15px]">
-          {vendor.description}
-        </p>
-      </div>
-    </article>
+        {/* Content */}
+        <div className="flex flex-col gap-3 px-1 pb-2 lg:gap-4 lg:px-2">
+          <div className="flex items-baseline gap-4">
+            <span
+              className="text-[12px] font-semibold tracking-[3px] uppercase"
+              style={{ color: accent }}
+            >
+              {number}
+            </span>
+            <span className="text-[10px] font-semibold tracking-[3px] uppercase text-white/55">
+              {vendor.tagline}
+            </span>
+          </div>
+
+          <div className="relative inline-flex flex-col items-start gap-0">
+            <h3 className="font-display text-[32px] font-black uppercase leading-[0.95] tracking-[-0.5px] text-white lg:text-[40px]">
+              {vendor.name}
+            </h3>
+            <span
+              className="mt-2 block h-[2px] w-0 transition-all duration-500 ease-out group-hover:w-16"
+              style={{ backgroundColor: accent }}
+            />
+          </div>
+
+          <p className="max-w-[460px] text-[14px] font-light leading-[1.7] text-white/60 lg:text-[15px]">
+            {vendor.description}
+          </p>
+        </div>
+      </article>
+    </Link>
   );
 }

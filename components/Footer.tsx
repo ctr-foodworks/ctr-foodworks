@@ -19,7 +19,7 @@ const connectLinks = [
 ];
 
 const diningLinks = [
-  ...vendors.map((v) => ({ href: `/dining#${v.slug}`, label: v.name })),
+  ...vendors.map((v) => ({ href: `/dining/${v.slug}`, label: v.name })),
   { href: "/dining#bar", label: "CTR Bar" },
 ];
 
