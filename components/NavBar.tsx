@@ -61,7 +61,7 @@ export function NavBar() {
           <div className="flex items-center gap-3">
             <Link
               href="/#waitlist"
-              className="hidden h-[40px] items-center bg-[var(--primary)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d] lg:inline-flex"
+              className="hidden h-[40px] items-center border border-[var(--text-dark)] bg-transparent px-5 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white lg:inline-flex"
             >
               Join Us
             </Link>
@@ -100,7 +100,7 @@ export function NavBar() {
             })}
             <Link
               href="/#waitlist"
-              className="bg-[var(--primary)] px-6 py-5 text-[14px] font-semibold tracking-[3px] uppercase text-white"
+              className="border-t border-[var(--border-light)] bg-transparent px-6 py-5 text-[14px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
             >
               Join Us
             </Link>
