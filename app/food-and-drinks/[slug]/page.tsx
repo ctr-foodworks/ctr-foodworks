@@ -62,7 +62,7 @@ export default async function VendorDetailPage({
           }}
         />
 
-        <div className="relative z-10 flex min-h-[520px] flex-col px-6 py-12 lg:min-h-[620px] lg:px-[60px] lg:py-16">
+        <div className="relative z-10 flex min-h-[440px] flex-col px-6 py-10 lg:min-h-[620px] lg:px-[60px] lg:py-16">
           <Link
             href="/food-and-drinks"
             className="group inline-flex w-fit items-center gap-2 text-[11px] font-semibold tracking-[3px] uppercase text-white/65 transition-colors hover:text-white"
@@ -71,9 +71,13 @@ export default async function VendorDetailPage({
             Back to the lineup
           </Link>
 
-          <div className="mt-auto flex flex-col gap-5">
+          <div className="mt-auto flex flex-col gap-4 lg:gap-5">
             <Eyebrow tone="primary">{vendor.tagline}</Eyebrow>
-            <DisplayHeading size="xl" as="h1" className="max-w-[860px] text-white">
+            <DisplayHeading
+              size="xl"
+              as="h1"
+              className="max-w-[860px] !text-[44px] !leading-[0.95] text-white sm:!text-[56px] lg:!text-[104px] lg:!leading-[0.88]"
+            >
               {vendor.name.toUpperCase()}
             </DisplayHeading>
             {vendor.comingSoon && (
@@ -86,36 +90,36 @@ export default async function VendorDetailPage({
       </section>
 
       {/* §2 — About + Find Us */}
-      <section className="w-full bg-[#f9f4f0] px-6 py-[80px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]">
-        <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-20">
+      <section className="w-full bg-[#f9f4f0] px-6 py-[60px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]">
+        <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-10 lg:grid-cols-[1.5fr_1fr] lg:gap-20">
           {/* Left — Logo + About */}
-          <div className="flex flex-col gap-7">
+          <div className="flex flex-col gap-6 lg:gap-7">
             {vendor.logoLargeUrl ? (
               // Wide / wordmark logo — render at natural aspect, capped height
               <img
                 src={vendor.logoLargeUrl}
                 alt={`${vendor.name} logo`}
-                className="h-20 w-auto max-w-[420px] object-contain lg:h-24"
+                className="h-16 w-auto max-w-[420px] object-contain lg:h-24"
               />
             ) : (
               <VendorLogo
                 name={vendor.name}
                 logoUrl={vendor.logoUrl}
                 size="lg"
+                className="!h-20 !w-20 lg:!h-28 lg:!w-28"
               />
             )}
             <Eyebrow tone="primary">About</Eyebrow>
-            <DisplayHeading size="md" className="text-[var(--text-dark)]">
-              {vendor.name.toUpperCase()}
-            </DisplayHeading>
             <div className="h-[2px] w-12 bg-[var(--primary)]" />
-            <p className="max-w-[560px] text-[15px] font-light leading-[1.9] text-[var(--text-muted-dark)] lg:text-[16px]">
+            <p className="max-w-[560px] text-[15px] font-light leading-[1.85] text-[var(--text-muted-dark)] lg:text-[16px] lg:leading-[1.9]">
               {vendor.description}
             </p>
           </div>
 
-          {/* Right — Find Us sidebar */}
-          <aside className="flex flex-col gap-6 lg:border-l lg:border-[var(--text-dark)]/10 lg:pl-12">
+          {/* Right — Find Us sidebar. On mobile it stacks below with a top
+              border + padding so it reads as its own block. On lg it's a
+              true sidebar with a left border instead. */}
+          <aside className="flex flex-col gap-6 border-t border-[var(--text-dark)]/10 pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
             <Eyebrow tone="primary">Find Us</Eyebrow>
 
             <div className="flex flex-col gap-5">
