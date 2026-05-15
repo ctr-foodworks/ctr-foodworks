@@ -44,7 +44,7 @@ export function CookieNotice() {
       aria-describedby="cookie-desc"
       aria-hidden={leaving}
       style={{ transitionDuration: `${FADE_OUT_MS}ms` }}
-      className={`fixed bottom-4 left-4 right-4 z-[60] transition-all ease-out sm:bottom-6 sm:left-auto sm:right-6 sm:max-w-[420px] ${
+      className={`fixed bottom-10 left-4 right-4 z-[60] transition-all ease-out sm:bottom-6 sm:left-auto sm:right-6 sm:max-w-[420px] ${
         leaving
           ? "pointer-events-none translate-y-3 opacity-0"
           : "animate-[fadeUp_0.45s_ease-out] translate-y-0 opacity-100"
