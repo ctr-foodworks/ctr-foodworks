@@ -40,11 +40,12 @@ export function NavBar() {
 
           <nav className="hidden items-center gap-10 lg:flex">
             {navLinks.map((link) => {
-              const active = pathname === link.href;
+              const active = isActive(pathname, link.href);
               return (
                 <Link
                   key={link.href}
                   href={link.href}
+                  aria-current={active ? "page" : undefined}
                   className={`text-[11px] font-semibold tracking-[3px] uppercase transition-colors ${
                     active
                       ? "text-[var(--primary)]"
@@ -80,15 +81,23 @@ export function NavBar() {
       {open && (
         <div className="fixed inset-0 top-[72px] z-40 flex flex-col bg-[var(--bg-warm-white)] lg:hidden">
           <nav className="flex flex-col">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="border-b border-[var(--border-light)] px-6 py-5 text-[14px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)]"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {navLinks.map((link) => {
+              const active = isActive(pathname, link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`border-b border-[var(--border-light)] px-6 py-5 text-[14px] font-semibold tracking-[3px] uppercase transition-colors ${
+                    active
+                      ? "bg-[var(--primary)] text-white"
+                      : "text-[var(--text-dark)]"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
             <Link
               href="/#waitlist"
               className="bg-[var(--primary)] px-6 py-5 text-[14px] font-semibold tracking-[3px] uppercase text-white"
@@ -100,4 +109,20 @@ export function NavBar() {
       )}
     </>
   );
+}
+
+/**
+ * Returns true if `linkHref` matches the current pathname. Handles:
+ *   · trailingSlash: true in next.config (pathname may be "/about/")
+ *   · sub-routes (`/food-and-drinks/morellis` should highlight
+ *     `/food-and-drinks`)
+ *   · the home link `/` which should only match the home page exactly
+ */
+function isActive(pathname: string, linkHref: string): boolean {
+  const normalized =
+    pathname.length > 1 && pathname.endsWith("/")
+      ? pathname.slice(0, -1)
+      : pathname;
+  if (linkHref === "/") return normalized === "/";
+  return normalized === linkHref || normalized.startsWith(linkHref + "/");
 }
