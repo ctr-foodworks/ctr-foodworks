@@ -179,7 +179,7 @@ export default function VisitPage() {
           </DisplayHeading>
           <div className="h-[2px] w-12 bg-[var(--primary)]" />
           <p className="max-w-[480px] text-[15px] font-light leading-[1.8] text-[var(--text-muted-dark)]">
-            World Cup matches. NBA playoffs. SEC championships. Concerts at State Farm Arena. CTR sits inside the cluster — order food, walk out, catch the game, walk back.
+            Major matches. NBA playoffs. SEC championships. Concerts at State Farm Arena. CTR sits inside the cluster — order food, walk out, catch the game, walk back.
           </p>
 
           <div className="mt-4 flex flex-col gap-3 border-t border-[var(--text-dark)]/10 pt-6">
@@ -228,22 +228,22 @@ export default function VisitPage() {
         <div className="order-2 flex flex-col justify-center gap-6 px-6 pb-[80px] lg:order-1 lg:px-[60px] lg:py-[120px]">
           <Eyebrow tone="primary">Private Events</Eyebrow>
           <DisplayHeading size="md" className="text-white">
-            BUY OUT
+            FEEL LIKE
             <br />
-            THE WHOLE
+            BUYING THE
             <br />
-            DAMN PLACE.
+            WHOLE PLACE?
           </DisplayHeading>
           <div className="h-[2px] w-12 bg-[var(--primary)]" />
           <p className="max-w-[480px] text-[15px] font-light leading-[1.8] text-white/65">
             Game-day buyouts. Brand activations. Conference dinners. Wedding receptions where the cocktail hour <em className="italic">is</em> the food hall itself. Tell us what you&apos;re throwing and we&apos;ll build the room around it.
           </p>
           <Link
-            href="mailto:events@ctrfoodworks.com"
+            href="/events"
             className="group inline-flex w-fit items-center gap-3 border border-white/30 px-6 py-3 transition-colors hover:bg-white hover:text-[var(--text-dark)]"
           >
             <span className="text-[11px] font-semibold tracking-[3px] uppercase">
-              Inquire about events
+              See event options
             </span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>

@@ -64,7 +64,7 @@ export default async function VendorDetailPage({
 
         <div className="relative z-10 flex min-h-[520px] flex-col px-6 py-12 lg:min-h-[620px] lg:px-[60px] lg:py-16">
           <Link
-            href="/dining"
+            href="/food-and-drinks"
             className="group inline-flex w-fit items-center gap-2 text-[11px] font-semibold tracking-[3px] uppercase text-white/65 transition-colors hover:text-white"
           >
             <ArrowLeft className="h-3.5 w-3.5 transition-transform group-hover:-translate-x-1" />
@@ -76,6 +76,11 @@ export default async function VendorDetailPage({
             <DisplayHeading size="xl" as="h1" className="max-w-[860px] text-white">
               {vendor.name.toUpperCase()}
             </DisplayHeading>
+            {vendor.comingSoon && (
+              <span className="inline-flex w-fit items-center bg-[#f9f4f0] px-3 py-1.5 text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)]">
+                Concept being announced
+              </span>
+            )}
           </div>
         </div>
       </section>
@@ -197,7 +202,7 @@ export default async function VendorDetailPage({
         </div>
       </section>
 
-      {/* §3 — CTA back to /dining */}
+      {/* §3 — CTA back to /food-and-drinks */}
       <CTAStrip
         eyebrow="The rest of the lineup"
         title={
@@ -207,7 +212,7 @@ export default async function VendorDetailPage({
             ten kitchens.
           </>
         }
-        ctaHref="/dining"
+        ctaHref="/food-and-drinks"
         ctaLabel="Back to the lineup"
         tone="primary"
       />

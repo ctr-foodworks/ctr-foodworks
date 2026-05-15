@@ -18,11 +18,11 @@ export function About() {
         <div className="w-10 h-px bg-[var(--primary)]" />
 
         <p className="text-[15px] font-light leading-[1.9] text-white/70 max-w-[460px]">
-          Located inside the reimagined former CNN Center, CTR Food Works transforms one of the city’s most recognizable landmarks into a lively culinary destination for locals and visitors alike. Guests can explore diverse food concepts, meet friends at the bar, and experience the energy of Atlanta’s evolving food scene.
+          Located inside the reimagined former CNN Center, CTR Food Works transforms one of Atlanta’s most recognizable landmarks into a lively culinary destination for locals and visitors alike. Developed in collaboration with CP Group, and led by the visionary team behind Chattahoochee Food Works and its founder Robert Montwaid.
         </p>
 
         <p className="text-[15px] font-light leading-[1.9] text-white/70 max-w-[460px]">
-          With major events like the FIFA World Cup 2026&trade; on the horizon, CTR Food Works is poised to become a central gathering place downtown — a destination built for everyday dining, celebration, and discovery.
+          Eleven chef-driven culinary concepts, vibrant gathering spaces, and elevated hospitality experiences under one roof — designed for everyday dining, connection, celebration, and discovery.
         </p>
 
         <div className="flex flex-col gap-1.5 pt-2">

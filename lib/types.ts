@@ -22,6 +22,9 @@ export type Vendor = {
   instagram?: string;
   /** Full vendor website URL */
   website?: string;
+  /** Concept not finalized — card and detail page render placeholder
+   *  copy + a 'Coming Soon' badge instead of the standard treatment. */
+  comingSoon?: boolean;
 };
 
 export type HoursRow = {

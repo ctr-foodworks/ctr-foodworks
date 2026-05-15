@@ -11,11 +11,12 @@ type Props = {
 export function VendorCard({ vendor, index }: Props) {
   const accent = accentVar[vendor.accent];
   const number = String(index + 1).padStart(2, "0");
+  const isComingSoon = vendor.comingSoon === true;
 
   return (
     <Link
       id={vendor.slug}
-      href={`/dining/${vendor.slug}`}
+      href={`/food-and-drinks/${vendor.slug}`}
       aria-label={`${vendor.name} — ${vendor.tagline}`}
       className="group flex flex-col gap-7 bg-[var(--bg-dark)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-4 focus-visible:ring-offset-[var(--bg-dark)] lg:gap-8"
     >
@@ -25,15 +26,30 @@ export function VendorCard({ vendor, index }: Props) {
           <img
             src={vendor.imageUrl}
             alt={vendor.name}
-            className="absolute inset-0 h-full w-full object-cover saturate-[0.9] transition-all duration-700 ease-out group-hover:saturate-100"
+            className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-out ${
+              isComingSoon
+                ? "opacity-50 grayscale"
+                : "saturate-[0.9] group-hover:saturate-100"
+            }`}
           />
-          <div className="absolute right-4 top-4 drop-shadow-[0_6px_18px_rgba(0,0,0,0.5)] lg:right-5 lg:top-5">
-            <VendorLogo
-              name={vendor.name}
-              logoUrl={vendor.logoUrl}
-              size="sm"
-            />
-          </div>
+          {/* Coming Soon badge — top-left */}
+          {isComingSoon && (
+            <div className="absolute left-4 top-4 lg:left-5 lg:top-5">
+              <span className="inline-flex items-center bg-[#f9f4f0] px-3 py-1.5 text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] shadow-[0_6px_18px_rgba(0,0,0,0.5)]">
+                Coming Soon
+              </span>
+            </div>
+          )}
+          {/* Logo overlay — top-right (skipped on comingSoon cards) */}
+          {!isComingSoon && (
+            <div className="absolute right-4 top-4 drop-shadow-[0_6px_18px_rgba(0,0,0,0.5)] lg:right-5 lg:top-5">
+              <VendorLogo
+                name={vendor.name}
+                logoUrl={vendor.logoUrl}
+                size="sm"
+              />
+            </div>
+          )}
         </div>
 
         {/* Content */}

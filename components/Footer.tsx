@@ -12,15 +12,15 @@ const visitLinks = [
 
 const connectLinks = [
   { href: "/about", label: "Our Story" },
-  { href: "/about#fifa", label: "FIFA World Cup 2026™" },
+  { href: "/events", label: "Events" },
+  { href: "/connect", label: "Contact" },
   { href: "/#waitlist", label: "Join Us" },
   { href: "mailto:press@ctrfoodworks.com", label: "Press Inquiries" },
-  { href: "mailto:hello@ctrfoodworks.com", label: "Contact" },
 ];
 
 const diningLinks = [
-  ...vendors.map((v) => ({ href: `/dining/${v.slug}`, label: v.name })),
-  { href: "/dining#bar", label: "CTR Bar" },
+  ...vendors.map((v) => ({ href: `/food-and-drinks/${v.slug}`, label: v.name })),
+  { href: "/food-and-drinks#bar", label: "CTR Bar" },
 ];
 
 export function Footer() {
@@ -86,7 +86,7 @@ export function Footer() {
           </div>
         </div>
 
-        <FooterColumn title="Dining" items={diningLinks} />
+        <FooterColumn title="Food & Drinks" items={diningLinks} />
         <FooterColumn title="Visit" items={visitLinks} />
         <FooterColumn title="Connect" items={connectLinks} />
       </div>

@@ -4,9 +4,9 @@ export const vendors: Vendor[] = [
   {
     slug: "southern-belle-chicken-co",
     name: "Southern Belle Chicken Co.",
-    tagline: "Southern Fried · World Travelled",
+    tagline: "Southern Fried · World Traveled",
     description:
-      "Atlanta's most well-travelled bird. Classic Southern fried chicken elevated with global spices — comfort food with a passport and a serious crunch.",
+      "Southern Belle Chicken Co. brings a bold new take on fried chicken, serving up crispy sandwiches, hand-breaded strips, and craveable sides rooted in Southern tradition and inspired by flavors from around the world. Led by Michelin-recommended and James Beard-nominated Atlanta chef Joey Ward, the concept lives by its motto: “Southern Fried. World Traveled.” With globally influenced sauces, unexpected flavor combinations, and a chef-driven approach, every dish blends comfort, craft, and culinary creativity. Southern Belle Chicken Co. delivers the soul of the South with the energy of an international street-food journey.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -18,7 +18,7 @@ export const vendors: Vendor[] = [
     name: "Morelli's",
     tagline: "Artisan Ice Cream",
     description:
-      "A beloved Atlanta institution in a spectacular new home. Morelli's legendary hand-crafted ice creams and rotating seasonal scoops, right here in the hall.",
+      "Morelli’s Ice Cream serves up signature flavors like Blueberry Corncake, Salted Caramel, Coffee Doughnut, and many more that keep fans coming back for more. Owned by husband-and-wife team Donald and Clarissa, the beloved small-batch ice cream parlor has become an Atlanta favorite since opening its first walk-up shop in East Atlanta in 2009.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1576506295286-5cda18df43e7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -29,18 +29,19 @@ export const vendors: Vendor[] = [
     name: "The Sparrow",
     tagline: "Szechuan Cuisine",
     description:
-      "Bold, fragrant, unapologetically fiery. Dry-pot marvels, numbing cold noodles, and the layered complexity of Szechuan cooking done with precision.",
+      "The Sparrow brings the bold flavors of Szechuan Chinese cuisine in a lively, fast-casual format. Inspired by traditional Szechuan cooking techniques and authentic ingredients, the concept will feature dumplings, wok-fired noodles, stir-fried specialties, rice bowls, and shareable small plates, delivering an approachable and flavorful dining experience rooted in Asian culinary tradition.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1552566626-52f8b828add9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/the-sparrow.svg",
+    logoUrl: "/logos/vendors/the-sparrow.png",
+    logoLargeUrl: "/logos/vendors/the-sparrow-large.png",
   },
   {
     slug: "la-tropical",
     name: "La Tropical",
-    tagline: "Latin Kitchen",
+    tagline: "Cuban · Caribbean · Latin",
     description:
-      "Sunshine on a plate. Slow-roasted meats, bright ceviches, and bold salsas drawing from the vibrant cooking traditions of Latin America.",
+      "At La Tropical, every dish celebrates the vibrant flavors and traditions of Puerto Rican, Cuban, and Latin cuisine. From perfectly pressed Cuban sandwiches and crispy bacalaitos to savory mofongo, carne frita, arroz con pollo, and slow-braised ropa vieja, each plate is crafted with heart, soul, and authentic island flavor. Led by Chef Minelly Amador, La Tropical brings together homegrown recipes, warm hospitality, and the spirit of the Caribbean in a lively and welcoming atmosphere.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1565299507177-b0ac66763828?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -49,9 +50,9 @@ export const vendors: Vendor[] = [
   {
     slug: "fuzzys",
     name: "Fuzzy's",
-    tagline: "Coastal Seafood",
+    tagline: "Raw Bar · Seafood",
     description:
-      "Landlocked city, coastal soul. Po'boys, fish tacos, and market-fresh platters that taste like they were caught this morning and fried to order.",
+      "Fuzzy’s Raw Bar is a laid-back seafood restaurant and raw bar, serving fresh oysters, shrimp cocktail, lobster rolls, cold drinks, and coastal comfort food in a fun, nostalgic setting. Inspired by classic dockside seafood shacks and old-school oyster bars, Fuzzy’s blends fresh catches, bold flavors, and a welcoming atmosphere where guests can gather for lunch, dinner, or a late-night bite.",
     accent: "navy",
     imageUrl:
       "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -60,42 +61,31 @@ export const vendors: Vendor[] = [
   {
     slug: "eggflip",
     name: "Eggflip",
-    tagline: "All-Day Breakfast",
+    tagline: "Korean-Inspired Breakfast",
     description:
-      "Breakfast done right, all day long. Loaded sandwiches, fluffy omelets, avocado toasts, and pancake stacks. Because mornings should never have to end.",
+      "Eggflip is a Korean-inspired breakfast concept known for its bold flavors, signature egg sandwiches, breakfast burritos, and elevated comfort food. Blending fast-casual convenience with chef-driven quality, Eggflip delivers a modern and flavorful take on breakfast favorites while creating an approachable and satisfying experience for guests throughout the day.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1525351484163-7529414344d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
     logoUrl: "/logos/vendors/eggflip.png",
   },
   {
-    slug: "sushiflip",
-    name: "SushiFlip",
-    tagline: "Handcrafted Sushi",
+    slug: "cheesesteak",
+    name: "Cheesesteak",
+    tagline: "Concept Coming Soon",
     description:
-      "Classic technique, modern energy. Precision nigiri, omakase-inspired bites, and signature rolls that respect tradition while pushing the form.",
-    accent: "navy",
-    imageUrl:
-      "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/sushiflip.svg",
-  },
-  {
-    slug: "joeys-beef",
-    name: "Joey's Beef",
-    tagline: "Philly Cheesesteak",
-    description:
-      "The real deal. Thinly-shaved ribeye, griddled onions, cheese of your choosing. Joey's does one thing and does it better than anyone else in the building.",
+      "The cheesesteak concept at CTR is being finalized — stay tuned for the reveal. A chef-driven take on an American classic, joining the lineup ahead of opening day.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/joeys-beef.svg",
+    comingSoon: true,
   },
   {
     slug: "patty-and-franks",
     name: "Patty & Frank's",
     tagline: "Burgers & Hot Dogs",
     description:
-      "Two American icons, side by side. Crispy-edged smash burgers and snappy all-beef franks with every topping imaginable. The classic never gets old.",
+      "Patty & Frank’s is a modern American burger and hot dog concept that blends nostalgic comfort food with elevated ingredients and bold flavor. The brand is known for its smashed burgers, premium beef franks, and craveable classics inspired by iconic roadside stands and neighborhood grill counters. Built around quality, simplicity, and “Love In Every Bun,” Patty & Frank’s delivers an energetic fast-casual experience that feels both familiar and fresh, combining retro Americana with chef-driven execution and broad consumer appeal.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -104,9 +94,9 @@ export const vendors: Vendor[] = [
   {
     slug: "mimi-taqueria",
     name: "Mimi Taqueria",
-    tagline: "Mexican Favorites",
+    tagline: "Modern Mexican Street Food",
     description:
-      "Handmade tortillas, family salsas, slow-braised fillings perfected over generations. Mimi's tacos and burritos are built on the belief that simplicity is sacred.",
+      "MiMi Taqueria is a lively, female chef-driven kitchen serving Mexican street food with a playful modern twist. Inspired by Chef Mimi’s passion for handcrafted cooking and fresh ingredients, the menu features delicious tacos, burritos, enchiladas, and signature comfort dishes packed with unique flavors, house-made sauces, and soulful authenticity. All served in a warm, energetic atmosphere.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -117,7 +107,7 @@ export const vendors: Vendor[] = [
     name: "Flora D'Italia",
     tagline: "Italian Kitchen",
     description:
-      "Fresh pasta made daily, long-simmered sauces, and Italian soul food that makes you feel like you're in someone's grandmother's kitchen in Bologna.",
+      "Flora D’Italia brings a fresh and approachable take on classic Italian cuisine. Known for its handmade pastas, Neapolitan-style pizzas, hearty sandwiches, crisp salads, and comforting favorites like eggplant and chicken Parmesan, the restaurant focuses on quality ingredients and satisfying flavors. Blending traditional Italian recipes with a modern, welcoming atmosphere, Flora D’Italia offers the perfect spot for everything from a casual lunch to a relaxed dinner with friends and family.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1551183053-bf91a1d81141?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
@@ -126,9 +116,9 @@ export const vendors: Vendor[] = [
   {
     slug: "dessertbox",
     name: "DessertBox",
-    tagline: "Pastry Shop",
+    tagline: "Modern Bakery & Pastry",
     description:
-      "The sweetest stop in the hall. Seasonal tarts, laminated croissants, signature cakes, and confections that change with the calendar and sell out by noon on weekends.",
+      "Dessertbox is a modern bakery rooted in craft, simplicity, and beauty. Inspired by classic French pâtisserie and timeless comfort foods, DessertBox offers a curated selection of desserts, breads, and savory bites made with exceptional technique and quality ingredients. From elegant cakes and cupcakes to seasonal specialties, every item is thoughtfully crafted to be enjoyed every day, shared often, and remembered long after the last bite.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1486427944299-d1955d23e34d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
