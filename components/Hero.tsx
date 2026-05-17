@@ -25,8 +25,8 @@ export function Hero() {
               FOOD HALL.
             </DisplayHeading>
 
-            <p className="max-w-[420px] text-[15px] font-light leading-[1.7] text-[var(--text-muted-dark)] lg:text-[16px]">
-              11 chef-driven dining concepts and 1 extraordinary bar, inside the reimagined former CNN Center.
+            <p className="max-w-[440px] text-[15px] font-light leading-[1.7] text-[var(--text-muted-dark)] lg:text-[16px]">
+              From morning coffee to evening cocktails, CTR Food Works brings together the city&apos;s best flavors and moments. More than a food hall, a place to gather and share.
             </p>
 
             <div className="flex items-start gap-3 border-t border-[var(--border-light)] pt-6">

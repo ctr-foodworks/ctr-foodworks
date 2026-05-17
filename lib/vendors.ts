@@ -59,25 +59,27 @@ export const vendors: Vendor[] = [
     logoUrl: "/logos/vendors/fuzzys.jpg",
   },
   {
-    slug: "eggflip",
-    name: "Eggflip",
-    tagline: "Korean-Inspired Breakfast",
+    slug: "eggflip-x-sushiflip",
+    name: "Eggflip × SushiFlip",
+    tagline: "Korean Breakfast · Handcrafted Sushi",
     description:
-      "Eggflip is a Korean-inspired breakfast concept known for its bold flavors, signature egg sandwiches, breakfast burritos, and elevated comfort food. Blending fast-casual convenience with chef-driven quality, Eggflip delivers a modern and flavorful take on breakfast favorites while creating an approachable and satisfying experience for guests throughout the day.",
+      "Eggflip × SushiFlip offer the best of both worlds. Eggflip is a Korean-inspired fast-casual concept serving flavorful egg sandwiches, breakfast burritos, bowls, and elevated comfort food. On the flip side, SushiFlip features fresh sushi rolls, poke bowls, and shareable appetizers, creating a modern and approachable dining experience that keeps guests coming back for more.",
     accent: "primary",
     imageUrl:
       "https://images.unsplash.com/photo-1525351484163-7529414344d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/eggflip.png",
+    logoUrl: "/logos/vendors/eggflip-x-sushiflip.png",
   },
   {
-    slug: "cheesesteak",
-    name: "Cheesesteak",
-    tagline: "Concept Coming Soon",
+    slug: "rivalry-beef",
+    name: "Rivalry Beef",
+    tagline: "Philly × Chicago",
     description:
-      "The cheesesteak concept at CTR is being finalized — stay tuned for the reveal. A chef-driven take on an American classic, joining the lineup ahead of opening day.",
+      "Rivalry Beef brings two legendary sandwich cities under one roof: Philly cheesesteaks and Chicago Italian beef. Built around the playful rivalry between the two icons, the concept delivers stacked sandwiches and old-school Americana energy with a modern street-food vibe. Whether you’re Team Philly or Team Chicago, every bite helps settle the beef.",
     accent: "primary",
     imageUrl:
-      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    // Logo pending — Thierry mentioned an attachment but it wasn't sent.
+    // Falls back to initials placeholder ("RB") via VendorLogo until provided.
     comingSoon: true,
   },
   {

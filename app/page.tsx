@@ -3,7 +3,6 @@ import { Countdown } from "@/components/Countdown";
 import { About } from "@/components/About";
 import { SignupBreak } from "@/components/SignupBreak";
 import { LogoBands } from "@/components/marketing/LogoBands";
-import { CTAStrip } from "@/components/marketing/CTAStrip";
 import { PullQuote } from "@/components/marketing/PullQuote";
 
 export default function Home() {
@@ -17,19 +16,6 @@ export default function Home() {
         attribution="CTR Food Works"
       />
       <About />
-      <CTAStrip
-        eyebrow="The Lineup"
-        title={
-          <>
-            11 chef-driven kitchens.
-            <br />
-            1 extraordinary bar.
-          </>
-        }
-        ctaHref="/food-and-drinks"
-        ctaLabel="Meet the lineup"
-        tone="grey"
-      />
       <SignupBreak />
     </main>
   );

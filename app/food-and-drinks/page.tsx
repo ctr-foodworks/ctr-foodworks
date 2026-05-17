@@ -27,7 +27,7 @@ export default function DiningPage() {
             BE HUNGRY.
           </>
         }
-        description="Every kitchen at CTR Food Works is chef-driven, independently owned, and built around doing one thing better than anyone else."
+        description="Every kitchen at CTR Food Works is chef-driven and built around doing one thing better than anyone else."
         imageUrl="/images/CNN_Atrium Rendering_2026-01-09.jpg"
         imageAlt="CTR Food Works atrium rendering"
       />
@@ -53,10 +53,10 @@ export default function DiningPage() {
           </div>
           <div className="flex flex-col justify-center gap-5 text-[15px] font-light leading-[1.8] text-[var(--text-muted-dark)] lg:text-[16px]">
             <p>
-              No franchises. No food-court compromises. Every kitchen at CTR Food Works is independently owned and chef-driven, picked for doing one thing — chicken, ramen, ceviche, sushi, ice cream — better than anyone else in the building.
+              No franchises. No generic concepts. No food-court compromises. Every kitchen at CTR Food Works is selected for quality, personality, and craftsmanship — a collection of concepts ranging from hamburgers and cheesesteaks to comfort food, cocktails, and desserts.
             </p>
             <p>
-              Order from one. Order from all eleven. Sit at the bar. Move between them. The format is yours; the standard is ours.
+              Order from one or all eleven. Stay for a quick bite or settle in for the night. CTR Food Works is built to be experienced your way.
             </p>
           </div>
         </div>

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/marketing/PageHero";
 import { CTAStrip } from "@/components/marketing/CTAStrip";
 import { PullQuote } from "@/components/marketing/PullQuote";
-import { Countdown } from "@/components/Countdown";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
 
@@ -57,11 +56,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <Countdown />
-
       <PullQuote
-        quote="A culinary destination built for everyday dining, celebration, and discovery — at the heart of Atlanta."
-        attribution="CTR Food Works"
+        quote="We’re taking a place that was once a symbol of Atlanta’s global voice and turning it into a platform for local talent, local flavor, and community connection. We’re honored to help with the transformation of this Atlanta landmark."
+        attribution="Robert Montwaid"
       />
 
       <CTAStrip

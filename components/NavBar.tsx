@@ -3,13 +3,42 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
 import { navLinks } from "@/lib/nav";
+import { events } from "@/lib/events";
+
+const monthShort = [
+  "JAN",
+  "FEB",
+  "MAR",
+  "APR",
+  "MAY",
+  "JUN",
+  "JUL",
+  "AUG",
+  "SEP",
+  "OCT",
+  "NOV",
+  "DEC",
+];
+
+/** Picks the earliest event for the nav-pill teaser. */
+function pickNextEvent() {
+  if (!events.length) return null;
+  const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
+  const [first] = sorted;
+  const [y, m, d] = first.date.split("T")[0].split("-").map(Number);
+  return {
+    title: first.title,
+    label: `${monthShort[(m ?? 1) - 1]} ${String(d ?? 1).padStart(2, "0")}`,
+  };
+}
 
 export function NavBar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const nextEvent = pickNextEvent();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 8);
@@ -59,6 +88,22 @@ export function NavBar() {
           </nav>
 
           <div className="flex items-center gap-3">
+            {/* Event-of-the-day pill — fills the horizontal whitespace
+                between the nav and the Join Us pill on wide viewports.
+                Hidden below xl since lg gets cramped with 6 nav items. */}
+            {nextEvent && (
+              <Link
+                href="/events"
+                className="group hidden h-[40px] items-center gap-2.5 px-3 text-[10px] font-semibold tracking-[3px] uppercase text-[var(--primary)] transition-colors hover:text-[var(--text-dark)] xl:inline-flex"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--primary)]" />
+                <span>
+                  Next · {nextEvent.title} · {nextEvent.label}
+                </span>
+                <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            )}
+
             <Link
               href="/#waitlist"
               className="hidden h-[40px] items-center border border-[var(--text-dark)] bg-transparent px-5 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white lg:inline-flex"

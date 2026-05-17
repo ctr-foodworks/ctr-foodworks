@@ -50,7 +50,7 @@ function Band({ vendors, direction }: BandProps) {
             key={`${v.slug}-${i}`}
             href={`/food-and-drinks/${v.slug}`}
             aria-label={v.name}
-            className="flex flex-shrink-0 items-center gap-4 rounded-md bg-white px-5 py-4 shadow-[0_8px_20px_-12px_rgba(0,0,0,0.2)] transition-transform hover:-translate-y-0.5 lg:gap-5 lg:px-6 lg:py-5"
+            className="flex flex-shrink-0 items-center gap-4 rounded-md bg-[var(--primary)] px-5 py-4 shadow-[0_10px_24px_-12px_rgba(196,55,37,0.45)] transition-all hover:-translate-y-0.5 hover:bg-[#a82d1d] lg:gap-5 lg:px-6 lg:py-5"
           >
             <VendorLogo
               name={v.name}
@@ -59,10 +59,10 @@ function Band({ vendors, direction }: BandProps) {
               className="!h-12 !w-12 lg:!h-14 lg:!w-14"
             />
             <div className="flex flex-col gap-1 pr-2">
-              <span className="font-display text-[18px] font-black uppercase leading-[1] tracking-[-0.5px] text-[var(--text-dark)] lg:text-[20px]">
+              <span className="font-display text-[18px] font-black uppercase leading-[1] tracking-[-0.5px] text-white lg:text-[20px]">
                 {v.name}
               </span>
-              <span className="text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-muted-dark)]">
+              <span className="text-[10px] font-semibold tracking-[3px] uppercase text-white/75">
                 {v.tagline}
               </span>
             </div>
