@@ -3,41 +3,13 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronDown, ArrowRight } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { navLinks, type NavLink } from "@/lib/nav";
-import { events } from "@/lib/events";
-
-const monthShort = [
-  "JAN",
-  "FEB",
-  "MAR",
-  "APR",
-  "MAY",
-  "JUN",
-  "JUL",
-  "AUG",
-  "SEP",
-  "OCT",
-  "NOV",
-  "DEC",
-];
-
-function pickNextEvent() {
-  if (!events.length) return null;
-  const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
-  const [first] = sorted;
-  const [, m, d] = first.date.split("T")[0].split("-").map(Number);
-  return {
-    title: first.title,
-    label: `${monthShort[(m ?? 1) - 1]} ${String(d ?? 1).padStart(2, "0")}`,
-  };
-}
 
 export function NavBar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const nextEvent = pickNextEvent();
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 8);
@@ -77,7 +49,6 @@ export function NavBar() {
                 key={link.href}
                 link={link}
                 pathname={pathname}
-                nextEvent={link.showNextEvent ? nextEvent : null}
               />
             ))}
           </nav>
@@ -126,14 +97,12 @@ export function NavBar() {
 function DesktopNavItem({
   link,
   pathname,
-  nextEvent,
 }: {
   link: NavLink;
   pathname: string;
-  nextEvent: { title: string; label: string } | null;
 }) {
   const active = isActive(pathname, link.href);
-  const hasDropdown = !!link.children?.length || !!nextEvent;
+  const hasDropdown = !!link.children?.length;
 
   if (!hasDropdown) {
     return (
@@ -176,24 +145,6 @@ function DesktopNavItem({
 
       <div className="invisible absolute right-0 top-[calc(100%+12px)] z-10 min-w-[260px] origin-top-right -translate-y-1 opacity-0 transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
         <div className="overflow-hidden border border-[var(--border-light)] bg-[var(--bg-warm-white)] shadow-[0_24px_48px_-16px_rgba(0,0,0,0.18)]">
-          {nextEvent && (
-            <Link
-              href="/events"
-              className="group/eotd flex items-center gap-3 border-b border-[var(--border-light)] bg-[#f9f4f0] px-5 py-4 transition-colors hover:bg-[var(--primary)]"
-            >
-              <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[var(--primary)] group-hover/eotd:bg-white" />
-              <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                <span className="text-[9px] font-semibold tracking-[3px] uppercase text-[var(--text-muted-dark)] group-hover/eotd:text-white/80">
-                  Next event
-                </span>
-                <span className="truncate text-[12px] font-semibold tracking-[1px] uppercase text-[var(--text-dark)] group-hover/eotd:text-white">
-                  {nextEvent.title} · {nextEvent.label}
-                </span>
-              </div>
-              <ArrowRight className="h-3.5 w-3.5 flex-shrink-0 text-[var(--primary)] transition-transform group-hover/eotd:translate-x-0.5 group-hover/eotd:text-white" />
-            </Link>
-          )}
-
           <ul className="flex flex-col py-2">
             {link.children?.map((child) => (
               <li key={child.href + child.label}>

@@ -9,9 +9,6 @@ export type NavLink = {
   /** If present, the nav item gets a dropdown panel on desktop and
    *  an indented sub-list on mobile. */
   children?: NavChild[];
-  /** If true, the Events dropdown also surfaces the next upcoming
-   *  event from lib/events.ts as a featured row at the top. */
-  showNextEvent?: boolean;
 };
 
 export const navLinks: NavLink[] = [
@@ -24,15 +21,7 @@ export const navLinks: NavLink[] = [
       { href: "/food-and-drinks#bar", label: "The Bar" },
     ],
   },
-  {
-    href: "/events",
-    label: "Events",
-    showNextEvent: true,
-    children: [
-      { href: "/events#private-events", label: "Private Events" },
-      { href: "/events#calendar", label: "What's On" },
-    ],
-  },
+  { href: "/events", label: "Events" },
   {
     href: "/visit",
     label: "Visit",

@@ -6,7 +6,10 @@ import { DisplayHeading } from "./ui/DisplayHeading";
 export function Hero() {
   return (
     <section className="relative w-full bg-[var(--bg-warm-white)] lg:min-h-[100svh]">
-      <div className="grid grid-cols-1 lg:min-h-[100svh] lg:grid-cols-[5fr_7fr]">
+      {/* Right-panel left edge aligns with the "Home" nav link above (~30% from
+          viewport left at lg+). NavBar layout: logo at px-60, nav cluster
+          centered via flex justify-between, "Home" is the first nav item. */}
+      <div className="grid grid-cols-1 lg:min-h-[100svh] lg:grid-cols-[3fr_8fr]">
         {/* LEFT — statement panel */}
         <div className="relative flex min-h-[100svh] flex-col justify-between bg-[var(--bg-warm-white)] px-6 pb-14 pt-[110px] lg:min-h-0 lg:px-[60px] lg:pb-20 lg:pt-[140px] xl:px-[80px]">
           {/* Top — eyebrow */}

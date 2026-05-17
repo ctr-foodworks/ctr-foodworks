@@ -18,16 +18,16 @@ export default function AboutPage() {
         eyebrow="About CTR Food Works"
         title={
           <>
-            FOOD.
+            ROOTED.
             <br />
-            ENERGY.
+            RESTORED.
             <br />
-            CONNECTION.
+            ALIVE.
           </>
         }
-        description="A culinary destination built for everyday dining, celebration, and discovery — at the heart of Atlanta."
-        imageUrl="/images/260218 Food Hall Rendering_View_002 (1).webp"
-        imageAlt="CTR Food Works food hall rendering"
+        description="A historic landmark reimagined as a modern gathering place for food, culture, and community."
+        imageUrl="/images/CNN_Atrium Rendering_2026-01-09.jpg"
+        imageAlt="CTR Food Works atrium rendering"
       />
 
       {/* Story */}
@@ -49,8 +49,8 @@ export default function AboutPage() {
 
         <div className="relative min-h-[400px] overflow-hidden lg:min-h-0">
           <img
-            src="/images/CNN_Atrium Rendering_2026-01-09.jpg"
-            alt="Atrium rendering"
+            src="/images/S_Entry_02_hires-scaled.jpeg"
+            alt="CTR Food Works entrance rendering"
             className="absolute inset-0 h-full w-full object-cover"
           />
         </div>

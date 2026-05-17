@@ -1,6 +1,5 @@
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
-import { happyHour } from "@/lib/hours";
 
 const pour = [
   { label: "Draft Beer", val: "8 rotating Georgia taps" },
@@ -15,8 +14,8 @@ export function BarFeature() {
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:min-h-[680px]">
         <img
-          src="https://images.unsplash.com/photo-1572116469696-31de0f17cc34?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600"
-          alt="Backlit bar at night with stocked bottle shelves"
+          src="/images/CNN_Atrium Rendering_2026-01-09.jpg"
+          alt="CTR Food Works atrium and bar rendering"
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div
@@ -36,7 +35,7 @@ export function BarFeature() {
         </DisplayHeading>
         <div className="h-[2px] w-12 bg-[var(--primary)]" />
         <p className="max-w-[480px] text-[15px] font-light leading-[1.8] text-white/65 lg:text-[16px]">
-          The heartbeat of the hall. Rotating Georgia craft beers, thoughtfully built seasonal cocktails, and natural wines for the adventurous palate. The place where every great food-hall story begins — and usually ends.
+          The heartbeat of the hall, and the largest bar in Georgia. Anchoring the atrium at the center of CTR Food Works, it&apos;s where cocktails flow, conversations linger, and every great story begins — and usually ends.
         </p>
 
         <div className="mt-2 flex flex-col">
@@ -57,14 +56,6 @@ export function BarFeature() {
                 </span>
               </li>
             ))}
-            <li className="flex items-baseline justify-between gap-6 py-4">
-              <span className="text-[10px] font-semibold tracking-[3px] uppercase text-white/45">
-                Happy Hour
-              </span>
-              <span className="text-[14px] font-medium text-[var(--primary)]">
-                {happyHour}
-              </span>
-            </li>
           </ul>
         </div>
       </div>
