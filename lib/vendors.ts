@@ -8,8 +8,7 @@ export const vendors: Vendor[] = [
     description:
       "Southern Belle Chicken Co. brings a bold new take on fried chicken, serving up crispy sandwiches, hand-breaded strips, and craveable sides rooted in Southern tradition and inspired by flavors from around the world. Led by Michelin-recommended and James Beard-nominated Atlanta chef Joey Ward, the concept lives by its motto: “Southern Fried. World Traveled.” With globally influenced sauces, unexpected flavor combinations, and a chef-driven approach, every dish blends comfort, craft, and culinary creativity. Southern Belle Chicken Co. delivers the soul of the South with the energy of an international street-food journey.",
     accent: "primary",
-    imageUrl:
-      "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    imageUrl: "/images/vendors/southern-belle-chicken-co.jpg",
     logoUrl: "/logos/vendors/southern-belle-chicken-co.png",
     logoLargeUrl: "/logos/vendors/southern-belle-chicken-co-large.png",
   },

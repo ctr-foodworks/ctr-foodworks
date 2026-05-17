@@ -102,7 +102,7 @@ function DesktopNavItem({
   pathname: string;
 }) {
   const active = isActive(pathname, link.href);
-  const hasDropdown = !!link.children?.length;
+  const hasDropdown = !!link.children?.length && !link.desktopFlat;
 
   if (!hasDropdown) {
     return (
@@ -173,22 +173,50 @@ function MobileNavItem({
   pathname: string;
 }) {
   const active = isActive(pathname, link.href);
+  const hasChildren = !!link.children?.length;
+  // Auto-expand the section the user is currently on so children are visible
+  // without an extra tap when arriving on a sub-route (e.g. /food-and-drinks/morellis).
+  const [expanded, setExpanded] = useState(active && hasChildren);
+
   return (
     <div className="flex flex-col border-b border-[var(--border-light)]">
-      <Link
-        href={link.href}
-        aria-current={active ? "page" : undefined}
-        className={`px-6 py-5 text-[14px] font-semibold tracking-[3px] uppercase transition-colors ${
-          active
-            ? "bg-[var(--primary)] text-white"
-            : "text-[var(--text-dark)]"
-        }`}
-      >
-        {link.label}
-      </Link>
-      {link.children?.length ? (
+      <div className="flex items-stretch">
+        <Link
+          href={link.href}
+          aria-current={active ? "page" : undefined}
+          className={`flex-1 px-6 py-5 text-[14px] font-semibold tracking-[3px] uppercase transition-colors ${
+            active
+              ? "bg-[var(--primary)] text-white"
+              : "text-[var(--text-dark)]"
+          }`}
+        >
+          {link.label}
+        </Link>
+        {hasChildren && (
+          <button
+            type="button"
+            aria-label={
+              expanded ? `Collapse ${link.label}` : `Expand ${link.label}`
+            }
+            aria-expanded={expanded}
+            onClick={() => setExpanded((v) => !v)}
+            className={`flex items-center justify-center px-6 transition-colors ${
+              active
+                ? "bg-[var(--primary)] text-white"
+                : "text-[var(--text-dark)] hover:text-[var(--primary)]"
+            }`}
+          >
+            <ChevronDown
+              className={`h-4 w-4 transition-transform duration-200 ${
+                expanded ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+        )}
+      </div>
+      {hasChildren && expanded ? (
         <ul className="flex flex-col bg-[#f9f4f0] pb-2">
-          {link.children.map((child) => (
+          {link.children?.map((child) => (
             <li key={child.href + child.label}>
               <Link
                 href={child.href}
