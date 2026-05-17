@@ -43,8 +43,7 @@ export const vendors: Vendor[] = [
     description:
       "At La Tropical, every dish celebrates the vibrant flavors and traditions of Puerto Rican, Cuban, and Latin cuisine. From perfectly pressed Cuban sandwiches and crispy bacalaitos to savory mofongo, carne frita, arroz con pollo, and slow-braised ropa vieja, each plate is crafted with heart, soul, and authentic island flavor. Led by Chef Minelly Amador, La Tropical brings together homegrown recipes, warm hospitality, and the spirit of the Caribbean in a lively and welcoming atmosphere.",
     accent: "primary",
-    imageUrl:
-      "https://images.unsplash.com/photo-1565299507177-b0ac66763828?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    imageUrl: "/images/vendors/la-tropical.png",
     logoUrl: "/logos/vendors/la-tropical.png",
   },
   {
