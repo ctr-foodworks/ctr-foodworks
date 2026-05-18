@@ -122,13 +122,13 @@ export default function EventsPage() {
               Game-day buyouts. Brand activations. Conference dinners. Wedding receptions where the cocktail hour <em className="italic">is</em> the food hall itself. Tell us what you&apos;re throwing and we&apos;ll build the room around it.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              {/* TODO: swap href="#" for Tripleseat booking URL once Thierry sends it. */}
+              {/* TODO: swap href="#" for the Tripleseat booking URL once Thierry sends it. */}
               <Link
                 href="#"
-                aria-label="Book on Tripleseat (link coming soon)"
+                aria-label="Book a private event"
                 className="group inline-flex w-fit items-center gap-3 bg-[var(--primary)] px-7 py-4 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
               >
-                Book on Tripleseat
+                Book
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link

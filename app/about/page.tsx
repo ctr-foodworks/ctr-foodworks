@@ -43,7 +43,7 @@ export default function AboutPage() {
             Located inside the <strong className="font-medium text-[var(--text-dark)]">reimagined former CNN Center</strong>, CTR Food Works transforms one of Atlanta&apos;s most recognizable landmarks into a lively culinary destination for locals and visitors alike. Developed in collaboration with <strong className="font-medium text-[var(--text-dark)]">CP Group</strong>, and led by the same visionary team behind <strong className="font-medium text-[var(--text-dark)]">Chattahoochee Food Works</strong> and its founder <strong className="font-medium text-[var(--text-dark)]">Robert Montwaid</strong>, CTR Food Works brings together a curated collection of chef-driven dining concepts, vibrant gathering spaces, and elevated hospitality experiences under one roof in the heart of downtown Atlanta.
           </p>
           <p className="max-w-[520px] text-[15px] font-light leading-[1.9] text-[var(--text-muted-dark)]">
-            Guests can explore eleven diverse culinary concepts, meet friends at the bar, and experience the energy of Atlanta&apos;s evolving food scene in a dynamic destination designed for everyday dining, connection, celebration, and discovery.
+            Guests can explore twelve diverse culinary concepts, meet friends at the bar, and experience the energy of Atlanta&apos;s evolving food scene in a dynamic destination designed for everyday dining, connection, celebration, and discovery.
           </p>
         </div>
 

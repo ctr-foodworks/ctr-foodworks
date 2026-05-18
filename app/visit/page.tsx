@@ -89,15 +89,15 @@ export default function VisitPage() {
         <div className="order-2 flex flex-col justify-center gap-6 px-6 pb-[80px] lg:order-2 lg:px-[60px] lg:py-[120px]">
           <Eyebrow tone="primary">The Building</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
-            A LANDMARK
+            A LOCAL LANDMARK
             <br />
-            REOPENED
+            WITH A
             <br />
-            FOR EATING.
+            GLOBAL VOICE.
           </DisplayHeading>
           <div className="h-[2px] w-12 bg-[var(--primary)]" />
           <p className="max-w-[480px] text-[15px] font-light leading-[1.8] text-[var(--text-muted-dark)]">
-            The former CNN Center hosted presidents, prime ministers, and a quarter-century of breaking news. The atrium that anchored 30 years of broadcast journalism is now the dining room you came for.
+            The former CNN Center hosted presidents, prime ministers, and a quarter-century of breaking news. The atrium that anchored 30 years of broadcast journalism is now the place to be and share a moment with great food and drinks.
           </p>
         </div>
       </section>

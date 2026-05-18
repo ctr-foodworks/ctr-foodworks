@@ -115,4 +115,15 @@ export const vendors: Vendor[] = [
     imageUrl: "/images/vendors/dessertbox.jpg",
     logoUrl: "/logos/vendors/dessertbox.png",
   },
+  {
+    slug: "the-catering-kitchen",
+    name: "The CaTeRing Kitchen",
+    tagline: "Catering & Meal Prep",
+    description:
+      "Located inside CTR Food Works, The CaTeRing Kitchen offers chef-driven catering for onsite events, corporate luncheons, private gatherings, and weekly meal prep services. Blending quality ingredients with seamless hospitality, our team delivers fresh, customizable menus designed to make every event — big or small — effortless and memorable.",
+    accent: "primary",
+    imageUrl:
+      "https://images.unsplash.com/photo-1555244162-803834f70033?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    logoUrl: "/logos/vendors/the-catering-kitchen.jpg",
+  },
 ];

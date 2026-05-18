@@ -14,8 +14,8 @@ export function BarFeature() {
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:min-h-[680px]">
         <img
-          src="/images/ctr-bar.jpg"
-          alt="The CTR Food Works central bar in the atrium"
+          src="/images/CNN_Atrium Rendering_2026-01-09.jpg"
+          alt="CTR Food Works atrium with the central bar"
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div
