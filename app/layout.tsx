@@ -19,6 +19,21 @@ export const metadata: Metadata = {
     siteName: "CTR Food Works",
     type: "website",
   },
+  // favicon.ico is auto-served from app/favicon.ico. The icons below are
+  // declared explicitly so Next.js emits the <link> tags for the PNG /
+  // apple-touch / Android sizes on every page.
+  icons: {
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    other: [
+      { rel: "icon", url: "/android-chrome-192x192.png", sizes: "192x192" },
+      { rel: "icon", url: "/android-chrome-512x512.png", sizes: "512x512" },
+    ],
+  },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
