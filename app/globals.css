@@ -40,9 +40,9 @@
 
   /* Layout shell — content anchors at this max-width on wide screens.
      Colored section backgrounds still bleed to viewport edges; only the
-     readable content stops here. Tweak if the site ever feels too
-     letterboxed (raise) or too sprawling (lower). */
-  --shell-max: 1600px;
+     readable content stops here. 2000px feels premium on 4K (only kicks
+     in past ~3200px viewports). Raise if it still feels boxed-in. */
+  --shell-max: 2000px;
 }
 
 @layer base {
