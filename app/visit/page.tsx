@@ -76,8 +76,10 @@ export default function VisitPage() {
         imageAlt="CTR Food Works entrance rendering"
       />
 
-      {/* §2 — The Building (warm cream #f9f4f0, image left + text right) */}
-      <section className="grid w-full grid-cols-1 bg-[#f9f4f0] lg:grid-cols-2">
+      {/* §2 — The Building. Background bleeds, inner grid capped to match
+          the rest of the site's shell (1440 lg / 1600 xl). */}
+      <section className="w-full bg-[#f9f4f0]">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 lg:grid-cols-2 xl:max-w-[1600px]">
         <div className="order-1 p-6 lg:order-1 lg:p-[60px] lg:py-[120px]">
           <SketchPlaceholder
             src="/images/sketches/building-exterior.png"
@@ -86,8 +88,6 @@ export default function VisitPage() {
             aspect="portrait"
           />
         </div>
-        {/* Text column — anchored to the LEFT edge of its half (= screen
-            midline) so the copy stays near the column boundary on 4K. */}
         <div className="order-2 flex justify-start px-6 pb-[80px] lg:order-2 lg:px-[60px] lg:py-[120px]">
           <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[640px] xl:max-w-[720px]">
           <Eyebrow tone="primary">The Building</Eyebrow>
@@ -104,11 +104,12 @@ export default function VisitPage() {
           </p>
           </div>
         </div>
+      </div>
       </section>
 
       {/* §3 — Hours (dark) */}
       <section className="w-full bg-[var(--bg-dark)] px-6 py-[80px] text-white lg:px-[60px] lg:py-[120px]">
-        <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
+        <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20 xl:max-w-[1600px]">
           <div className="flex flex-col gap-6">
             <Eyebrow tone="primary">Hours</Eyebrow>
             <DisplayHeading size="md" className="text-white">
@@ -132,7 +133,7 @@ export default function VisitPage() {
         id="getting-here"
         className="w-full bg-[#e8e6e3] px-6 py-[80px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]"
       >
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:gap-16">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-12 lg:gap-16 xl:max-w-[1600px]">
           <div className="flex flex-col gap-5 lg:max-w-[640px]">
             <Eyebrow tone="primary">Getting Here</Eyebrow>
             <DisplayHeading size="md" className="text-[var(--text-dark)]">
@@ -171,9 +172,8 @@ export default function VisitPage() {
       </section>
 
       {/* §5 — The Neighborhood (cream, text left + Google Maps right) */}
-      <section className="grid w-full grid-cols-1 bg-[var(--bg-cream)] lg:grid-cols-2">
-        {/* Text column on the LEFT — anchor to RIGHT edge so copy sits near
-            screen midline on 4K. */}
+      <section className="w-full bg-[var(--bg-cream)]">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 lg:grid-cols-2 xl:max-w-[1600px]">
         <div className="order-2 flex justify-start px-6 pb-[80px] lg:order-1 lg:justify-end lg:px-[60px] lg:py-[120px]">
           <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[640px] xl:max-w-[720px]">
           <Eyebrow tone="primary">The Neighborhood</Eyebrow>
@@ -226,15 +226,15 @@ export default function VisitPage() {
             />
           </div>
         </div>
+      </div>
       </section>
 
       {/* §6 — Private Events (dark, text left + atrium sketch right) */}
       <section
         id="private-events"
-        className="grid w-full grid-cols-1 bg-[var(--bg-dark)] text-white lg:grid-cols-2"
+        className="w-full bg-[var(--bg-dark)] text-white"
       >
-        {/* Text on the LEFT — anchor to RIGHT edge so copy sits near screen
-            midline on wide screens. */}
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 lg:grid-cols-2 xl:max-w-[1600px]">
         <div className="order-2 flex justify-start px-6 pb-[80px] lg:order-1 lg:justify-end lg:px-[60px] lg:py-[120px]">
           <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[640px] xl:max-w-[720px]">
           <Eyebrow tone="primary">Private Events</Eyebrow>
@@ -268,14 +268,16 @@ export default function VisitPage() {
             aspect="landscape"
           />
         </div>
+      </div>
       </section>
 
-      {/* §7 — Accessibility (grey, simpler) */}
+      {/* §7 — Accessibility (grey, simpler). Wider than typical narrow copy
+          so it doesn't read as a lonely island after the wider sections. */}
       <section
         id="accessibility"
         className="w-full bg-[#e8e6e3] px-6 py-[80px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]"
       >
-        <div className="mx-auto flex max-w-[860px] flex-col gap-6">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 xl:max-w-[1600px]">
           <Eyebrow tone="primary">Accessibility</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             EVERY GUEST.
