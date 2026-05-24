@@ -109,18 +109,18 @@ export default function EventsPage() {
         id="private-events"
         className="w-full scroll-mt-24 bg-[#f9f4f0] px-6 py-[80px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]"
       >
-        <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
+        <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-24 xl:gap-32">
           <div className="flex flex-col gap-6">
             <Eyebrow tone="primary">Private Events</Eyebrow>
-            <DisplayHeading size="md" className="text-[var(--text-dark)]">
+            <h2 className="font-display text-[48px] font-black uppercase leading-[0.95] tracking-[-1px] text-[var(--text-dark)] lg:text-[72px] xl:text-[88px]">
               BOOK YOUR EVENT
               <br />
               IN THE CENTER
               <br />
               OF IT ALL.
-            </DisplayHeading>
+            </h2>
             <div className="h-[2px] w-12 bg-[var(--primary)]" />
-            <p className="max-w-[520px] text-[15px] font-light leading-[1.9] text-[var(--text-muted-dark)] lg:text-[16px]">
+            <p className="max-w-[560px] text-[16px] font-light leading-[1.9] text-[var(--text-muted-dark)] lg:text-[17px] xl:text-[18px]">
               Game-day buyouts. Brand activations. Conference dinners. Wedding receptions where the cocktail hour <em className="italic">is</em> the food hall itself. Tell us what you&apos;re throwing and we&apos;ll build the room around it.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -142,7 +142,9 @@ export default function EventsPage() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 lg:border-l lg:border-[var(--text-dark)]/10 lg:pl-12">
+          {/* Right column — heavier visual weight: bigger items, more
+              padding, matching the scale of the left headline. */}
+          <div className="flex flex-col gap-5 lg:border-l lg:border-[var(--text-dark)]/10 lg:pl-12 xl:pl-16">
             <Eyebrow tone="primary">What we host</Eyebrow>
             <ul className="flex flex-col">
               {[
@@ -155,7 +157,7 @@ export default function EventsPage() {
               ].map((item) => (
                 <li
                   key={item}
-                  className="border-b border-[var(--text-dark)]/10 py-3 text-[14px] font-light text-[var(--text-dark)] last:border-b-0"
+                  className="border-b border-[var(--text-dark)]/10 py-5 text-[16px] font-light text-[var(--text-dark)] last:border-b-0 lg:text-[18px] xl:py-6 xl:text-[20px]"
                 >
                   {item}
                 </li>
@@ -169,7 +171,7 @@ export default function EventsPage() {
             Tripleseat's script auto-injects the form DOM on load. */}
         <div
           id="book"
-          className="mx-auto mt-16 max-w-[820px] scroll-mt-24 border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16"
+          className="mx-auto mt-16 max-w-[960px] scroll-mt-24 border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16"
         >
           <div className="mb-8 flex flex-col gap-5 lg:mb-10">
             <Eyebrow tone="primary">Book Your Event</Eyebrow>
@@ -186,7 +188,7 @@ export default function EventsPage() {
 
         {/* Catering Kitchen — back-of-house service, surfaced here so private-
             event inquirers can also book catering. Lives in lib/catering.ts. */}
-        <div className="mx-auto mt-16 max-w-[1200px] border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16">
+        <div className="mx-auto mt-16 max-w-[1440px] border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[220px_1fr] lg:items-center lg:gap-16">
             <div className="flex items-center justify-center bg-white p-5 lg:p-6">
               <img
@@ -223,7 +225,7 @@ export default function EventsPage() {
         id="public-events"
         className="w-full scroll-mt-24 bg-[var(--bg-dark)] px-6 py-[80px] text-white lg:px-[60px] lg:py-[120px]"
       >
-        <div className="mx-auto max-w-[1200px] flex flex-col gap-10 lg:gap-14">
+        <div className="mx-auto max-w-[1440px] flex flex-col gap-10 lg:gap-14">
           <div className="flex flex-col gap-5 lg:max-w-[640px]">
             <Eyebrow tone="primary">Public Events</Eyebrow>
             <DisplayHeading size="md" className="text-white">

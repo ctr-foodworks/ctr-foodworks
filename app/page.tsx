@@ -11,11 +11,14 @@ export default function Home() {
       <Hero />
       <LogoBands />
       <Countdown />
+      <About />
+      {/* Plum pull-quote sits between the navy About panel and the red
+          SignupBreak panel — acts as a dark "exhale" between the two
+          colored slabs and re-centers the page rhythm. */}
       <PullQuote
         quote="A culinary destination built for everyday dining, celebration, and discovery — at the heart of Atlanta."
         attribution="CTR Food Works"
       />
-      <About />
       <SignupBreak />
     </main>
   );

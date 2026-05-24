@@ -51,10 +51,11 @@ export function CTAStrip({
   const style = toneStyles[tone];
   return (
     <section className={`w-full py-14 lg:py-16 ${style.container}`}>
-      {/* Inner shell — anchors copy + CTA at max-w-[1600px] so the button
-          stays near the headline on 4K instead of drifting to the far right. */}
-      <div className="shell flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
-        <div className="flex flex-col gap-3 lg:max-w-[560px]">
+      {/* Inner content capped tighter than the global shell so the button
+          stays clustered with the headline instead of drifting to the far
+          right of a 2000px shell on wide monitors. */}
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:px-[60px]">
+        <div className="flex flex-col gap-3 lg:max-w-[640px]">
           <span
             className={`text-[10px] font-semibold tracking-[5px] uppercase ${style.eyebrow}`}
           >
