@@ -55,7 +55,7 @@ export function ContactForm() {
       <div
         role="status"
         aria-live="polite"
-        className="flex flex-col gap-5 bg-white p-8 lg:p-10"
+        className="contact-form-success flex flex-col gap-5 bg-white p-8 lg:p-10"
       >
         <div className="flex flex-col gap-3">
           <span className="text-[10px] font-semibold tracking-[3px] uppercase text-[var(--primary)]">
@@ -77,6 +77,15 @@ export function ContactForm() {
         >
           Send another
         </button>
+        <style>{`
+          .contact-form-success {
+            animation: contact-form-success 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+          }
+          @keyframes contact-form-success {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+        `}</style>
       </div>
     );
   }

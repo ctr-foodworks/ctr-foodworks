@@ -80,7 +80,7 @@ export function WaitlistForm({
         aria-live="polite"
       >
         <div
-          className={`flex h-[52px] items-center px-5 text-[13px] font-medium ${
+          className={`form-success-in flex h-[52px] items-center px-5 text-[13px] font-medium ${
             variant === "dark"
               ? "bg-white/15 text-white"
               : "bg-[var(--primary)] text-white"
@@ -88,6 +88,15 @@ export function WaitlistForm({
         >
           You&rsquo;re on the list. We&rsquo;ll be in touch.
         </div>
+        <style>{`
+          .form-success-in {
+            animation: form-success-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+          }
+          @keyframes form-success-in {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+          }
+        `}</style>
       </div>
     );
   }

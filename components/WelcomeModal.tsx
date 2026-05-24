@@ -20,12 +20,17 @@ const STORAGE_KEY = "ctr-welcome-dismissed";
 // Small delay so the page has time to paint before the modal pops — avoids
 // the modal feeling like an aggressive interstitial.
 const SHOW_DELAY_MS = 900;
+// Keep in sync with the welcome-fade-out / welcome-card-out keyframes below.
+const EXIT_ANIMATION_MS = 280;
 
 export function WelcomeModal() {
   // `mounted` defers any DOM/localStorage access to after hydration so the
   // server-rendered output is always empty (no flash, no hydration mismatch).
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  // `closing` lets the modal run an exit animation before unmounting so it
+  // fades out smoothly rather than popping off the page.
+  const [closing, setClosing] = useState(false);
 
   // Mount + initial localStorage check
   useEffect(() => {
@@ -45,12 +50,19 @@ export function WelcomeModal() {
   }, []);
 
   function dismiss() {
-    setOpen(false);
+    if (closing) return;
+    // Persist the flag immediately so a page refresh during the exit
+    // animation still counts as "dismissed."
     try {
       window.localStorage.setItem(STORAGE_KEY, String(Date.now()));
     } catch {
       // ignore
     }
+    setClosing(true);
+    window.setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, EXIT_ANIMATION_MS);
   }
 
   // Escape key closes
@@ -97,11 +109,17 @@ export function WelcomeModal() {
         type="button"
         aria-label="Close welcome dialog"
         onClick={dismiss}
-        className="welcome-modal-backdrop absolute inset-0 cursor-pointer bg-black/65"
+        className={`welcome-modal-backdrop absolute inset-0 cursor-pointer bg-black/65 ${
+          closing ? "welcome-modal-backdrop-exit" : ""
+        }`}
       />
 
       {/* Card */}
-      <div className="welcome-modal-card relative z-10 flex w-full max-w-[920px] flex-col overflow-hidden bg-[var(--primary)] text-white shadow-[0_40px_80px_-20px_rgba(0,0,0,0.5)]">
+      <div
+        className={`welcome-modal-card relative z-10 flex w-full max-w-[920px] flex-col overflow-hidden bg-[var(--primary)] text-white shadow-[0_40px_80px_-20px_rgba(0,0,0,0.5)] ${
+          closing ? "welcome-modal-card-exit" : ""
+        }`}
+      >
         {/* X — top-right */}
         <button
           type="button"
@@ -152,13 +170,21 @@ export function WelcomeModal() {
       </div>
 
       {/* Animations scoped to this modal so they don't leak into other
-          fixed/overlay components on the page */}
+          fixed/overlay components on the page. Exit classes take precedence
+          when `closing` is true so the modal fades out gracefully before the
+          parent unmounts it. */}
       <style>{`
         .welcome-modal-backdrop {
           animation: welcome-fade-in 280ms ease-out both;
         }
         .welcome-modal-card {
           animation: welcome-card-in 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+        }
+        .welcome-modal-backdrop-exit {
+          animation: welcome-fade-out 280ms ease-in both;
+        }
+        .welcome-modal-card-exit {
+          animation: welcome-card-out 280ms cubic-bezier(0.4, 0, 1, 1) both;
         }
         @keyframes welcome-fade-in {
           from { opacity: 0; }
@@ -167,6 +193,14 @@ export function WelcomeModal() {
         @keyframes welcome-card-in {
           from { opacity: 0; transform: translateY(16px) scale(0.98); }
           to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes welcome-fade-out {
+          from { opacity: 1; }
+          to { opacity: 0; }
+        }
+        @keyframes welcome-card-out {
+          from { opacity: 1; transform: translateY(0) scale(1); }
+          to   { opacity: 0; transform: translateY(-6px) scale(0.98); }
         }
       `}</style>
     </div>
