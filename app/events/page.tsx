@@ -171,7 +171,7 @@ export default function EventsPage() {
             Tripleseat's script auto-injects the form DOM on load. */}
         <div
           id="book"
-          className="mx-auto mt-16 max-w-[960px] scroll-mt-24 border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16"
+          className="mx-auto mt-16 max-w-[1440px] scroll-mt-24 border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16"
         >
           <div className="mb-8 flex flex-col gap-5 lg:mb-10">
             <Eyebrow tone="primary">Book Your Event</Eyebrow>
