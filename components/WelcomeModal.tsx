@@ -132,6 +132,7 @@ export function WelcomeModal() {
               variant="dark"
               buttonLabel="Join"
               showHelper={false}
+              onSuccess={dismiss}
             />
             <p className="text-[10px] font-light leading-[1.5] text-white/55">
               No spam. Unsubscribe any time.
