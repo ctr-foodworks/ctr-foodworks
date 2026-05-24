@@ -109,7 +109,7 @@ export default function EventsPage() {
         id="private-events"
         className="w-full scroll-mt-24 bg-[#f9f4f0] px-6 py-[80px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]"
       >
-        <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-24 xl:gap-32">
+        <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-24 xl:max-w-[1600px] xl:gap-32">
           <div className="flex flex-col gap-6">
             <Eyebrow tone="primary">Private Events</Eyebrow>
             <h2 className="font-display text-[48px] font-black uppercase leading-[0.95] tracking-[-1px] text-[var(--text-dark)] lg:text-[72px] xl:text-[88px]">
@@ -171,7 +171,7 @@ export default function EventsPage() {
             Tripleseat's script auto-injects the form DOM on load. */}
         <div
           id="book"
-          className="mx-auto mt-16 max-w-[1440px] scroll-mt-24 border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16"
+          className="mx-auto mt-16 max-w-[1440px] scroll-mt-24 border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16 xl:max-w-[1600px]"
         >
           <div className="mb-8 flex flex-col gap-5 lg:mb-10">
             <Eyebrow tone="primary">Book Your Event</Eyebrow>
@@ -188,7 +188,7 @@ export default function EventsPage() {
 
         {/* Catering Kitchen — back-of-house service, surfaced here so private-
             event inquirers can also book catering. Lives in lib/catering.ts. */}
-        <div className="mx-auto mt-16 max-w-[1440px] border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16">
+        <div className="mx-auto mt-16 max-w-[1440px] border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16 xl:max-w-[1600px]">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[220px_1fr] lg:items-center lg:gap-16">
             <div className="flex items-center justify-center bg-white p-5 lg:p-6">
               <img
@@ -225,7 +225,7 @@ export default function EventsPage() {
         id="public-events"
         className="w-full scroll-mt-24 bg-[var(--bg-dark)] px-6 py-[80px] text-white lg:px-[60px] lg:py-[120px]"
       >
-        <div className="mx-auto max-w-[1440px] flex flex-col gap-10 lg:gap-14">
+        <div className="mx-auto max-w-[1440px] flex flex-col gap-10 lg:gap-14 xl:max-w-[1600px]">
           <div className="flex flex-col gap-5 lg:max-w-[640px]">
             <Eyebrow tone="primary">Public Events</Eyebrow>
             <DisplayHeading size="md" className="text-white">
