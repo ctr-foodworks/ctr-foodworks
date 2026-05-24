@@ -129,10 +129,10 @@ export default function ConnectPage() {
           </p>
           <div className="flex items-center justify-center gap-6 pt-2">
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/ctrfoodworks/"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Instagram"
+              aria-label="CTR Food Works on Instagram"
               className="group flex items-center gap-3 border border-white/30 px-6 py-3 transition-colors hover:bg-white hover:text-[var(--text-dark)]"
             >
               <Instagram className="h-5 w-5" />
