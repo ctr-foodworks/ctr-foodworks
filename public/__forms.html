@@ -1,0 +1,28 @@
+<!--
+  Static stub so Netlify Forms reliably detects our React-rendered form at
+  build time. Required for Next.js static exports — Netlify's HTML parser
+  occasionally misses forms inside the hydration shell, but always finds
+  ones in plain public/ files. Field shape here must match the real form
+  in app/connect/page.tsx exactly.
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Forms detection stub</title>
+  </head>
+  <body>
+    <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input type="text" name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <select name="category">
+        <option value="General">General</option>
+        <option value="Press">Press</option>
+        <option value="Partnerships">Partnerships</option>
+        <option value="Careers">Careers</option>
+      </select>
+      <textarea name="message"></textarea>
+    </form>
+  </body>
+</html>

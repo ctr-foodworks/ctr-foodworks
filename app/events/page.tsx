@@ -7,6 +7,7 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
 import { events, type Event } from "@/lib/events";
 import { catering } from "@/lib/catering";
+import { TripleseatForm } from "@/components/marketing/TripleseatForm";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -123,17 +124,17 @@ export default function EventsPage() {
               Game-day buyouts. Brand activations. Conference dinners. Wedding receptions where the cocktail hour <em className="italic">is</em> the food hall itself. Tell us what you&apos;re throwing and we&apos;ll build the room around it.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              {/* TODO: swap href="#" for the Tripleseat booking URL once Thierry sends it. */}
+              {/* Scrolls down to the embedded Tripleseat booking form (id="book"). */}
               <Link
-                href="#"
-                aria-label="Book a private event"
+                href="#book"
+                aria-label="Jump to the booking form"
                 className="group inline-flex w-fit items-center gap-3 bg-[var(--primary)] px-7 py-4 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
               >
                 Book
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
-                href="mailto:events@ctrfoodworks.com"
+                href="mailto:inquiries@ctrfoodworks.com?subject=Private%20Event%20Inquiry"
                 className="inline-flex w-fit items-center gap-3 border border-[var(--text-dark)] px-7 py-4 text-[12px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
               >
                 Or email us
@@ -161,6 +162,26 @@ export default function EventsPage() {
               ))}
             </ul>
           </div>
+        </div>
+
+        {/* Booking — embedded Tripleseat form. The "Book" CTA above scroll-
+            anchors here. The form lives behind a client component because
+            Tripleseat's script auto-injects the form DOM on load. */}
+        <div
+          id="book"
+          className="mx-auto mt-16 max-w-[820px] scroll-mt-24 border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16"
+        >
+          <div className="mb-8 flex flex-col gap-5 lg:mb-10">
+            <Eyebrow tone="primary">Book Your Event</Eyebrow>
+            <h3 className="font-display text-[36px] font-black uppercase leading-[0.95] tracking-[-1px] text-[var(--text-dark)] lg:text-[48px]">
+              Tell us what you&apos;re planning.
+            </h3>
+            <div className="h-[2px] w-12 bg-[var(--primary)]" />
+            <p className="max-w-[640px] text-[15px] font-light leading-[1.8] text-[var(--text-muted-dark)] lg:text-[16px]">
+              Drop the details below and our events team will follow up within one business day with availability, menus, and pricing.
+            </p>
+          </div>
+          <TripleseatForm />
         </div>
 
         {/* Catering Kitchen — back-of-house service, surfaced here so private-

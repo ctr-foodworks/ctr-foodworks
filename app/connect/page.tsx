@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   Mail,
   Newspaper,
@@ -21,47 +20,41 @@ export const metadata: Metadata = {
     "Get in touch with CTR Food Works — general inquiries, press, partnerships, and careers.",
 };
 
-// All four contact cards route to the same inbox (inquiries@ctrfoodworks.com)
-// with a pre-filled subject line so Thierry can triage from one place. No
-// separate per-category mailboxes need to be provisioned.
+// All four contact categories route to a single inquiries@ctrfoodworks.com
+// inbox. The contact form posts via Netlify Forms (zero backend) — Netlify
+// detects the form at deploy time via the data-netlify="true" attribute and
+// captures submissions to the dashboard + email forwarding.
 const INQUIRIES_INBOX = "inquiries@ctrfoodworks.com";
 
-type Contact = {
+type Category = {
   icon: LucideIcon;
   label: string;
   detail: string;
-  /** Subject line pre-filled in the mailto so the recipient knows the bucket. */
-  subject: string;
 };
 
-const contacts: Contact[] = [
+const categories: Category[] = [
   {
     icon: Mail,
     label: "General",
     detail:
       "Questions about the hall, the vendors, the bar, or anything else — we read every note.",
-    subject: "General Inquiry",
   },
   {
     icon: Newspaper,
     label: "Press",
-    detail:
-      "Stories, interviews, photo requests, and media credentials.",
-    subject: "Press Inquiry",
+    detail: "Stories, interviews, photo requests, and media credentials.",
   },
   {
     icon: Handshake,
     label: "Partnerships",
     detail:
       "Vendors, brand collaborations, sponsorships, and special activations.",
-    subject: "Partnership Inquiry",
   },
   {
     icon: Briefcase,
     label: "Careers",
     detail:
       "Opening-team roles across kitchens, the bar, and front-of-house.",
-    subject: "Careers Inquiry",
   },
 ];
 
@@ -81,52 +74,152 @@ export default function ConnectPage() {
         imageAlt="CTR Food Works food hall rendering"
       />
 
-      {/* §2 — Contact grid */}
+      {/* §2 — Contact form (Netlify Forms) + category legend */}
       <section className="w-full bg-[#f9f4f0] px-6 py-[80px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]">
-        <div className="mx-auto max-w-[1200px] flex flex-col gap-12 lg:gap-16">
+        <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:gap-16">
           <div className="flex flex-col gap-5 lg:max-w-[640px]">
             <Eyebrow tone="primary">Get in touch</Eyebrow>
             <DisplayHeading size="md" className="text-[var(--text-dark)]">
               FOUR WAYS IN.
             </DisplayHeading>
             <div className="h-[2px] w-12 bg-[var(--primary)]" />
+            <p className="text-[15px] font-light leading-[1.8] text-[var(--text-muted-dark)] lg:text-[16px]">
+              One inbox, one quick reply. Pick a category and tell us what&apos;s on your mind — we read every note.
+            </p>
           </div>
 
-          <ul className="grid grid-cols-1 gap-px bg-[var(--text-dark)]/15 sm:grid-cols-2">
-            {contacts.map((c) => {
-              const Icon = c.icon;
-              const href = `mailto:${INQUIRIES_INBOX}?subject=${encodeURIComponent(
-                c.subject
-              )}`;
-              return (
-                <li key={c.label} className="bg-[#f9f4f0]">
-                  <Link
-                    href={href}
-                    className="group flex h-full flex-col gap-4 p-8 lg:p-10"
-                  >
-                    <div className="flex h-11 w-11 items-center justify-center bg-[var(--bg-dark)] text-white">
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
+            {/* Left — category legend */}
+            <ul className="flex flex-col gap-7">
+              {categories.map((c) => {
+                const Icon = c.icon;
+                return (
+                  <li key={c.label} className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center bg-[var(--bg-dark)] text-white">
                       <Icon className="h-4 w-4" />
                     </div>
-                    <div className="flex flex-col gap-2">
-                      <h3 className="font-display text-[28px] font-black uppercase leading-[1] tracking-[-0.5px] text-[var(--text-dark)] lg:text-[36px]">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[12px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)]">
                         {c.label}
-                      </h3>
-                      <span className="text-[12px] font-light tracking-[0.5px] text-[var(--text-muted-dark)]">
-                        {INQUIRIES_INBOX}
                       </span>
+                      <p className="text-[13px] font-light leading-[1.6] text-[var(--text-muted-dark)]">
+                        {c.detail}
+                      </p>
                     </div>
-                    <p className="text-[13px] font-light leading-[1.7] text-[var(--text-muted-dark)]">
-                      {c.detail}
-                    </p>
-                    <span className="mt-auto inline-flex items-center gap-2 pt-2 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--primary)]">
-                      Write
-                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {/* Right — Netlify Forms contact form. Netlify detects this at
+                deploy time via data-netlify="true" + name="contact". The
+                hidden form-name input is required so submissions are tagged.
+                Posts to /thanks/ on success. */}
+            <form
+              name="contact"
+              method="POST"
+              action="/thanks/"
+              data-netlify="true"
+              data-netlify-honeypot="bot-field"
+              className="flex flex-col gap-5 bg-white p-8 lg:p-10"
+            >
+              <input type="hidden" name="form-name" value="contact" />
+              {/* Honeypot — hidden from real users, catches naive bots */}
+              <p className="hidden">
+                <label>
+                  Don&apos;t fill this out if you&apos;re human:{" "}
+                  <input name="bot-field" />
+                </label>
+              </p>
+
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor="contact-name"
+                  className="text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)]"
+                >
+                  Name
+                </label>
+                <input
+                  id="contact-name"
+                  name="name"
+                  type="text"
+                  required
+                  autoComplete="name"
+                  className="border border-[var(--text-dark)]/20 bg-white px-4 py-3 text-[14px] font-light text-[var(--text-dark)] outline-none transition-colors placeholder:text-[var(--text-muted-dark)]/60 focus:border-[var(--primary)]"
+                  placeholder="Your full name"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor="contact-email"
+                  className="text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)]"
+                >
+                  Email
+                </label>
+                <input
+                  id="contact-email"
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  className="border border-[var(--text-dark)]/20 bg-white px-4 py-3 text-[14px] font-light text-[var(--text-dark)] outline-none transition-colors placeholder:text-[var(--text-muted-dark)]/60 focus:border-[var(--primary)]"
+                  placeholder="you@example.com"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor="contact-category"
+                  className="text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)]"
+                >
+                  Category
+                </label>
+                <select
+                  id="contact-category"
+                  name="category"
+                  required
+                  defaultValue="General"
+                  className="border border-[var(--text-dark)]/20 bg-white px-4 py-3 text-[14px] font-light text-[var(--text-dark)] outline-none transition-colors focus:border-[var(--primary)]"
+                >
+                  {categories.map((c) => (
+                    <option key={c.label} value={c.label}>
+                      {c.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label
+                  htmlFor="contact-message"
+                  className="text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)]"
+                >
+                  Message
+                </label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  required
+                  rows={6}
+                  className="border border-[var(--text-dark)]/20 bg-white px-4 py-3 text-[14px] font-light text-[var(--text-dark)] outline-none transition-colors placeholder:text-[var(--text-muted-dark)]/60 focus:border-[var(--primary)]"
+                  placeholder="Tell us what's on your mind…"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="group mt-2 inline-flex items-center justify-center gap-3 self-start bg-[var(--primary)] px-7 py-4 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
+              >
+                Send Message
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </button>
+
+              <p className="text-[11px] font-light leading-[1.5] text-[var(--text-muted-dark)]">
+                Replies land in {INQUIRIES_INBOX}.
+              </p>
+            </form>
+          </div>
         </div>
       </section>
 
