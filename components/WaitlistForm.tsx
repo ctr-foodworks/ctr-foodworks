@@ -1,10 +1,18 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
+
 type Variant = "dark" | "light";
+type Status = "idle" | "submitting" | "success" | "error";
 
 type Props = {
   variant?: Variant;
   className?: string;
   buttonLabel?: string;
   showHelper?: boolean;
+  /** Fires once the submission lands successfully — used by WelcomeModal to
+   *  auto-dismiss after a brief success state. */
+  onSuccess?: () => void;
 };
 
 const inputClass: Record<Variant, string> = {
@@ -14,20 +22,76 @@ const inputClass: Record<Variant, string> = {
 };
 
 /**
- * Email-only waitlist signup. Submits via Netlify Forms (zero backend) —
- * Netlify detects the form at deploy time via `data-netlify="true"`. The
- * submission lands in the `waitlist` form bucket on the Netlify dashboard,
- * separate from the longer `contact` form on /connect. After submit the
- * user lands on /thanks/.
- *
- * Server-rendered (no "use client") — plain HTML form, no JS state.
+ * Email-only waitlist signup. Submits via Netlify Forms over AJAX so the
+ * user never leaves the page — the form is replaced inline with a success
+ * message on success. The plain <form> attributes (data-netlify, name,
+ * hidden form-name) still ship in the static HTML so Netlify detects the
+ * form at deploy time. For no-JS users the submission would just POST to
+ * /thanks/ as a normal HTML form (the static fallback).
  */
 export function WaitlistForm({
   variant = "dark",
   className = "",
   buttonLabel = "Notify Me",
   showHelper = true,
+  onSuccess,
 }: Props) {
+  const [status, setStatus] = useState<Status>("idle");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (status === "submitting") return;
+    setStatus("submitting");
+
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const body = new URLSearchParams();
+    for (const [key, value] of formData.entries()) {
+      if (typeof value === "string") body.append(key, value);
+    }
+
+    try {
+      const res = await fetch("/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body.toString(),
+      });
+      if (res.ok) {
+        setStatus("success");
+        form.reset();
+        // Give the user a beat to see the success state, then notify caller
+        if (onSuccess) window.setTimeout(onSuccess, 1500);
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  // Success state — replace the form with an inline confirmation
+  if (status === "success") {
+    return (
+      <div
+        className={`flex w-full max-w-[480px] flex-col gap-3 ${className}`}
+        role="status"
+        aria-live="polite"
+      >
+        <div
+          className={`flex h-[52px] items-center px-5 text-[13px] font-medium ${
+            variant === "dark"
+              ? "bg-white/15 text-white"
+              : "bg-[var(--primary)] text-white"
+          }`}
+        >
+          You&rsquo;re on the list. We&rsquo;ll be in touch.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`flex w-full max-w-[480px] flex-col gap-3 ${className}`}>
       <form
@@ -36,6 +100,7 @@ export function WaitlistForm({
         action="/thanks/"
         data-netlify="true"
         data-netlify-honeypot="bot-field"
+        onSubmit={handleSubmit}
         className="flex w-full"
       >
         <input type="hidden" name="form-name" value="waitlist" />
@@ -53,16 +118,28 @@ export function WaitlistForm({
           placeholder="Enter your email"
           aria-label="Email address"
           autoComplete="email"
-          className={`h-[52px] flex-1 rounded-l-[4px] border-none px-5 text-[14px] font-light outline-none ${inputClass[variant]}`}
+          disabled={status === "submitting"}
+          className={`h-[52px] flex-1 rounded-l-[4px] border-none px-5 text-[14px] font-light outline-none disabled:opacity-60 ${inputClass[variant]}`}
         />
         <button
           type="submit"
-          className="h-[52px] cursor-pointer rounded-r-[4px] bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[2px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
+          disabled={status === "submitting"}
+          className="h-[52px] cursor-pointer rounded-r-[4px] bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[2px] uppercase text-white transition-colors hover:bg-[#a82d1d] disabled:cursor-wait disabled:opacity-60"
         >
-          {buttonLabel}
+          {status === "submitting" ? "…" : buttonLabel}
         </button>
       </form>
-      {showHelper ? (
+
+      {status === "error" ? (
+        <p
+          className={`text-[12px] font-light ${
+            variant === "dark" ? "text-white/85" : "text-[var(--primary)]"
+          }`}
+          role="alert"
+        >
+          Something went wrong. Try again?
+        </p>
+      ) : showHelper ? (
         <p
           className={`text-[11px] font-light ${
             variant === "dark"
