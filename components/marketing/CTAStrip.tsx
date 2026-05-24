@@ -50,8 +50,10 @@ export function CTAStrip({
 }: Props) {
   const style = toneStyles[tone];
   return (
-    <section className={`w-full ${style.container}`}>
-      <div className="flex flex-col gap-6 px-6 py-14 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:px-[60px] lg:py-16">
+    <section className={`w-full py-14 lg:py-16 ${style.container}`}>
+      {/* Inner shell — anchors copy + CTA at max-w-[1600px] so the button
+          stays near the headline on 4K instead of drifting to the far right. */}
+      <div className="shell flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-12">
         <div className="flex flex-col gap-3 lg:max-w-[560px]">
           <span
             className={`text-[10px] font-semibold tracking-[5px] uppercase ${style.eyebrow}`}

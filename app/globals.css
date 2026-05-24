@@ -37,6 +37,12 @@
   --text-light: #ffffff;
   --text-muted-dark: #444444;
   --text-muted-light: #d8d8d8;
+
+  /* Layout shell — content anchors at this max-width on wide screens.
+     Colored section backgrounds still bleed to viewport edges; only the
+     readable content stops here. Tweak if the site ever feels too
+     letterboxed (raise) or too sprawling (lower). */
+  --shell-max: 1600px;
 }
 
 @layer base {
@@ -57,6 +63,22 @@
     font-family: "Barlow Condensed", "Arboria", sans-serif;
     font-weight: 700;
     letter-spacing: -0.02em;
+  }
+}
+
+/* Inner shell — wraps section content so it caps at --shell-max on wide
+   screens with consistent horizontal padding. Use anywhere you want content
+   anchored at the design width while the parent section's background bleeds
+   edge-to-edge. */
+.shell {
+  margin-inline: auto;
+  width: 100%;
+  max-width: var(--shell-max);
+  padding-inline: 24px;
+}
+@media (min-width: 1024px) {
+  .shell {
+    padding-inline: 60px;
   }
 }
 

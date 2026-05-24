@@ -86,7 +86,10 @@ export default function VisitPage() {
             aspect="portrait"
           />
         </div>
-        <div className="order-2 flex flex-col justify-center gap-6 px-6 pb-[80px] lg:order-2 lg:px-[60px] lg:py-[120px]">
+        {/* Text column — anchored to the LEFT edge of its half (= screen
+            midline) so the copy stays near the column boundary on 4K. */}
+        <div className="order-2 flex justify-start px-6 pb-[80px] lg:order-2 lg:px-[60px] lg:py-[120px]">
+          <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[560px]">
           <Eyebrow tone="primary">The Building</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             A LOCAL LANDMARK
@@ -99,6 +102,7 @@ export default function VisitPage() {
           <p className="max-w-[480px] text-[15px] font-light leading-[1.8] text-[var(--text-muted-dark)]">
             The former CNN Center hosted presidents, prime ministers, and a quarter-century of breaking news. The atrium that anchored 30 years of broadcast journalism is now the place to be and share a moment with great food and drinks.
           </p>
+          </div>
         </div>
       </section>
 
@@ -168,7 +172,10 @@ export default function VisitPage() {
 
       {/* §5 — The Neighborhood (cream, text left + Google Maps right) */}
       <section className="grid w-full grid-cols-1 bg-[var(--bg-cream)] lg:grid-cols-2">
-        <div className="order-2 flex flex-col justify-center gap-6 px-6 pb-[80px] lg:order-1 lg:px-[60px] lg:py-[120px]">
+        {/* Text column on the LEFT — anchor to RIGHT edge so copy sits near
+            screen midline on 4K. */}
+        <div className="order-2 flex justify-start px-6 pb-[80px] lg:order-1 lg:justify-end lg:px-[60px] lg:py-[120px]">
+          <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[560px]">
           <Eyebrow tone="primary">The Neighborhood</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             AT THE
@@ -206,6 +213,7 @@ export default function VisitPage() {
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
             </a>
           </div>
+          </div>
         </div>
         <div className="order-1 p-6 lg:order-2 lg:p-[60px] lg:py-[120px]">
           <div className="relative aspect-[3/2] w-full overflow-hidden border border-[var(--text-dark)]/10 bg-[var(--bg-dark)]">
@@ -225,7 +233,10 @@ export default function VisitPage() {
         id="private-events"
         className="grid w-full grid-cols-1 bg-[var(--bg-dark)] text-white lg:grid-cols-2"
       >
-        <div className="order-2 flex flex-col justify-center gap-6 px-6 pb-[80px] lg:order-1 lg:px-[60px] lg:py-[120px]">
+        {/* Text on the LEFT — anchor to RIGHT edge so copy sits near screen
+            midline on wide screens. */}
+        <div className="order-2 flex justify-start px-6 pb-[80px] lg:order-1 lg:justify-end lg:px-[60px] lg:py-[120px]">
+          <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[560px]">
           <Eyebrow tone="primary">Private Events</Eyebrow>
           <DisplayHeading size="md" className="text-white">
             FEEL LIKE
@@ -247,6 +258,7 @@ export default function VisitPage() {
             </span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
+          </div>
         </div>
         <div className="order-1 p-6 lg:order-2 lg:p-[60px] lg:py-[120px]">
           <SketchPlaceholder

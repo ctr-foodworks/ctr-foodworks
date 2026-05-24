@@ -31,9 +31,11 @@ export default function AboutPage() {
         imageAlt="CTR Food Works atrium rendering"
       />
 
-      {/* Story */}
+      {/* Story — paired full-bleed. Text column anchors to right edge of its
+          half (= screen midline on 4K) via flex justify-end + max-w-[640px]. */}
       <section className="grid w-full grid-cols-1 lg:grid-cols-2">
-        <div className="flex flex-col gap-6 bg-[var(--bg-cream)] px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
+        <div className="flex justify-start bg-[var(--bg-cream)] px-6 py-[80px] lg:justify-end lg:px-[60px] lg:py-[120px]">
+          <div className="flex w-full flex-col gap-6 lg:max-w-[640px]">
           <Eyebrow tone="primary">The Story</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             A LANDMARK,
@@ -57,6 +59,7 @@ export default function AboutPage() {
             Explore the Building
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
+          </div>
         </div>
 
         <div className="relative min-h-[400px] overflow-hidden lg:min-h-0">
