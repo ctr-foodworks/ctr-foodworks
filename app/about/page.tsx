@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ArrowUpRight } from "lucide-react";
 import { PageHero } from "@/components/marketing/PageHero";
 import { CTAStrip } from "@/components/marketing/CTAStrip";
 import { PullQuote } from "@/components/marketing/PullQuote";
@@ -45,6 +46,17 @@ export default function AboutPage() {
           <p className="max-w-[520px] text-[15px] font-light leading-[1.9] text-[var(--text-muted-dark)]">
             Guests can explore eleven diverse culinary concepts, meet friends at the bar, and experience the energy of Atlanta&apos;s evolving food scene in a dynamic destination designed for everyday dining, connection, celebration, and discovery.
           </p>
+          {/* Outbound CTA to the wider property site (per Thierry). External
+              link → opens in a new tab. */}
+          <a
+            href="https://www.thectratlanta.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group mt-2 inline-flex w-fit items-center gap-3 border border-[var(--text-dark)] px-7 py-4 text-[12px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
+          >
+            Explore the Building
+            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </a>
         </div>
 
         <div className="relative min-h-[400px] overflow-hidden lg:min-h-0">
