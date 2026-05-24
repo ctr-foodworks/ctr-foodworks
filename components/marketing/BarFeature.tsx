@@ -30,8 +30,11 @@ export function BarFeature() {
         />
       </div>
 
-      {/* Copy */}
-      <div className="flex flex-col justify-center gap-7 px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
+      {/* Copy — anchored to the LEFT edge of this column (= screen midline
+          on 4K) so the bar copy doesn't drift into the middle of the right
+          half on wide screens. */}
+      <div className="flex justify-start px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
+        <div className="flex w-full flex-col justify-center gap-7 lg:max-w-[560px]">
         <Eyebrow tone="primary">The Bar</Eyebrow>
         <DisplayHeading size="lg" as="h2" className="text-white">
           CTR BAR.
@@ -60,6 +63,7 @@ export function BarFeature() {
               </li>
             ))}
           </ul>
+        </div>
         </div>
       </div>
     </section>

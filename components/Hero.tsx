@@ -10,16 +10,19 @@ export function Hero() {
           viewport left at lg+). NavBar layout: logo at px-60, nav cluster
           centered via flex justify-between, "Home" is the first nav item. */}
       <div className="grid grid-cols-1 lg:min-h-[100svh] lg:grid-cols-[3fr_8fr]">
-        {/* LEFT — statement panel */}
+        {/* LEFT — statement panel. Inner cluster (max-w-[480px], ml-auto on lg+)
+            anchors text to the RIGHT edge of this column so the headline sits
+            close to the column boundary (= screen midline) on wide screens
+            instead of drifting in the middle of the left third. */}
         <div className="relative flex min-h-[100svh] flex-col justify-between bg-[var(--bg-warm-white)] px-6 pb-14 pt-[110px] lg:min-h-0 lg:px-[60px] lg:pb-20 lg:pt-[140px] xl:px-[80px]">
           {/* Top — eyebrow */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 lg:ml-auto lg:w-full lg:max-w-[480px]">
             <Eyebrow tone="primary">Opening Spring 2026</Eyebrow>
             <div className="h-[2px] w-12 bg-[var(--primary)]" />
           </div>
 
           {/* Middle — headline + body + address */}
-          <div className="flex flex-col gap-8 py-10 lg:gap-10 lg:py-0">
+          <div className="flex flex-col gap-8 py-10 lg:ml-auto lg:w-full lg:max-w-[480px] lg:gap-10 lg:py-0">
             <DisplayHeading as="h1" size="lg">
               DOWNTOWN
               <br />
@@ -43,7 +46,7 @@ export function Hero() {
           </div>
 
           {/* Bottom — logo mark */}
-          <div className="flex items-end pt-4">
+          <div className="flex items-end pt-4 lg:ml-auto lg:w-full lg:max-w-[480px]">
             <img
               src="/logos/ctr-food-works_primary-black.svg"
               alt="CTR Food Works"
@@ -71,8 +74,11 @@ export function Hero() {
           />
 
           <div className="relative z-10 flex h-full min-h-[100svh] flex-col justify-end gap-8 px-6 pt-[110px] pb-14 lg:min-h-0 lg:gap-10 lg:px-[60px] lg:pt-[140px] lg:pb-20 xl:px-[80px]">
-            {/* Headline cluster — anchored to the bottom */}
-            <div className="flex flex-col gap-5">
+            {/* Headline cluster — anchored to the bottom AND to the LEFT edge
+                of this column (max-w-[560px]) so on 4K the JOIN US copy stays
+                near the column boundary instead of drifting into the middle
+                of the right two-thirds. */}
+            <div className="flex flex-col gap-5 lg:w-full lg:max-w-[560px]">
               <Eyebrow tone="light">Opening Spring 2026</Eyebrow>
               <DisplayHeading
                 as="h2"
@@ -88,7 +94,7 @@ export function Hero() {
             </div>
 
             {/* Single CTA button — scrolls to the SignupBreak section below */}
-            <div>
+            <div className="lg:w-full lg:max-w-[560px]">
               <Link
                 href="/#waitlist"
                 className="group inline-flex items-center gap-3 bg-[var(--primary)] px-7 py-4 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d]"

@@ -117,7 +117,7 @@ export default function ConnectPage() {
 
       {/* §3 — Socials */}
       <section className="w-full bg-[var(--bg-dark)] px-6 py-[80px] text-white lg:px-[60px] lg:py-[100px]">
-        <div className="mx-auto max-w-[1000px] flex flex-col gap-8 text-center">
+        <div className="mx-auto max-w-[1200px] flex flex-col gap-8 text-center">
           <Eyebrow tone="primary" className="self-center">
             Follow Along
           </Eyebrow>
