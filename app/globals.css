@@ -45,6 +45,10 @@
     height: 100%;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   .font-primary {
     font-family: "Arboria", "Inter", sans-serif;
   }
@@ -53,5 +57,39 @@
     font-family: "Barlow Condensed", "Arboria", sans-serif;
     font-weight: 700;
     letter-spacing: -0.02em;
+  }
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Soft-edge fade for an image so it dissolves into its container background
+   instead of meeting it at a hard line. Vertical fade on mobile (image stacks
+   above text), horizontal fade on lg+ (image left, text right). */
+.fade-into-bg {
+  -webkit-mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+}
+@media (min-width: 1024px) {
+  .fade-into-bg {
+    -webkit-mask-image: linear-gradient(to right, black 50%, transparent 100%);
+    mask-image: linear-gradient(to right, black 50%, transparent 100%);
   }
 }

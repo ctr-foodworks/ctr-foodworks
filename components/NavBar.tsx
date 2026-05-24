@@ -1,0 +1,251 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, X, ChevronDown } from "lucide-react";
+import { navLinks, type NavLink } from "@/lib/nav";
+
+export function NavBar() {
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 8);
+    handler();
+    window.addEventListener("scroll", handler, { passive: true });
+    return () => window.removeEventListener("scroll", handler);
+  }, []);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  return (
+    <>
+      <header
+        className={`fixed inset-x-0 top-0 z-50 bg-[var(--bg-warm-white)] transition-shadow ${
+          scrolled ? "shadow-[0_1px_0_rgba(0,0,0,0.06)]" : ""
+        }`}
+      >
+        <div className="flex h-[72px] items-center justify-between px-6 lg:h-[80px] lg:px-[60px]">
+          <Link
+            href="/"
+            aria-label="CTR Food Works home"
+            className="flex items-center"
+          >
+            <img
+              src="/logos/ctr-inline-black.svg"
+              alt="CTR Food Works"
+              className="h-4 w-auto lg:h-5"
+            />
+          </Link>
+
+          {/* Desktop nav with hover-dropdown panels */}
+          <nav className="hidden items-center gap-7 lg:flex">
+            {navLinks.map((link) => (
+              <DesktopNavItem
+                key={link.href}
+                link={link}
+                pathname={pathname}
+              />
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-3">
+            <Link
+              href="/#waitlist"
+              className="hidden h-[40px] items-center border border-[var(--text-dark)] bg-transparent px-5 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white lg:inline-flex"
+            >
+              Join Us
+            </Link>
+
+            <button
+              type="button"
+              aria-label={open ? "Close menu" : "Open menu"}
+              onClick={() => setOpen(!open)}
+              className="flex h-10 w-10 items-center justify-center text-[var(--text-dark)] lg:hidden"
+            >
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {open && (
+        <div className="fixed inset-0 top-[72px] z-40 flex flex-col overflow-y-auto bg-[var(--bg-warm-white)] lg:hidden">
+          <nav className="flex flex-col">
+            {navLinks.map((link) => (
+              <MobileNavItem key={link.href} link={link} pathname={pathname} />
+            ))}
+            <Link
+              href="/#waitlist"
+              className="border-t border-[var(--border-light)] bg-transparent px-6 py-5 text-[14px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
+            >
+              Join Us
+            </Link>
+          </nav>
+        </div>
+      )}
+    </>
+  );
+}
+
+/* ────────────────────────── desktop ────────────────────────── */
+
+function DesktopNavItem({
+  link,
+  pathname,
+}: {
+  link: NavLink;
+  pathname: string;
+}) {
+  const active = isActive(pathname, link.href);
+  const hasDropdown = !!link.children?.length && !link.desktopFlat;
+
+  if (!hasDropdown) {
+    return (
+      <Link
+        href={link.href}
+        aria-current={active ? "page" : undefined}
+        className={`text-[11px] font-semibold tracking-[3px] uppercase transition-colors ${
+          active
+            ? "text-[var(--primary)]"
+            : "text-[var(--text-dark)] hover:text-[var(--primary)]"
+        }`}
+      >
+        {link.label}
+      </Link>
+    );
+  }
+
+  return (
+    <div className="group relative">
+      <Link
+        href={link.href}
+        aria-current={active ? "page" : undefined}
+        aria-haspopup="true"
+        className={`flex items-center gap-1.5 text-[11px] font-semibold tracking-[3px] uppercase transition-colors ${
+          active
+            ? "text-[var(--primary)]"
+            : "text-[var(--text-dark)] hover:text-[var(--primary)]"
+        }`}
+      >
+        {link.label}
+        <ChevronDown className="h-3 w-3 transition-transform group-hover:rotate-180" />
+      </Link>
+
+      {/* Invisible bridge so the dropdown doesn't close when the cursor
+          crosses the gap between trigger and panel */}
+      <div
+        aria-hidden="true"
+        className="invisible absolute left-1/2 top-full h-3 w-[200px] -translate-x-1/2 group-hover:visible"
+      />
+
+      <div className="invisible absolute right-0 top-[calc(100%+12px)] z-10 min-w-[260px] origin-top-right -translate-y-1 opacity-0 transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+        <div className="overflow-hidden border border-[var(--border-light)] bg-[var(--bg-warm-white)] shadow-[0_24px_48px_-16px_rgba(0,0,0,0.18)]">
+          <ul className="flex flex-col py-2">
+            {link.children?.map((child) => (
+              <li key={child.href + child.label}>
+                <Link
+                  href={child.href}
+                  className="flex items-center px-5 py-2.5 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--bg-cream)] hover:text-[var(--primary)]"
+                >
+                  {child.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ────────────────────────── mobile ────────────────────────── */
+
+function MobileNavItem({
+  link,
+  pathname,
+}: {
+  link: NavLink;
+  pathname: string;
+}) {
+  const active = isActive(pathname, link.href);
+  const hasChildren = !!link.children?.length;
+  // Auto-expand the section the user is currently on so children are visible
+  // without an extra tap when arriving on a sub-route (e.g. /food-and-drinks/morellis).
+  const [expanded, setExpanded] = useState(active && hasChildren);
+
+  return (
+    <div className="flex flex-col border-b border-[var(--border-light)]">
+      <div className="flex items-stretch">
+        <Link
+          href={link.href}
+          aria-current={active ? "page" : undefined}
+          className={`flex-1 px-6 py-5 text-[14px] font-semibold tracking-[3px] uppercase transition-colors ${
+            active
+              ? "bg-[var(--primary)] text-white"
+              : "text-[var(--text-dark)]"
+          }`}
+        >
+          {link.label}
+        </Link>
+        {hasChildren && (
+          <button
+            type="button"
+            aria-label={
+              expanded ? `Collapse ${link.label}` : `Expand ${link.label}`
+            }
+            aria-expanded={expanded}
+            onClick={() => setExpanded((v) => !v)}
+            className={`flex items-center justify-center px-6 transition-colors ${
+              active
+                ? "bg-[var(--primary)] text-white"
+                : "text-[var(--text-dark)] hover:text-[var(--primary)]"
+            }`}
+          >
+            <ChevronDown
+              className={`h-4 w-4 transition-transform duration-200 ${
+                expanded ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+        )}
+      </div>
+      {hasChildren && expanded ? (
+        <ul className="flex flex-col bg-[#f9f4f0] pb-2">
+          {link.children?.map((child) => (
+            <li key={child.href + child.label}>
+              <Link
+                href={child.href}
+                className="block px-6 py-3 pl-10 text-[12px] font-semibold tracking-[3px] uppercase text-[var(--text-muted-dark)] transition-colors hover:text-[var(--primary)]"
+              >
+                {child.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+    </div>
+  );
+}
+
+/* ────────────────────────── helpers ────────────────────────── */
+
+/**
+ * Returns true if `linkHref` matches the current pathname. Handles:
+ *   · trailingSlash: true in next.config (pathname may be "/about/")
+ *   · sub-routes (`/food-and-drinks/morellis` should highlight
+ *     `/food-and-drinks`)
+ *   · the home link `/` which should only match the home page exactly
+ */
+function isActive(pathname: string, linkHref: string): boolean {
+  const normalized =
+    pathname.length > 1 && pathname.endsWith("/")
+      ? pathname.slice(0, -1)
+      : pathname;
+  if (linkHref === "/") return normalized === "/";
+  return normalized === linkHref || normalized.startsWith(linkHref + "/");
+}
