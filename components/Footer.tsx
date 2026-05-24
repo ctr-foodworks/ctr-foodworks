@@ -130,8 +130,10 @@ export function Footer() {
         </div>
         <div className="flex items-center gap-5">
           <a
-            href="https://instagram.com"
-            aria-label="Instagram"
+            href="https://www.instagram.com/ctrfoodworks/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="CTR Food Works on Instagram"
             className="transition-colors hover:text-white"
           >
             <Instagram className="h-[18px] w-[18px]" />
