@@ -39,7 +39,7 @@ export default function DiningPage() {
           right text column so body copy doesn't feel undersized next to the
           big display headline. */}
       <section className="w-full bg-[var(--bg-cream)] px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
-        <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-24 xl:gap-32">
+        <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-24 xl:max-w-[1600px] xl:gap-32">
           <div className="flex flex-col gap-5">
             <Eyebrow tone="primary">The Lineup</Eyebrow>
             <DisplayHeading size="md" className="text-[var(--text-dark)]">
@@ -77,7 +77,7 @@ export default function DiningPage() {
       {/* §6 — Curation principle. Wider container + larger type so this
           closing block feels substantial instead of lost in cream. */}
       <section className="w-full bg-[#e8e6e3] px-6 py-[100px] text-[var(--text-dark)] lg:px-[60px] lg:py-[140px] xl:py-[160px]">
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-7 xl:max-w-[1600px]">
           <Eyebrow tone="primary">Why these eleven</Eyebrow>
           <h2 className="font-display text-[48px] font-black uppercase leading-[0.95] tracking-[-1px] text-[var(--text-dark)] lg:text-[72px] xl:text-[88px]">
             ONE STANDARD.
