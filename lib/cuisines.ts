@@ -1,0 +1,15 @@
+export const cuisineLabels = [
+  "Southern Fried",
+  "Artisan Ice Cream",
+  "Szechuan Spice",
+  "Latin Kitchen",
+  "Coastal Seafood",
+  "All-Day Breakfast",
+  "Handcrafted Sushi",
+  "Philly Cheesesteak",
+  "Burgers & Dogs",
+  "Mexican Favorites",
+  "Italian Kitchen",
+  "Fresh Pastries",
+  "Craft Cocktails",
+];
