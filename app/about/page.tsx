@@ -31,14 +31,13 @@ export default function AboutPage() {
         imageAlt="CTR Food Works atrium rendering"
       />
 
-      {/* Story — paired full-bleed. Text column anchors to right edge of its
-          half (= screen midline on 4K) via flex justify-end + max-w-[640px]. */}
-      <section className="grid w-full grid-cols-1 lg:grid-cols-2">
-        {/* Text left-aligned so it lines up with the "ROOTED. RESTORED.
-            ALIVE." headline in the hero above (both anchored to the left
-            edge of the viewport + 60px padding). */}
-        <div className="flex justify-start bg-[var(--bg-cream)] px-6 py-[80px] lg:px-[60px] lg:py-[120px] xl:px-[80px]">
-          <div className="flex w-full flex-col gap-6 lg:max-w-[640px] xl:max-w-[720px]">
+      {/* Story — bg-cream bleeds edge-to-edge, inner grid bounded to the
+          site's 1440/1600 shell. Text column fills its grid cell so the
+          copy naturally meets the entrance-rendering image at the column
+          boundary ("pegar la imagen"). */}
+      <section className="w-full bg-[var(--bg-cream)]">
+        <div className="mx-auto grid max-w-[1440px] grid-cols-1 lg:grid-cols-2 xl:max-w-[1600px]">
+        <div className="flex flex-col justify-center gap-6 px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
           <Eyebrow tone="primary">The Story</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             A LANDMARK,
@@ -62,7 +61,6 @@ export default function AboutPage() {
             Explore the Building
             <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
           </a>
-          </div>
         </div>
 
         <div className="relative min-h-[400px] overflow-hidden lg:min-h-0">
@@ -71,6 +69,7 @@ export default function AboutPage() {
             alt="CTR Food Works entrance rendering"
             className="absolute inset-0 h-full w-full object-cover"
           />
+        </div>
         </div>
       </section>
 
