@@ -50,11 +50,11 @@ export function CTAStrip({
 }: Props) {
   const style = toneStyles[tone];
   return (
-    <section className={`w-full py-14 lg:py-16 ${style.container}`}>
-      {/* Inner content capped tighter than the global shell so the button
-          stays clustered with the headline instead of drifting to the far
-          right of a 2000px shell on wide monitors. */}
-      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 px-6 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:px-[60px] xl:max-w-[1600px]">
+    // Padding lives on the section (matches every other section on the
+    // site) so the inner shell aligns vertically with the sections above
+    // the CTA — fixes the "corrido" / inset-by-60px feel.
+    <section className={`w-full px-6 py-14 lg:px-[60px] lg:py-16 ${style.container}`}>
+      <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-12 xl:max-w-[1600px]">
         <div className="flex flex-col gap-3 lg:max-w-[640px]">
           <span
             className={`text-[10px] font-semibold tracking-[5px] uppercase ${style.eyebrow}`}

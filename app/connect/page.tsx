@@ -73,7 +73,7 @@ export default function ConnectPage() {
 
       {/* §2 — Contact form (Netlify Forms) + category legend */}
       <section className="w-full bg-[#f9f4f0] px-6 py-[80px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]">
-        <div className="mx-auto flex max-w-[1200px] flex-col gap-12 lg:gap-16">
+        <div className="mx-auto flex max-w-[1440px] xl:max-w-[1600px] flex-col gap-12 lg:gap-16">
           <div className="flex flex-col gap-5 lg:max-w-[640px]">
             <Eyebrow tone="primary">Get in touch</Eyebrow>
             <DisplayHeading size="md" className="text-[var(--text-dark)]">
@@ -117,7 +117,7 @@ export default function ConnectPage() {
 
       {/* §3 — Socials */}
       <section className="w-full bg-[var(--bg-dark)] px-6 py-[80px] text-white lg:px-[60px] lg:py-[100px]">
-        <div className="mx-auto max-w-[1200px] flex flex-col gap-8 text-center">
+        <div className="mx-auto max-w-[1440px] xl:max-w-[1600px] flex flex-col gap-8 text-center">
           <Eyebrow tone="primary" className="self-center">
             Follow Along
           </Eyebrow>
