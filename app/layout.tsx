@@ -3,6 +3,7 @@ import "./globals.css";
 import { NavBar } from "@/components/NavBar";
 import { Footer } from "@/components/Footer";
 import { CookieNotice } from "@/components/CookieNotice";
+import { WelcomeModal } from "@/components/WelcomeModal";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ctrfoodworks.com"),
@@ -80,6 +81,9 @@ export default function RootLayout({
         <NavBar />
         {children}
         <Footer />
+        {/* WelcomeModal renders first-visit only (localStorage-gated). Cookie
+            notice still appears bottom-right after the modal is dismissed. */}
+        <WelcomeModal />
         <CookieNotice />
       </body>
     </html>
