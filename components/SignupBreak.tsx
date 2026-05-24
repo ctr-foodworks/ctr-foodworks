@@ -27,13 +27,14 @@ export function SignupBreak() {
         />
       </div>
 
-      {/* RIGHT — red text + form, anchored to the LEFT edge of its column */}
-      <div className="flex justify-start px-6 py-16 lg:order-2 lg:px-[60px] lg:py-[100px]">
-        <div className="flex w-full flex-col gap-7 lg:max-w-[560px]">
+      {/* RIGHT — red text + form, anchored to the LEFT edge of its column.
+          max-w widens at xl+ so headline gets to breathe on wide screens. */}
+      <div className="flex justify-start px-6 py-16 lg:order-2 lg:px-[60px] lg:py-[100px] xl:px-[80px]">
+        <div className="flex w-full flex-col gap-7 lg:max-w-[640px] xl:max-w-[720px]">
           <span className="text-[11px] font-semibold tracking-[6px] uppercase text-white/60">
             Atlanta · Spring 2026
           </span>
-          <h2 className="break-words font-display text-[48px] font-black leading-[0.9] tracking-[-1px] text-white sm:text-[56px] lg:text-[72px]">
+          <h2 className="break-words font-display text-[48px] font-black leading-[0.9] tracking-[-1px] text-white sm:text-[56px] lg:text-[72px] xl:text-[88px]">
             ENTERTAINMENT.
             <br />
             CULTURE.

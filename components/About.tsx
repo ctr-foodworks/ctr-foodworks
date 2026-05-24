@@ -13,14 +13,16 @@
 export function About() {
   return (
     <section className="grid w-full bg-[var(--secondary-navy)] lg:min-h-[680px] lg:grid-cols-2">
-      {/* LEFT — text, anchored to the right edge of its column */}
-      <div className="flex justify-start px-6 py-16 lg:justify-end lg:px-[60px] lg:py-[100px]">
-        <div className="flex w-full flex-col gap-7 lg:max-w-[560px]">
+      {/* LEFT — text, anchored to the right edge of its column.
+          max-w-[720px] keeps copy comfortable to read while letting the
+          headline fill more of the column on wide screens. */}
+      <div className="flex justify-start px-6 py-16 lg:justify-end lg:px-[60px] lg:py-[100px] xl:px-[80px]">
+        <div className="flex w-full flex-col gap-7 lg:max-w-[640px] xl:max-w-[720px]">
           <span className="text-[11px] font-semibold tracking-[6px] text-white/50">
             ABOUT CTR FOOD WORKS
           </span>
 
-          <h2 className="font-display text-[52px] font-black leading-[0.9] text-white lg:text-[72px]">
+          <h2 className="font-display text-[52px] font-black leading-[0.9] text-white lg:text-[72px] xl:text-[88px]">
             FOOD.
             <br />
             ENERGY.

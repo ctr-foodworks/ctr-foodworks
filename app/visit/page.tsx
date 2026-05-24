@@ -89,7 +89,7 @@ export default function VisitPage() {
         {/* Text column — anchored to the LEFT edge of its half (= screen
             midline) so the copy stays near the column boundary on 4K. */}
         <div className="order-2 flex justify-start px-6 pb-[80px] lg:order-2 lg:px-[60px] lg:py-[120px]">
-          <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[560px]">
+          <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[640px] xl:max-w-[720px]">
           <Eyebrow tone="primary">The Building</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             A LOCAL LANDMARK
@@ -175,7 +175,7 @@ export default function VisitPage() {
         {/* Text column on the LEFT — anchor to RIGHT edge so copy sits near
             screen midline on 4K. */}
         <div className="order-2 flex justify-start px-6 pb-[80px] lg:order-1 lg:justify-end lg:px-[60px] lg:py-[120px]">
-          <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[560px]">
+          <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[640px] xl:max-w-[720px]">
           <Eyebrow tone="primary">The Neighborhood</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             AT THE
@@ -236,7 +236,7 @@ export default function VisitPage() {
         {/* Text on the LEFT — anchor to RIGHT edge so copy sits near screen
             midline on wide screens. */}
         <div className="order-2 flex justify-start px-6 pb-[80px] lg:order-1 lg:justify-end lg:px-[60px] lg:py-[120px]">
-          <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[560px]">
+          <div className="flex w-full flex-col justify-center gap-6 lg:max-w-[640px] xl:max-w-[720px]">
           <Eyebrow tone="primary">Private Events</Eyebrow>
           <DisplayHeading size="md" className="text-white">
             FEEL LIKE
