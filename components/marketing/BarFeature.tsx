@@ -12,8 +12,12 @@ export function BarFeature() {
   return (
     <section
       id="bar"
-      className="grid w-full scroll-mt-24 grid-cols-1 bg-[#161616] text-white lg:grid-cols-2"
+      className="w-full scroll-mt-24 bg-[#161616] text-white"
     >
+      {/* Inner grid capped to match the vendor grid width above so the bar
+          section reads as part of the same rhythm instead of a separate
+          full-bleed block. Background still bleeds to viewport edges. */}
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 lg:grid-cols-2 xl:max-w-[1600px]">
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:min-h-[680px]">
         <img
@@ -65,6 +69,7 @@ export function BarFeature() {
           </ul>
         </div>
         </div>
+      </div>
       </div>
     </section>
   );
