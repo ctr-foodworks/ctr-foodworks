@@ -34,7 +34,10 @@ export default function AboutPage() {
       {/* Story — paired full-bleed. Text column anchors to right edge of its
           half (= screen midline on 4K) via flex justify-end + max-w-[640px]. */}
       <section className="grid w-full grid-cols-1 lg:grid-cols-2">
-        <div className="flex justify-start bg-[var(--bg-cream)] px-6 py-[80px] lg:justify-end lg:px-[60px] lg:py-[120px] xl:px-[80px]">
+        {/* Text left-aligned so it lines up with the "ROOTED. RESTORED.
+            ALIVE." headline in the hero above (both anchored to the left
+            edge of the viewport + 60px padding). */}
+        <div className="flex justify-start bg-[var(--bg-cream)] px-6 py-[80px] lg:px-[60px] lg:py-[120px] xl:px-[80px]">
           <div className="flex w-full flex-col gap-6 lg:max-w-[640px] xl:max-w-[720px]">
           <Eyebrow tone="primary">The Story</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
