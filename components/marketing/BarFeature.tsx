@@ -2,7 +2,7 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
 
 const pour = [
-  { label: "Draft Beer", val: "8 rotating Georgia taps" },
+  { label: "Draft Beer", val: "6 rotating Georgia taps" },
   { label: "Cocktails", val: "Seasonal craft menu" },
   { label: "Wine", val: "Natural & biodynamic" },
   { label: "N/A Options", val: "House sodas & shrubs" },
@@ -10,7 +10,10 @@ const pour = [
 
 export function BarFeature() {
   return (
-    <section className="grid w-full grid-cols-1 bg-[#161616] text-white lg:grid-cols-2">
+    <section
+      id="bar"
+      className="grid w-full scroll-mt-24 grid-cols-1 bg-[#161616] text-white lg:grid-cols-2"
+    >
       {/* Image */}
       <div className="relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:min-h-[680px]">
         <img

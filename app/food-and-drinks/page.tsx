@@ -11,7 +11,7 @@ import { vendors } from "@/lib/vendors";
 export const metadata: Metadata = {
   title: "Dining",
   description:
-    "Twelve chef-driven kitchens and one extraordinary bar. Meet the lineup at CTR Food Works.",
+    "Eleven chef-driven kitchens and one extraordinary bar. Meet the lineup at CTR Food Works.",
 };
 
 export default function DiningPage() {
@@ -22,7 +22,7 @@ export default function DiningPage() {
         eyebrow="The Dining Lineup"
         title={
           <>
-            12 WAYS TO
+            11 WAYS TO
             <br />
             BE HUNGRY.
           </>
@@ -41,7 +41,7 @@ export default function DiningPage() {
           <div className="flex flex-col gap-5">
             <Eyebrow tone="primary">The Lineup</Eyebrow>
             <DisplayHeading size="md" className="text-[var(--text-dark)]">
-              TWELVE INDEPENDENT
+              ELEVEN INDEPENDENT
               <br />
               KITCHENS.
               <br />
@@ -56,7 +56,7 @@ export default function DiningPage() {
               No franchises. No generic concepts. No food-court compromises. Every kitchen at CTR Food Works is selected for quality, personality, and craftsmanship — a collection of concepts ranging from hamburgers and cheesesteaks to comfort food, cocktails, and desserts.
             </p>
             <p>
-              Order from one or all twelve. Stay for a quick bite or settle in for the night. CTR Food Works is built to be experienced your way.
+              Order from one or all eleven. Stay for a quick bite or settle in for the night. CTR Food Works is built to be experienced your way.
             </p>
           </div>
         </div>
@@ -75,15 +75,15 @@ export default function DiningPage() {
       {/* §6 — Curation principle */}
       <section className="w-full bg-[#e8e6e3] px-6 py-[80px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]">
         <div className="mx-auto flex max-w-[860px] flex-col gap-6">
-          <Eyebrow tone="primary">Why these twelve</Eyebrow>
+          <Eyebrow tone="primary">Why these eleven</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             ONE STANDARD.
             <br />
-            TWELVE ANSWERS.
+            ELEVEN ANSWERS.
           </DisplayHeading>
           <div className="h-[2px] w-12 bg-[var(--primary)]" />
           <p className="max-w-[680px] text-[15px] font-light leading-[1.8] text-[var(--text-muted-dark)] lg:text-[16px]">
-            Atlanta&apos;s food story is too big and too good to be told by one kitchen. So we picked twelve operators who already do their one thing better than almost anyone in the city — and gave them a stage with a great bar, a long table, and a downtown front door.
+            Atlanta&apos;s food story is too big and too good to be told by one kitchen. So we picked eleven operators who already do their one thing better than almost anyone in the city — and gave them a stage with a great bar, a big room, and a downtown front door.
           </p>
         </div>
       </section>

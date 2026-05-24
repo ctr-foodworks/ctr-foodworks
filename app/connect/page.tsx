@@ -21,11 +21,17 @@ export const metadata: Metadata = {
     "Get in touch with CTR Food Works — general inquiries, press, partnerships, and careers.",
 };
 
+// All four contact cards route to the same inbox (inquiries@ctrfoodworks.com)
+// with a pre-filled subject line so Thierry can triage from one place. No
+// separate per-category mailboxes need to be provisioned.
+const INQUIRIES_INBOX = "inquiries@ctrfoodworks.com";
+
 type Contact = {
   icon: LucideIcon;
   label: string;
   detail: string;
-  email: string;
+  /** Subject line pre-filled in the mailto so the recipient knows the bucket. */
+  subject: string;
 };
 
 const contacts: Contact[] = [
@@ -34,28 +40,28 @@ const contacts: Contact[] = [
     label: "General",
     detail:
       "Questions about the hall, the vendors, the bar, or anything else — we read every note.",
-    email: "hello@ctrfoodworks.com",
+    subject: "General Inquiry",
   },
   {
     icon: Newspaper,
     label: "Press",
     detail:
       "Stories, interviews, photo requests, and media credentials.",
-    email: "press@ctrfoodworks.com",
+    subject: "Press Inquiry",
   },
   {
     icon: Handshake,
     label: "Partnerships",
     detail:
       "Vendors, brand collaborations, sponsorships, and special activations.",
-    email: "partners@ctrfoodworks.com",
+    subject: "Partnership Inquiry",
   },
   {
     icon: Briefcase,
     label: "Careers",
     detail:
       "Opening-team roles across kitchens, the bar, and front-of-house.",
-    email: "careers@ctrfoodworks.com",
+    subject: "Careers Inquiry",
   },
 ];
 
@@ -89,22 +95,25 @@ export default function ConnectPage() {
           <ul className="grid grid-cols-1 gap-px bg-[var(--text-dark)]/15 sm:grid-cols-2">
             {contacts.map((c) => {
               const Icon = c.icon;
+              const href = `mailto:${INQUIRIES_INBOX}?subject=${encodeURIComponent(
+                c.subject
+              )}`;
               return (
                 <li key={c.label} className="bg-[#f9f4f0]">
                   <Link
-                    href={`mailto:${c.email}`}
+                    href={href}
                     className="group flex h-full flex-col gap-4 p-8 lg:p-10"
                   >
                     <div className="flex h-11 w-11 items-center justify-center bg-[var(--bg-dark)] text-white">
                       <Icon className="h-4 w-4" />
                     </div>
                     <div className="flex flex-col gap-2">
-                      <span className="text-[10px] font-semibold tracking-[4px] uppercase text-[var(--text-muted-dark)]">
+                      <h3 className="font-display text-[28px] font-black uppercase leading-[1] tracking-[-0.5px] text-[var(--text-dark)] lg:text-[36px]">
                         {c.label}
-                      </span>
-                      <h3 className="font-display text-[24px] font-black uppercase leading-[1] tracking-[-0.5px] text-[var(--text-dark)] lg:text-[28px]">
-                        {c.email}
                       </h3>
+                      <span className="text-[12px] font-light tracking-[0.5px] text-[var(--text-muted-dark)]">
+                        {INQUIRIES_INBOX}
+                      </span>
                     </div>
                     <p className="text-[13px] font-light leading-[1.7] text-[var(--text-muted-dark)]">
                       {c.detail}

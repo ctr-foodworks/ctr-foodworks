@@ -29,7 +29,6 @@ export const navLinks: NavLink[] = [
   {
     href: "/events",
     label: "Events",
-    desktopFlat: true,
     children: [
       { href: "/events#private-events", label: "Private Events" },
       { href: "/events#public-events", label: "Public Events" },

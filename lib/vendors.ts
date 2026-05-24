@@ -70,9 +70,13 @@ export const vendors: Vendor[] = [
     description:
       "Rivalry Beef brings two legendary sandwich cities under one roof: Philly cheesesteaks and Chicago Italian beef. Built around the playful rivalry between the two icons, the concept delivers stacked sandwiches and old-school Americana energy with a modern street-food vibe. Whether you’re Team Philly or Team Chicago, every bite helps settle the beef.",
     accent: "primary",
-    imageUrl:
-      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
+    // Food photo still pending from Thierry — using the temporary logo as the
+    // card image. VendorCard renders this object-contain on a neutral tile
+    // (see imageMode: "logo") so the square logo isn't crop-mangled by the
+    // usual 4:3 object-cover.
+    imageUrl: "/logos/vendors/rivalry-beef.png",
     logoUrl: "/logos/vendors/rivalry-beef.png",
+    imageMode: "logo",
     comingSoon: true,
   },
   {
@@ -114,16 +118,5 @@ export const vendors: Vendor[] = [
     accent: "primary",
     imageUrl: "/images/vendors/dessertbox.jpg",
     logoUrl: "/logos/vendors/dessertbox.png",
-  },
-  {
-    slug: "the-catering-kitchen",
-    name: "The CaTeRing Kitchen",
-    tagline: "Catering & Meal Prep",
-    description:
-      "Located inside CTR Food Works, The CaTeRing Kitchen offers chef-driven catering for onsite events, corporate luncheons, private gatherings, and weekly meal prep services. Blending quality ingredients with seamless hospitality, our team delivers fresh, customizable menus designed to make every event — big or small — effortless and memorable.",
-    accent: "primary",
-    imageUrl:
-      "https://images.unsplash.com/photo-1555244162-803834f70033?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080",
-    logoUrl: "/logos/vendors/the-catering-kitchen.jpg",
   },
 ];

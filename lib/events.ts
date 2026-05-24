@@ -31,7 +31,7 @@ export const events: Event[] = [
     date: "2026-05-01",
     time: "5 PM – Late",
     description:
-      "The doors open. All twelve kitchens plus the bar, live music, and the city's first look inside the reimagined CNN Center.",
+      "The doors open. All eleven kitchens plus the bar, live music, and the city's first look inside the reimagined CNN Center.",
   },
   {
     slug: "grand-opening-brunch",

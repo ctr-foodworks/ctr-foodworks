@@ -12,6 +12,10 @@ export function VendorCard({ vendor, index }: Props) {
   const accent = accentVar[vendor.accent];
   const number = String(index + 1).padStart(2, "0");
   const isComingSoon = vendor.comingSoon === true;
+  // imageMode: "logo" — used when the vendor doesn't have a food photo yet
+  // (e.g. Rivalry Beef). The brand logo IS the card image; render it
+  // centered with padding so the square logo isn't crop-mangled by 4:3.
+  const isLogoImage = vendor.imageMode === "logo";
 
   return (
     <Link
@@ -22,15 +26,23 @@ export function VendorCard({ vendor, index }: Props) {
     >
       <article className="contents">
         {/* Image with logo overlay */}
-        <div className="relative aspect-[4/3] overflow-hidden bg-[#0c0c0a]">
+        <div
+          className={`relative aspect-[4/3] overflow-hidden ${
+            isLogoImage ? "bg-[#1a1a17]" : "bg-[#0c0c0a]"
+          }`}
+        >
           <img
             src={vendor.imageUrl}
             alt={vendor.name}
-            className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-out ${
-              isComingSoon
-                ? "opacity-50 grayscale"
-                : "saturate-[0.9] group-hover:saturate-100"
-            }`}
+            className={
+              isLogoImage
+                ? "absolute inset-0 h-full w-full object-contain p-10 lg:p-14"
+                : `absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-out ${
+                    isComingSoon
+                      ? "opacity-50 grayscale"
+                      : "saturate-[0.9] group-hover:saturate-100"
+                  }`
+            }
           />
           {/* Coming Soon badge — top-left */}
           {isComingSoon && (
@@ -40,8 +52,9 @@ export function VendorCard({ vendor, index }: Props) {
               </span>
             </div>
           )}
-          {/* Logo overlay — top-right (skipped on comingSoon cards) */}
-          {!isComingSoon && (
+          {/* Logo overlay — top-right. Skipped on comingSoon cards AND on
+              logo-mode cards (the main image already IS the logo). */}
+          {!isComingSoon && !isLogoImage && (
             <div className="absolute right-4 top-4 drop-shadow-[0_6px_18px_rgba(0,0,0,0.5)] lg:right-5 lg:top-5">
               <VendorLogo
                 name={vendor.name}

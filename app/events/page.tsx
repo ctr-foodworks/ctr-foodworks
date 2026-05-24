@@ -6,6 +6,7 @@ import { CTAStrip } from "@/components/marketing/CTAStrip";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
 import { events, type Event } from "@/lib/events";
+import { catering } from "@/lib/catering";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -153,13 +154,43 @@ export default function EventsPage() {
               ].map((item) => (
                 <li
                   key={item}
-                  className="flex items-center justify-between gap-6 border-b border-[var(--text-dark)]/10 py-3 text-[14px] font-light text-[var(--text-dark)] last:border-b-0"
+                  className="border-b border-[var(--text-dark)]/10 py-3 text-[14px] font-light text-[var(--text-dark)] last:border-b-0"
                 >
-                  <span>{item}</span>
-                  <span className="text-[var(--primary)]">→</span>
+                  {item}
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
+
+        {/* Catering Kitchen — back-of-house service, surfaced here so private-
+            event inquirers can also book catering. Lives in lib/catering.ts. */}
+        <div className="mx-auto mt-16 max-w-[1200px] border-t border-[var(--text-dark)]/10 pt-12 lg:mt-24 lg:pt-16">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[220px_1fr] lg:items-center lg:gap-16">
+            <div className="flex items-center justify-center bg-white p-5 lg:p-6">
+              <img
+                src={catering.logoUrl}
+                alt={`${catering.name} logo`}
+                className="h-auto w-full max-w-[180px]"
+              />
+            </div>
+            <div className="flex flex-col gap-5">
+              <Eyebrow tone="primary">Also Available</Eyebrow>
+              <h3 className="font-display text-[28px] font-black uppercase leading-[1] tracking-[-0.5px] text-[var(--text-dark)] lg:text-[36px]">
+                {catering.name}
+              </h3>
+              <div className="h-[2px] w-12 bg-[var(--primary)]" />
+              <p className="max-w-[640px] text-[15px] font-light leading-[1.8] text-[var(--text-muted-dark)]">
+                {catering.description}
+              </p>
+              <Link
+                href={catering.inquireMailto}
+                className="group inline-flex w-fit items-center gap-3 border border-[var(--text-dark)] px-7 py-4 text-[12px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
+              >
+                Inquire about catering
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>

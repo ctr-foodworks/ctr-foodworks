@@ -25,6 +25,13 @@ export type Vendor = {
   /** Concept not finalized — card and detail page render placeholder
    *  copy + a 'Coming Soon' badge instead of the standard treatment. */
   comingSoon?: boolean;
+  /** How `imageUrl` should be displayed inside the card image area.
+   *  - "cover" (default): photograph fills the 4:3 tile via object-cover.
+   *  - "logo": treat `imageUrl` as a brand logo — center it with padding
+   *    via object-contain on a neutral background. Used for vendors that
+   *    don't have a food photo yet (e.g. Rivalry Beef).
+   */
+  imageMode?: "cover" | "logo";
 };
 
 export type HoursRow = {
