@@ -88,7 +88,7 @@ export default function EventsPage() {
         aria-label="Events sections"
         className="w-full border-b border-[var(--border-light)] bg-[var(--bg-warm-white)] px-6 lg:px-[60px]"
       >
-        <div className="mx-auto flex max-w-[1200px] flex-wrap gap-x-8 gap-y-3 py-5">
+        <div className="mx-auto flex max-w-[1440px] flex-wrap gap-x-8 gap-y-3 py-5 xl:max-w-[1600px]">
           <a
             href="#private-events"
             className="text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:text-[var(--primary)]"

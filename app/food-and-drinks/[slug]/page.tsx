@@ -91,7 +91,7 @@ export default async function VendorDetailPage({
 
       {/* §2 — About + Find Us */}
       <section className="w-full bg-[#f9f4f0] px-6 py-[60px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]">
-        <div className="mx-auto grid max-w-[1200px] grid-cols-1 gap-10 lg:grid-cols-[1.5fr_1fr] lg:gap-20">
+        <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-10 lg:grid-cols-[1.5fr_1fr] lg:gap-20 xl:max-w-[1600px]">
           {/* Left — Logo + About */}
           <div className="flex flex-col gap-6 lg:gap-7">
             {vendor.logoLargeUrl ? (
