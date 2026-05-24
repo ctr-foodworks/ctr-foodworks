@@ -31,13 +31,12 @@ export default function AboutPage() {
         imageAlt="CTR Food Works atrium rendering"
       />
 
-      {/* Story — bg-cream bleeds edge-to-edge, inner grid bounded to the
-          site's 1440/1600 shell. Text column fills its grid cell so the
-          copy naturally meets the entrance-rendering image at the column
-          boundary ("pegar la imagen"). */}
-      <section className="w-full bg-[var(--bg-cream)]">
-        <div className="mx-auto grid max-w-[1440px] grid-cols-1 lg:grid-cols-2 xl:max-w-[1600px]">
-        <div className="flex flex-col justify-center gap-6 px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
+      {/* Story — section padding moves up so the grid's left edge aligns
+          horizontally with the hero "ROOTED. RESTORED. ALIVE." above and
+          with every other content section's left edge. */}
+      <section className="w-full bg-[var(--bg-cream)] px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
+        <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 xl:max-w-[1600px] xl:gap-20">
+        <div className="flex flex-col justify-center gap-6">
           <Eyebrow tone="primary">The Story</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             A LANDMARK,
