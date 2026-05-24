@@ -76,11 +76,13 @@ export default function VisitPage() {
         imageAlt="CTR Food Works entrance rendering"
       />
 
-      {/* §2 — The Building. Background bleeds, inner grid capped to match
-          the rest of the site's shell (1440 lg / 1600 xl). */}
-      <section className="w-full bg-[#f9f4f0]">
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 lg:grid-cols-2 xl:max-w-[1600px]">
-        <div className="order-1 p-6 lg:order-1 lg:p-[60px] lg:py-[120px]">
+      {/* §2 — The Building. Padding lives on the section (matches Hours +
+          Getting Here pattern) so the inner grid's left edge aligns
+          horizontally with those sections instead of being offset by
+          another 60px of cell padding. */}
+      <section className="w-full bg-[#f9f4f0] px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 xl:max-w-[1600px] xl:gap-20">
+        <div className="order-1 lg:order-1">
           <SketchPlaceholder
             src="/images/sketches/building-exterior.png"
             alt="Hand-drawn sketch of the CTR Food Works building exterior"
@@ -88,9 +90,7 @@ export default function VisitPage() {
             aspect="portrait"
           />
         </div>
-        {/* Text column fills its grid cell — matches the Hours/Getting
-            Here/Accessibility rhythm where content spans the full half. */}
-        <div className="order-2 flex flex-col justify-center gap-6 px-6 pb-[80px] lg:order-2 lg:px-[60px] lg:py-[120px]">
+        <div className="order-2 flex flex-col justify-center gap-6 lg:order-2">
           <Eyebrow tone="primary">The Building</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             A LOCAL LANDMARK
@@ -171,12 +171,11 @@ export default function VisitPage() {
         </div>
       </section>
 
-      {/* §5 — The Neighborhood (cream, text left + Google Maps right) */}
-      <section className="w-full bg-[var(--bg-cream)]">
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 lg:grid-cols-2 xl:max-w-[1600px]">
-        {/* Text column fills its grid cell, naturally meets the map on the
-            right side at the column boundary. */}
-        <div className="order-2 flex flex-col justify-center gap-6 px-6 pb-[80px] lg:order-1 lg:px-[60px] lg:py-[120px]">
+      {/* §5 — The Neighborhood (cream, text left + Google Maps right).
+          Section-level padding so headlines align with Hours/Getting Here. */}
+      <section className="w-full bg-[var(--bg-cream)] px-6 py-[80px] lg:px-[60px] lg:py-[120px]">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 xl:max-w-[1600px] xl:gap-20">
+        <div className="order-2 flex flex-col justify-center gap-6 lg:order-1">
           <Eyebrow tone="primary">The Neighborhood</Eyebrow>
           <DisplayHeading size="md" className="text-[var(--text-dark)]">
             AT THE
@@ -215,7 +214,7 @@ export default function VisitPage() {
             </a>
           </div>
         </div>
-        <div className="order-1 p-6 lg:order-2 lg:p-[60px] lg:py-[120px]">
+        <div className="order-1 lg:order-2">
           <div className="relative aspect-[3/2] w-full overflow-hidden border border-[var(--text-dark)]/10 bg-[var(--bg-dark)]">
             <iframe
               title="CTR Food Works on Google Maps — 190 Marietta St NW, Atlanta GA 30303"
@@ -229,15 +228,14 @@ export default function VisitPage() {
       </div>
       </section>
 
-      {/* §6 — Private Events (dark, text left + atrium sketch right) */}
+      {/* §6 — Private Events (dark, text left + atrium sketch right).
+          Section-level padding so headlines align with Hours/Getting Here. */}
       <section
         id="private-events"
-        className="w-full bg-[var(--bg-dark)] text-white"
+        className="w-full bg-[var(--bg-dark)] px-6 py-[80px] text-white lg:px-[60px] lg:py-[120px]"
       >
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 lg:grid-cols-2 xl:max-w-[1600px]">
-        {/* Text fills its grid cell, naturally meets the sketch image at
-            the column boundary. */}
-        <div className="order-2 flex flex-col justify-center gap-6 px-6 pb-[80px] lg:order-1 lg:px-[60px] lg:py-[120px]">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 xl:max-w-[1600px] xl:gap-20">
+        <div className="order-2 flex flex-col justify-center gap-6 lg:order-1">
           <Eyebrow tone="primary">Private Events</Eyebrow>
           <DisplayHeading size="md" className="text-white">
             FEEL LIKE
@@ -260,7 +258,7 @@ export default function VisitPage() {
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
-        <div className="order-1 p-6 lg:order-2 lg:p-[60px] lg:py-[120px]">
+        <div className="order-1 lg:order-2">
           <SketchPlaceholder
             src="/images/sketches/atrium-interior.png"
             alt="Hand-drawn sketch of the CTR Food Works atrium interior"
