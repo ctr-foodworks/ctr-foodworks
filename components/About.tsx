@@ -13,10 +13,10 @@
 export function About() {
   return (
     <section className="grid w-full bg-[var(--secondary-navy)] lg:min-h-[680px] lg:grid-cols-2">
-      {/* LEFT — text, anchored to the right edge of its column.
-          max-w-[720px] keeps copy comfortable to read while letting the
-          headline fill more of the column on wide screens. */}
-      <div className="flex justify-start px-6 py-16 lg:justify-end lg:px-[60px] lg:py-[100px] xl:px-[80px]">
+      {/* LEFT — text, left-aligned in its column (text justified to the
+          left of the viewport, image justified to the right). Matches the
+          "como estaba antes" feel — text doesn't drift to screen midline. */}
+      <div className="flex justify-start px-6 py-16 lg:px-[60px] lg:py-[100px] xl:px-[80px]">
         <div className="flex w-full flex-col gap-7 lg:max-w-[640px] xl:max-w-[720px]">
           <span className="text-[11px] font-semibold tracking-[6px] text-white/50">
             ABOUT CTR FOOD WORKS

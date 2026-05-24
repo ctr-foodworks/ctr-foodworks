@@ -31,10 +31,11 @@ export function PageHero({ eyebrow, title, description, imageUrl, imageAlt }: Pr
           />
         </>
       )}
-      <div className="relative z-10 flex min-h-[420px] w-full flex-col justify-end py-20 lg:min-h-[520px] lg:py-24">
-        {/* Inner shell — anchors title + description at max-w-[1600px] so on
-            4K the hero copy doesn't drift toward the right edge. */}
-        <div className="shell flex flex-col gap-6">
+      <div className="relative z-10 flex min-h-[420px] w-full flex-col justify-end px-6 py-20 lg:min-h-[520px] lg:px-[60px] lg:py-24">
+        {/* Inner content matches the site's 1440/1600 shell so the hero
+            title aligns horizontally with the content sections below it
+            (no more visual step-down at the top of every interior page). */}
+        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-6 xl:max-w-[1600px]">
           <Eyebrow tone="primary">{eyebrow}</Eyebrow>
           <DisplayHeading size="xl" as="h1" className="max-w-[800px] text-white">
             {title}

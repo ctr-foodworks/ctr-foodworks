@@ -26,9 +26,10 @@ const diningLinks = [
 export function Footer() {
   return (
     <footer className="w-full bg-[var(--bg-dark)] text-white">
-      {/* Top accent strip */}
+      {/* Top accent strip — bg + border bleed edge-to-edge, content bounded
+          to the site shell so it aligns with sections above. */}
       <div className="border-b border-white/10 px-6 py-5 lg:px-[60px]">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-2 sm:flex-row sm:items-center sm:justify-between xl:max-w-[1600px]">
           <span className="text-[10px] font-semibold tracking-[4px] uppercase text-white/75">
             Opening Spring 2026 · Downtown Atlanta
           </span>
@@ -39,7 +40,8 @@ export function Footer() {
       </div>
 
       {/* Main grid */}
-      <div className="grid gap-12 px-6 py-[80px] lg:grid-cols-[1.6fr_1fr_1fr_1fr] lg:gap-14 lg:px-[60px] lg:py-[100px]">
+      <div className="px-6 py-[80px] lg:px-[60px] lg:py-[100px]">
+        <div className="mx-auto grid max-w-[1440px] gap-12 lg:grid-cols-[1.6fr_1fr_1fr_1fr] lg:gap-14 xl:max-w-[1600px]">
         {/* Brand */}
         <div className="flex flex-col gap-7">
           <img
@@ -89,9 +91,10 @@ export function Footer() {
         <FooterColumn title="Food & Drinks" items={diningLinks} />
         <FooterColumn title="Visit" items={visitLinks} />
         <FooterColumn title="Connect" items={connectLinks} />
+        </div>
       </div>
 
-      {/* Big wordmark — architectural signature */}
+      {/* Big wordmark — architectural signature, bounded to shell */}
       <div
         className="overflow-hidden border-t border-white/[0.08] px-6 py-10 lg:px-[60px] lg:py-14"
         aria-hidden="true"
@@ -99,12 +102,13 @@ export function Footer() {
         <img
           src="/logos/ctr-inline-white.svg"
           alt=""
-          className="block w-full opacity-[0.06]"
+          className="mx-auto block w-full max-w-[1440px] opacity-[0.06] xl:max-w-[1600px]"
         />
       </div>
 
       {/* Bottom bar */}
-      <div className="flex flex-col gap-5 border-t border-white/[0.08] px-6 py-6 text-[11px] font-light text-white/35 lg:flex-row lg:items-center lg:justify-between lg:px-[60px]">
+      <div className="border-t border-white/[0.08] px-6 py-6 text-[11px] font-light text-white/35 lg:px-[60px]">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-5 lg:flex-row lg:items-center lg:justify-between xl:max-w-[1600px]">
         <p>
           © {new Date().getFullYear()} The Center Food Works, Atlanta. All rights reserved.
         </p>
@@ -145,6 +149,7 @@ export function Footer() {
           >
             <Facebook className="h-[18px] w-[18px]" />
           </a>
+        </div>
         </div>
       </div>
     </footer>
