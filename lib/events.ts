@@ -25,24 +25,6 @@ export type Event = {
  */
 export const events: Event[] = [
   {
-    slug: "opening-night",
-    title: "Opening Night",
-    category: "public",
-    date: "2026-06-01",
-    time: "5 PM – Late",
-    description:
-      "The doors open. All eleven kitchens plus the bar, live music, and the city's first look inside the reimagined CNN Center.",
-  },
-  {
-    slug: "grand-opening-brunch",
-    title: "Grand Opening Brunch",
-    category: "public",
-    date: "2026-06-03",
-    time: "11 AM – 3 PM",
-    description:
-      "A long-table brunch across the hall with bottomless coffee, brunch from Eggflip, pastries from DessertBox, and a Bloody Mary bar.",
-  },
-  {
     slug: "private-events-inquiry",
     title: "Now Booking Private Events",
     category: "private",
@@ -51,5 +33,29 @@ export const events: Event[] = [
       "Buyouts, brand activations, conference dinners, and milestone celebrations. Inquire early — opening-summer dates fill fast.",
     ctaUrl: "mailto:events@ctrfoodworks.com",
     ctaLabel: "Inquire",
+  },
+  {
+    slug: "ctr-grand-opening-weekend",
+    title: "The CTR Grand Opening Weekend",
+    category: "public",
+    date: "2026-06-12",
+    description:
+      "Three days at the heart of downtown Atlanta — every kitchen open, the bar pouring, live music across the atrium, and the city's first look inside the reimagined CNN Center.",
+  },
+  {
+    slug: "spain-vs-cabo-verde",
+    title: "Spain vs Cabo Verde",
+    category: "public",
+    date: "2026-06-15",
+    description:
+      "Match day at Mercedes-Benz Stadium, two blocks from CTR. Eat before, drink after — the bar pours through last call.",
+  },
+  {
+    slug: "spain-vs-saudi-arabia",
+    title: "Spain vs Saudi Arabia",
+    category: "public",
+    date: "2026-06-21",
+    description:
+      "Match day at Mercedes-Benz Stadium, two blocks from CTR. Pre-game bites, post-game drinks — walk over, walk back.",
   },
 ];
