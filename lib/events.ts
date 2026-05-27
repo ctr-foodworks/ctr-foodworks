@@ -31,7 +31,9 @@ export const events: Event[] = [
     date: "2026-06-01",
     description:
       "Buyouts, brand activations, conference dinners, and milestone celebrations. Inquire early — opening-summer dates fill fast.",
-    ctaUrl: "mailto:events@ctrfoodworks.com",
+    // Scroll-anchor to the Tripleseat form on the same /events page rather
+    // than open a mail client — gives the user a real working booking flow.
+    ctaUrl: "/events#book",
     ctaLabel: "Inquire",
   },
   {
