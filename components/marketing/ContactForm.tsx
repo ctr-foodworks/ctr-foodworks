@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { ArrowRight } from "lucide-react";
 
 const INQUIRIES_INBOX = "inquiries@ctrfoodworks.com";
 const CATEGORIES = ["General", "Press", "Partnerships", "Careers"] as const;
+type Category = (typeof CATEGORIES)[number];
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -14,9 +15,26 @@ type Status = "idle" | "submitting" | "success" | "error";
  * form is replaced with an inline confirmation card. Falls back to a plain
  * POST → /thanks/ if JS is disabled (the static HTML attributes are still
  * present, which is also what Netlify's deploy-time scanner needs).
+ *
+ * Also reads `?category=Press` (etc.) from the URL on mount so links from
+ * the Footer ("Press Inquiries") and the Events page can deep-link straight
+ * to the right category without the user having to re-select it.
  */
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
+  const [category, setCategory] = useState<Category>("General");
+
+  useEffect(() => {
+    // Read ?category= from the URL on mount. Case-insensitive match against
+    // the known CATEGORIES; unknown values fall back to the default.
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get("category");
+    if (!raw) return;
+    const match = CATEGORIES.find(
+      (c) => c.toLowerCase() === raw.toLowerCase(),
+    );
+    if (match) setCategory(match);
+  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -158,7 +176,8 @@ export function ContactForm() {
           id="contact-category"
           name="category"
           required
-          defaultValue="General"
+          value={category}
+          onChange={(e) => setCategory(e.target.value as Category)}
           disabled={status === "submitting"}
           className="border border-[var(--text-dark)]/20 bg-white px-4 py-3 text-[14px] font-light text-[var(--text-dark)] outline-none transition-colors focus:border-[var(--primary)] disabled:opacity-60"
         >

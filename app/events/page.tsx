@@ -133,11 +133,14 @@ export default function EventsPage() {
                 Book
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
+              {/* Routes to the /connect contact form (Netlify-backed) instead
+                  of opening the visitor's mail client. Per Thierry — both
+                  secondary CTAs across the site should land in a form. */}
               <Link
-                href="mailto:inquiries@ctrfoodworks.com?subject=Private%20Event%20Inquiry"
+                href="/connect#contact"
                 className="inline-flex w-fit items-center gap-3 border border-[var(--text-dark)] px-7 py-4 text-[12px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
               >
-                Or email us
+                Or send a message
               </Link>
             </div>
           </div>
