@@ -15,7 +15,7 @@ const connectLinks = [
   { href: "/events", label: "Events" },
   { href: "/connect", label: "Contact" },
   { href: "/#waitlist", label: "Join Us" },
-  { href: "mailto:press@ctrfoodworks.com", label: "Press Inquiries" },
+  { href: "/connect?category=Press#contact", label: "Press Inquiries" },
 ];
 
 const diningLinks = [

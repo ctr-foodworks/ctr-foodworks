@@ -71,8 +71,13 @@ export default function ConnectPage() {
         imageAlt="CTR Food Works food hall rendering"
       />
 
-      {/* §2 — Contact form (Netlify Forms) + category legend */}
-      <section className="w-full bg-[#f9f4f0] px-6 py-[80px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]">
+      {/* §2 — Contact form (Netlify Forms) + category legend.
+            id="contact" so external links (Footer "Press Inquiries", Events
+            "Or send a message") can scroll-anchor straight to the form. */}
+      <section
+        id="contact"
+        className="w-full scroll-mt-24 bg-[#f9f4f0] px-6 py-[80px] text-[var(--text-dark)] lg:px-[60px] lg:py-[120px]"
+      >
         <div className="mx-auto flex max-w-[1440px] xl:max-w-[1600px] flex-col gap-12 lg:gap-16">
           <div className="flex flex-col gap-5 lg:max-w-[640px]">
             <Eyebrow tone="primary">Get in touch</Eyebrow>
