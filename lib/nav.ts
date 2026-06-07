@@ -30,8 +30,8 @@ export const navLinks: NavLink[] = [
     href: "/events",
     label: "Events",
     children: [
-      { href: "/events#private-events", label: "Private Events" },
       { href: "/events#public-events", label: "Public Events" },
+      { href: "/events#private-events", label: "Private Events" },
     ],
   },
   {

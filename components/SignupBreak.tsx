@@ -54,7 +54,12 @@ export function SignupBreak() {
             <p className="max-w-[440px] text-[13px] font-light leading-[1.7] text-white/70">
               Opening events, brand activations, dining previews, and your invitation to opening night.
             </p>
-            <WaitlistForm variant="dark" buttonLabel="Join" showHelper={false} />
+            <WaitlistForm
+              variant="dark"
+              buttonLabel="Join"
+              showHelper={false}
+              source="signup-break"
+            />
           </div>
         </div>
       </div>

@@ -10,11 +10,9 @@ type Category = (typeof CATEGORIES)[number];
 type Status = "idle" | "submitting" | "success" | "error";
 
 /**
- * Connect page contact form. Submits via Netlify Forms over AJAX so the
- * user stays on /connect instead of navigating to /thanks/. On success the
- * form is replaced with an inline confirmation card. Falls back to a plain
- * POST → /thanks/ if JS is disabled (the static HTML attributes are still
- * present, which is also what Netlify's deploy-time scanner needs).
+ * Connect page contact form. Submits JSON to /api/contact over AJAX so the
+ * user stays on /connect. On success the form is replaced with an inline
+ * confirmation card.
  *
  * Also reads `?category=Press` (etc.) from the URL on mount so links from
  * the Footer ("Press Inquiries") and the Events page can deep-link straight
@@ -43,18 +41,19 @@ export function ContactForm() {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const body = new URLSearchParams();
-    for (const [key, value] of formData.entries()) {
-      if (typeof value === "string") body.append(key, value);
-    }
+    const payload = {
+      name: String(formData.get("name") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      category: String(formData.get("category") ?? ""),
+      message: String(formData.get("message") ?? ""),
+      botField: String(formData.get("bot-field") ?? ""),
+    };
 
     try {
-      const res = await fetch("/", {
+      const res = await fetch("/api/contact/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: body.toString(),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         setStatus("success");
@@ -110,15 +109,9 @@ export function ContactForm() {
 
   return (
     <form
-      name="contact"
-      method="POST"
-      action="/thanks/"
-      data-netlify="true"
-      data-netlify-honeypot="bot-field"
       onSubmit={handleSubmit}
       className="flex flex-col gap-5 bg-white p-8 lg:p-10"
     >
-      <input type="hidden" name="form-name" value="contact" />
       {/* Honeypot — hidden from real users, catches naive bots */}
       <p className="hidden">
         <label>
