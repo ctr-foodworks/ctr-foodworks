@@ -1,12 +1,12 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
 import { authConfig } from "./auth.config";
+import { verifyCredentials } from "./lib/users-db";
 
 /**
- * Full Auth.js setup (Node runtime). Single shared admin: credentials are
- * checked against ADMIN_EMAIL + ADMIN_PASSWORD_HASH (a bcrypt hash generated
- * with `npm run admin:hash`). No users table — one trusted login for the team.
+ * Full Auth.js setup (Node runtime). Admin credentials live in the Neon
+ * `users` table — verified via verifyCredentials. Seed/reset an admin with
+ * `npm run admin:create`. No password material in env (only AUTH_SECRET).
  */
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -17,20 +17,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const email = String(credentials?.email ?? "")
-          .toLowerCase()
-          .trim();
+        const email = String(credentials?.email ?? "");
         const password = String(credentials?.password ?? "");
+        if (!email || !password) return null;
 
-        const adminEmail = (process.env.ADMIN_EMAIL ?? "").toLowerCase().trim();
-        const hash = process.env.ADMIN_PASSWORD_HASH ?? "";
-        if (!adminEmail || !hash) return null;
-        if (email !== adminEmail) return null;
-
-        const ok = await bcrypt.compare(password, hash);
-        if (!ok) return null;
-
-        return { id: "admin", email: adminEmail, name: "Admin" };
+        try {
+          const user = await verifyCredentials(email, password);
+          if (!user) return null;
+          return { id: String(user.id), email: user.email, name: "Admin" };
+        } catch {
+          // DB unavailable / not configured — fail closed.
+          return null;
+        }
       },
     }),
   ],

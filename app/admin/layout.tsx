@@ -46,6 +46,12 @@ export default async function AdminLayout({
                 >
                   Messages
                 </Link>
+                <Link
+                  href="/admin/account"
+                  className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] hover:text-[var(--primary)]"
+                >
+                  Account
+                </Link>
               </nav>
             </div>
             <div className="flex items-center gap-6">
