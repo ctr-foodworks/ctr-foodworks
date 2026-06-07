@@ -73,3 +73,14 @@ export const contactMessages = pgTable("contact_messages", {
 });
 
 export type ContactRow = typeof contactMessages.$inferSelect;
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  /** bcrypt hash of the password (never store plaintext). */
+  passwordHash: text("password_hash").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type UserRow = typeof users.$inferSelect;

@@ -26,20 +26,21 @@ npm run db:seed      # loads the 4 starter events from lib/events.ts (idempotent
 (For versioned migrations instead of `db:push`, use `npm run db:generate` then
 `npm run db:migrate`.)
 
-## 3. Admin login (single shared account)
+## 3. Admin login (stored in the database)
 
-```bash
-# pick the admin email + password, then hash the password:
-npm run admin:hash -- "your-strong-password"
-```
-
-Add to `.env.local`:
+The admin account lives in the `users` table (not env). Add the session secret
+to `.env.local`, then create the admin:
 
 ```
-ADMIN_EMAIL="events@ctrfoodworks.com"
-ADMIN_PASSWORD_HASH="<paste the hash from the command above>"
 AUTH_SECRET="<npx auth secret>"
 ```
+
+```bash
+# creates / resets the admin (idempotent — also your password-reset + lockout recovery)
+npm run admin:create -- "web@ctrfoodworks.com" "your-strong-password"
+```
+
+Editors can change their own password later at **/admin/account**.
 
 ## 4. Image uploads (Vercel Blob)
 
@@ -63,11 +64,11 @@ within seconds — no redeploy.
 ## Deploying to Vercel
 
 1. Import the repo in Vercel (framework auto-detected as Next.js).
-2. Add all env vars from `.env.example` under **Settings → Environment Variables**
-   (Production + Preview): `DATABASE_URL`, `AUTH_SECRET`, `ADMIN_EMAIL`,
-   `ADMIN_PASSWORD_HASH`, `BLOB_READ_WRITE_TOKEN`.
-3. Deploy. After the first deploy, run the table setup once against the prod DB
-   (`npm run db:push` locally with the prod `DATABASE_URL`, or via Neon SQL).
+2. Add the env vars under **Settings → Environment Variables** (Production +
+   Preview): `DATABASE_URL`, `AUTH_SECRET`, `BLOB_READ_WRITE_TOKEN`.
+3. Deploy. After the first deploy, run the table setup + create the admin once
+   against the prod DB (locally, with the prod `DATABASE_URL`):
+   `npm run db:migrate && npm run admin:create -- "web@ctrfoodworks.com" "password"`.
 
 ## Where submissions go
 
