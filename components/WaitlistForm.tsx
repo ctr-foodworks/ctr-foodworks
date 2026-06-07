@@ -10,6 +10,13 @@ type Props = {
   className?: string;
   buttonLabel?: string;
   showHelper?: boolean;
+  /** Submit-button color. Default "primary" (brand red). Use "ink" when the
+   *  form sits on a red surface (e.g. WelcomeModal) so the button doesn't
+   *  disappear into the background. */
+  buttonTone?: "primary" | "ink";
+  /** Where this signup originated, stored alongside the email (e.g.
+   *  "welcome-modal", "signup-break"). */
+  source?: string;
   /** Fires once the submission lands successfully — used by WelcomeModal to
    *  auto-dismiss after a brief success state. */
   onSuccess?: () => void;
@@ -22,18 +29,17 @@ const inputClass: Record<Variant, string> = {
 };
 
 /**
- * Email-only waitlist signup. Submits via Netlify Forms over AJAX so the
+ * Email-only waitlist signup. Submits JSON to /api/waitlist over AJAX so the
  * user never leaves the page — the form is replaced inline with a success
- * message on success. The plain <form> attributes (data-netlify, name,
- * hidden form-name) still ship in the static HTML so Netlify detects the
- * form at deploy time. For no-JS users the submission would just POST to
- * /thanks/ as a normal HTML form (the static fallback).
+ * message. A hidden honeypot field guards against naive bots.
  */
 export function WaitlistForm({
   variant = "dark",
   className = "",
   buttonLabel = "Notify Me",
   showHelper = true,
+  buttonTone = "primary",
+  source,
   onSuccess,
 }: Props) {
   const [status, setStatus] = useState<Status>("idle");
@@ -45,18 +51,14 @@ export function WaitlistForm({
 
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const body = new URLSearchParams();
-    for (const [key, value] of formData.entries()) {
-      if (typeof value === "string") body.append(key, value);
-    }
+    const email = String(formData.get("email") ?? "");
+    const botField = String(formData.get("bot-field") ?? "");
 
     try {
-      const res = await fetch("/", {
+      const res = await fetch("/api/waitlist/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: body.toString(),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source, botField }),
       });
       if (res.ok) {
         setStatus("success");
@@ -103,16 +105,7 @@ export function WaitlistForm({
 
   return (
     <div className={`flex w-full max-w-[480px] flex-col gap-3 ${className}`}>
-      <form
-        name="waitlist"
-        method="POST"
-        action="/thanks/"
-        data-netlify="true"
-        data-netlify-honeypot="bot-field"
-        onSubmit={handleSubmit}
-        className="flex w-full"
-      >
-        <input type="hidden" name="form-name" value="waitlist" />
+      <form onSubmit={handleSubmit} className="flex w-full">
         {/* Honeypot — hidden from real users */}
         <p className="hidden">
           <label>
@@ -133,7 +126,11 @@ export function WaitlistForm({
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="h-[52px] cursor-pointer rounded-r-[4px] bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[2px] uppercase text-white transition-colors hover:bg-[#a82d1d] disabled:cursor-wait disabled:opacity-60"
+          className={`h-[52px] cursor-pointer rounded-r-[4px] px-7 text-[12px] font-semibold tracking-[2px] uppercase text-white transition-colors disabled:cursor-wait disabled:opacity-60 ${
+            buttonTone === "ink"
+              ? "bg-[var(--bg-dark)] hover:bg-[#222]"
+              : "bg-[var(--primary)] hover:bg-[#a82d1d]"
+          }`}
         >
           {status === "submitting" ? "…" : buttonLabel}
         </button>

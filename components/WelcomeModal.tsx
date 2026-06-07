@@ -130,9 +130,9 @@ export function WelcomeModal() {
           <X className="h-5 w-5" />
         </button>
 
-        <div className="grid grid-cols-1 items-center gap-8 p-8 lg:grid-cols-[1.3fr_1fr] lg:gap-10 lg:p-12">
+        <div className="grid grid-cols-1 items-stretch lg:grid-cols-[1.3fr_1fr]">
           {/* Left — copy + form */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 p-8 lg:p-12">
             <Eyebrow tone="light">Opening Spring 2026</Eyebrow>
             <h2
               id="welcome-modal-title"
@@ -149,7 +149,9 @@ export function WelcomeModal() {
             <WaitlistForm
               variant="dark"
               buttonLabel="Join"
+              buttonTone="ink"
               showHelper={false}
+              source="welcome-modal"
               onSuccess={dismiss}
             />
             <p className="text-[10px] font-light leading-[1.5] text-white/55">
@@ -157,13 +159,15 @@ export function WelcomeModal() {
             </p>
           </div>
 
-          {/* Right — stacked CTR logo (hidden on mobile to keep card compact) */}
-          <div className="hidden items-center justify-center lg:flex">
+          {/* Right — black accent panel with the stacked CTR logo. Black gives
+              the card the contrast the flat red lacked. Shown on mobile as a
+              bottom band (shorter) so the accent carries to small screens. */}
+          <div className="flex items-center justify-center bg-[var(--bg-dark)] px-8 py-10 lg:p-12">
             <img
               src="/logos/ctr-stacked-white.svg"
               alt=""
               aria-hidden="true"
-              className="h-auto w-full max-w-[240px] opacity-90"
+              className="h-auto w-[150px] opacity-95 lg:w-full lg:max-w-[240px]"
             />
           </div>
         </div>
