@@ -26,17 +26,27 @@ export async function POST(request: Request): Promise<Response> {
   const { searchParams } = new URL(request.url);
   const filename = searchParams.get("filename") ?? "upload";
 
-  if (!request.body) {
-    return NextResponse.json({ error: "No file provided." }, { status: 400 });
-  }
-
   try {
-    const blob = await put(`events/${filename}`, request.body, {
+    // Read the body fully (more compatible across runtimes than streaming
+    // request.body straight into put()).
+    const data = await request.arrayBuffer();
+    if (!data.byteLength) {
+      return NextResponse.json({ error: "No file provided." }, { status: 400 });
+    }
+
+    const blob = await put(`events/${filename}`, data, {
       access: "public",
       addRandomSuffix: true,
+      token: process.env.BLOB_READ_WRITE_TOKEN,
     });
     return NextResponse.json({ url: blob.url });
-  } catch {
-    return NextResponse.json({ error: "Upload failed." }, { status: 500 });
+  } catch (err) {
+    // Admin-only route — surface the real reason so we can diagnose.
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("[upload] failed:", message);
+    return NextResponse.json(
+      { error: `Upload failed: ${message}` },
+      { status: 500 },
+    );
   }
 }
