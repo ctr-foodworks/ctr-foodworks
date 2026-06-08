@@ -109,10 +109,9 @@ export function AdminChrome({ counts }: { counts: Counts }) {
             <Link
               key={href}
               href={href}
-              title={label}
               aria-label={label}
               aria-current={active ? "page" : undefined}
-              className={`relative flex h-11 w-full items-center justify-center transition-colors ${
+              className={`group relative flex h-11 w-full items-center justify-center transition-colors ${
                 active
                   ? "bg-[var(--primary)]/8 text-[var(--primary)]"
                   : "text-[var(--text-dark)]/55 hover:bg-black/[0.04] hover:text-[var(--primary)]"
@@ -124,6 +123,10 @@ export function AdminChrome({ counts }: { counts: Counts }) {
               <span className="relative">
                 <Icon className="h-[20px] w-[20px]" />
                 <Badge n={n} />
+              </span>
+              {/* Instant tooltip (no native title delay) */}
+              <span className="pointer-events-none absolute left-full top-1/2 z-50 ml-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-[var(--text-dark)] px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[2px] text-white opacity-0 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)] transition-opacity duration-100 group-hover:opacity-100">
+                {label}
               </span>
             </Link>
           );
