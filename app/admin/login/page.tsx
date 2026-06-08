@@ -8,19 +8,15 @@ export const metadata: Metadata = {
 
 export default function AdminLoginPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--secondary-navy)] px-6 py-16">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6 py-16">
       <div className="w-full max-w-[440px]">
-        {/* White wordmark above the card */}
-        <div className="mb-8 flex justify-center">
+        {/* Bordered card so it reads against the white page */}
+        <div className="rounded-2xl border border-[var(--text-dark)]/12 bg-white p-8 shadow-[0_2px_28px_rgba(0,0,0,0.06)] lg:p-10">
           <img
-            src="/logos/ctr-inline-white.svg"
+            src="/logos/ctr-inline-black.svg"
             alt="CTR Food Works"
-            className="h-6 w-auto lg:h-7"
+            className="mb-8 h-6 w-auto"
           />
-        </div>
-
-        {/* Card */}
-        <div className="rounded-2xl bg-white p-8 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.55)] lg:p-10">
           <h1 className="font-display text-[34px] font-black uppercase leading-[1] tracking-[-0.5px] text-[var(--text-dark)]">
             Sign In
           </h1>
@@ -32,7 +28,7 @@ export default function AdminLoginPage() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-[11px] font-light tracking-[1px] text-white/40">
+        <p className="mt-6 text-center text-[11px] font-light tracking-[1px] text-[var(--text-muted-dark)]">
           CTR Food Works · Staff access only
         </p>
       </div>

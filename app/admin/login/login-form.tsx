@@ -61,7 +61,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="mt-1 inline-flex h-12 items-center justify-center rounded-lg bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[3px] uppercase text-white shadow-[0_8px_20px_-8px_rgba(196,55,37,0.6)] transition-colors hover:bg-[#a82d1d] disabled:cursor-wait disabled:opacity-60"
+        className="mt-1 inline-flex h-12 items-center justify-center rounded-lg bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d] disabled:cursor-wait disabled:opacity-60"
       >
         {isPending ? "Signing in…" : "Sign In"}
       </button>
