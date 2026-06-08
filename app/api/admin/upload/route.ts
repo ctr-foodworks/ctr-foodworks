@@ -19,12 +19,27 @@ export async function GET(): Promise<Response> {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const t = process.env.BLOB_READ_WRITE_TOKEN ?? "";
-  return NextResponse.json({
-    tokenPresent: Boolean(t),
-    tokenLength: t.length,
-    tokenPrefix: t ? t.slice(0, 14) : null,
-    looksQuoted: t.startsWith('"') || t.endsWith('"') || t.includes("\n"),
-  });
+  // Attempt a tiny real upload so we see the exact put() error (if any).
+  try {
+    const blob = await put(`diagnostic/test-${Date.now()}.txt`, "ok", {
+      access: "public",
+      addRandomSuffix: true,
+      token: t,
+    });
+    return NextResponse.json({
+      tokenPresent: Boolean(t),
+      tokenLength: t.length,
+      testUpload: "success",
+      url: blob.url,
+    });
+  } catch (err) {
+    return NextResponse.json({
+      tokenPresent: Boolean(t),
+      tokenLength: t.length,
+      testUpload: "failed",
+      error: err instanceof Error ? err.message : String(err),
+    });
+  }
 }
 
 export async function POST(request: Request): Promise<Response> {
