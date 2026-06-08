@@ -25,18 +25,6 @@ export type Event = {
  */
 export const events: Event[] = [
   {
-    slug: "private-events-inquiry",
-    title: "Now Booking Private Events",
-    category: "private",
-    date: "2026-06-01",
-    description:
-      "Buyouts, brand activations, conference dinners, and milestone celebrations. Inquire early — opening-summer dates fill fast.",
-    // Scroll-anchor to the Tripleseat form on the same /events page rather
-    // than open a mail client — gives the user a real working booking flow.
-    ctaUrl: "/events#book",
-    ctaLabel: "Inquire",
-  },
-  {
     slug: "ctr-grand-opening-weekend",
     title: "The CTR Grand Opening Weekend",
     category: "public",

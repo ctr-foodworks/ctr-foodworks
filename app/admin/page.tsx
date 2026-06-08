@@ -60,15 +60,6 @@ export default async function AdminDashboard() {
               <span className="w-[110px] shrink-0 font-mono text-[13px] text-[var(--text-muted-dark)]">
                 {e.date}
               </span>
-              <span
-                className={`shrink-0 px-2 py-1 text-[9px] font-semibold tracking-[2px] uppercase ${
-                  e.category === "public"
-                    ? "bg-[var(--primary)] text-white"
-                    : "bg-[var(--text-dark)]/10 text-[var(--text-dark)]"
-                }`}
-              >
-                {e.category}
-              </span>
               <span className="min-w-[200px] flex-1 text-[15px] font-medium text-[var(--text-dark)]">
                 {e.title}
               </span>
