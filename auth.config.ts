@@ -8,7 +8,9 @@ import type { NextAuthConfig } from "next-auth";
  */
 export const authConfig = {
   trustHost: true,
-  session: { strategy: "jwt" },
+  // JWT session that expires 1 hour after sign-in → admin is logged out
+  // automatically. (maxAge < the default updateAge, so it's a hard 1h TTL.)
+  session: { strategy: "jwt", maxAge: 60 * 60 },
   pages: { signIn: "/admin/login" },
   callbacks: {
     // Gate /admin (and /api/admin) behind a session. The login page itself
