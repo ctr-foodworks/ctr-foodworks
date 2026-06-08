@@ -10,38 +10,6 @@ import { auth } from "@/auth";
  * is defense-in-depth. Note: serverless request bodies cap ~4.5MB — large
  * photos should be optimized before upload.
  */
-// Temporary diagnostic: visit /api/admin/upload/ (logged in) to confirm the
-// Blob token is reaching this function. Returns no secret — only presence,
-// length, prefix, and whether it was pasted with stray quotes.
-export async function GET(): Promise<Response> {
-  const session = await auth();
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-  const t = process.env.BLOB_READ_WRITE_TOKEN ?? "";
-  // Attempt a tiny real upload so we see the exact put() error (if any).
-  try {
-    const blob = await put(`diagnostic/test-${Date.now()}.txt`, "ok", {
-      access: "public",
-      addRandomSuffix: true,
-      token: t,
-    });
-    return NextResponse.json({
-      tokenPresent: Boolean(t),
-      tokenLength: t.length,
-      testUpload: "success",
-      url: blob.url,
-    });
-  } catch (err) {
-    return NextResponse.json({
-      tokenPresent: Boolean(t),
-      tokenLength: t.length,
-      testUpload: "failed",
-      error: err instanceof Error ? err.message : String(err),
-    });
-  }
-}
-
 export async function POST(request: Request): Promise<Response> {
   const session = await auth();
   if (!session?.user) {
