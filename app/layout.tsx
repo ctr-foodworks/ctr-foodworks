@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { NavBar } from "@/components/NavBar";
-import { Footer } from "@/components/Footer";
-import { CookieNotice } from "@/components/CookieNotice";
-import { WelcomeModal } from "@/components/WelcomeModal";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ctrfoodworks.com"),
@@ -78,13 +74,9 @@ export default function RootLayout({
         />
       </head>
       <body className="h-full font-primary bg-[var(--bg-warm-white)]">
-        <NavBar />
+        {/* Site chrome (NavBar/Footer/WelcomeModal/CookieNotice) lives in the
+            (site) route-group layout so /admin can have its own minimal shell. */}
         {children}
-        <Footer />
-        {/* WelcomeModal renders first-visit only (localStorage-gated). Cookie
-            notice still appears bottom-right after the modal is dismissed. */}
-        <WelcomeModal />
-        <CookieNotice />
       </body>
     </html>
   );
