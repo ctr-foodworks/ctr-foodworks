@@ -8,6 +8,7 @@ import {
   updateEvent,
   deleteEvent,
 } from "@/lib/events-db";
+import { markWaitlistRead, markContactRead } from "@/lib/submissions-db";
 import type { NewEventRow } from "@/lib/db/schema";
 
 export type EventFormState = { error?: string } | undefined;
@@ -107,6 +108,20 @@ export async function removeEvent(formData: FormData): Promise<void> {
   revalidatePath("/events");
   revalidatePath("/admin");
   redirect("/admin?flash=event-deleted");
+}
+
+export async function markWaitlistReadAction(): Promise<void> {
+  if (!(await requireAdmin())) return;
+  await markWaitlistRead();
+  revalidatePath("/admin", "layout");
+  revalidatePath("/admin/waitlist");
+}
+
+export async function markContactReadAction(): Promise<void> {
+  if (!(await requireAdmin())) return;
+  await markContactRead();
+  revalidatePath("/admin", "layout");
+  revalidatePath("/admin/contact");
 }
 
 export async function adminSignOut(): Promise<void> {

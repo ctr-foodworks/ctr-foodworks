@@ -5,6 +5,7 @@ import {
   text,
   timestamp,
   jsonb,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -55,6 +56,8 @@ export const waitlistSignups = pgTable("waitlist_signups", {
   email: text("email").notNull(),
   /** Where the signup came from, e.g. "welcome-modal" | "signup-break". */
   source: text("source"),
+  /** Admin "seen" flag — new signups are unread until marked. */
+  read: boolean("read").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
@@ -69,6 +72,8 @@ export const contactMessages = pgTable("contact_messages", {
   /** Any extra fields the form sends (event type, date, etc.) without a schema
    *  migration each time. */
   meta: jsonb("meta"),
+  /** Admin "seen" flag — new messages are unread until marked. */
+  read: boolean("read").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
