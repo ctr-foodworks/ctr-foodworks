@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -69,6 +70,16 @@ function useActivePath() {
 /** Top header (logo + utility actions) + a minimized icon rail on the left. */
 export function AdminChrome({ counts }: { counts: Counts }) {
   const path = useActivePath();
+  const [confirmSignOut, setConfirmSignOut] = useState(false);
+
+  useEffect(() => {
+    if (!confirmSignOut) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setConfirmSignOut(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [confirmSignOut]);
 
   return (
     <>
@@ -89,14 +100,13 @@ export function AdminChrome({ counts }: { counts: Counts }) {
           >
             View site ↗
           </Link>
-          <form action={adminSignOut}>
-            <button
-              type="submit"
-              className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-muted-dark)] transition-colors hover:text-[var(--primary)]"
-            >
-              Sign out
-            </button>
-          </form>
+          <button
+            type="button"
+            onClick={() => setConfirmSignOut(true)}
+            className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-muted-dark)] transition-colors hover:text-[var(--primary)]"
+          >
+            Sign out
+          </button>
         </div>
       </header>
 
@@ -132,6 +142,51 @@ export function AdminChrome({ counts }: { counts: Counts }) {
           );
         })}
       </aside>
+
+      {/* Sign-out confirmation modal */}
+      {confirmSignOut && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="signout-title"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+        >
+          <button
+            type="button"
+            aria-label="Cancel"
+            onClick={() => setConfirmSignOut(false)}
+            className="absolute inset-0 cursor-pointer bg-black/50"
+          />
+          <div className="relative z-10 w-full max-w-[380px] rounded-xl border border-[var(--text-dark)]/10 bg-white p-7 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.5)]">
+            <h2
+              id="signout-title"
+              className="font-display text-[24px] font-black uppercase leading-[1] tracking-[-0.5px] text-[var(--text-dark)]"
+            >
+              Sign out?
+            </h2>
+            <p className="mt-2 text-[14px] font-light leading-[1.6] text-[var(--text-muted-dark)]">
+              You&apos;ll need to log in again to manage events.
+            </p>
+            <div className="mt-6 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setConfirmSignOut(false)}
+                className="inline-flex h-[44px] items-center justify-center rounded-lg border border-[var(--text-dark)]/20 px-5 text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] transition-colors hover:bg-black/[0.04]"
+              >
+                Cancel
+              </button>
+              <form action={adminSignOut}>
+                <button
+                  type="submit"
+                  className="inline-flex h-[44px] items-center justify-center rounded-lg bg-[var(--primary)] px-5 text-[11px] font-semibold tracking-[2px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
+                >
+                  Sign out
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
