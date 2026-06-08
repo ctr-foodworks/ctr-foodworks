@@ -16,39 +16,40 @@ export default async function AdminLayout({
   const session = await auth();
 
   return (
-    <div className="min-h-screen bg-[#f9f4f0] text-[var(--text-dark)]">
+    <div className="min-h-screen bg-white text-[var(--text-dark)]">
       {session?.user && (
-        <header className="border-b border-[var(--text-dark)]/10 bg-white">
+        <header className="bg-[var(--secondary-navy)] text-white">
           <div className="mx-auto flex max-w-[1100px] flex-wrap items-center justify-between gap-4 px-6 py-4">
-            <div className="flex flex-wrap items-center gap-6">
-              <Link
-                href="/admin"
-                className="font-display text-[18px] font-black uppercase tracking-[-0.5px] text-[var(--text-dark)]"
-              >
-                CTR Admin
+            <div className="flex flex-wrap items-center gap-7">
+              <Link href="/admin" className="flex items-center">
+                <img
+                  src="/logos/ctr-inline-white.svg"
+                  alt="CTR Food Works"
+                  className="h-5 w-auto"
+                />
               </Link>
               <nav className="flex items-center gap-5">
                 <Link
                   href="/admin"
-                  className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] hover:text-[var(--primary)]"
+                  className="text-[11px] font-semibold tracking-[2px] uppercase text-white/80 transition-colors hover:text-white"
                 >
                   Events
                 </Link>
                 <Link
                   href="/admin/waitlist"
-                  className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] hover:text-[var(--primary)]"
+                  className="text-[11px] font-semibold tracking-[2px] uppercase text-white/80 transition-colors hover:text-white"
                 >
                   Waitlist
                 </Link>
                 <Link
                   href="/admin/contact"
-                  className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] hover:text-[var(--primary)]"
+                  className="text-[11px] font-semibold tracking-[2px] uppercase text-white/80 transition-colors hover:text-white"
                 >
                   Messages
                 </Link>
                 <Link
                   href="/admin/account"
-                  className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] hover:text-[var(--primary)]"
+                  className="text-[11px] font-semibold tracking-[2px] uppercase text-white/80 transition-colors hover:text-white"
                 >
                   Account
                 </Link>
@@ -58,14 +59,14 @@ export default async function AdminLayout({
               <Link
                 href="/events"
                 target="_blank"
-                className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-muted-dark)] hover:text-[var(--primary)]"
+                className="text-[11px] font-semibold tracking-[2px] uppercase text-white/60 transition-colors hover:text-white"
               >
                 View site ↗
               </Link>
               <form action={adminSignOut}>
                 <button
                   type="submit"
-                  className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-muted-dark)] hover:text-[var(--primary)]"
+                  className="text-[11px] font-semibold tracking-[2px] uppercase text-white/60 transition-colors hover:text-white"
                 >
                   Sign out
                 </button>
