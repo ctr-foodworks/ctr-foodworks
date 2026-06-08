@@ -96,7 +96,7 @@ export async function saveEvent(
 
   revalidatePath("/events");
   revalidatePath("/admin");
-  redirect("/admin");
+  redirect(idRaw ? "/admin?flash=event-updated" : "/admin?flash=event-created");
 }
 
 export async function removeEvent(formData: FormData): Promise<void> {
@@ -106,6 +106,7 @@ export async function removeEvent(formData: FormData): Promise<void> {
   await deleteEvent(id);
   revalidatePath("/events");
   revalidatePath("/admin");
+  redirect("/admin?flash=event-deleted");
 }
 
 export async function adminSignOut(): Promise<void> {

@@ -1,5 +1,6 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { verifyCredentials, updatePassword } from "@/lib/users-db";
 
@@ -28,5 +29,5 @@ export async function changePassword(
   if (!user) return { error: "Current password is incorrect." };
 
   await updatePassword(email, next);
-  return { success: true };
+  redirect("/admin/account?flash=password-updated");
 }
