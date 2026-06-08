@@ -69,7 +69,7 @@ export function CookieNotice() {
               type="button"
               onClick={() => accept("necessary")}
               disabled={leaving}
-              className="h-[42px] flex-1 cursor-pointer border border-[var(--text-dark)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white disabled:cursor-default"
+              className="h-[54px] flex-1 cursor-pointer border border-[var(--text-dark)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white disabled:cursor-default sm:h-[44px]"
             >
               Necessary only
             </button>
@@ -77,7 +77,7 @@ export function CookieNotice() {
               type="button"
               onClick={() => accept("all")}
               disabled={leaving}
-              className="h-[42px] flex-1 cursor-pointer bg-[var(--text-dark)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[var(--primary)] disabled:cursor-default"
+              className="h-[54px] flex-1 cursor-pointer bg-[var(--text-dark)] px-5 text-[11px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[var(--primary)] disabled:cursor-default sm:h-[44px]"
             >
               Accept all
             </button>
