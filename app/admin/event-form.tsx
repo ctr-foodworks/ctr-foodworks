@@ -46,6 +46,9 @@ export function EventForm({ event }: { event?: EventRow }) {
       {/* Slug is auto-derived from the title for new events and preserved
           (stable) for existing ones — no need to expose it to editors. */}
       {event && <input type="hidden" name="slug" value={event.slug} />}
+      {/* Category isn't shown: the carousel only renders public events, so new
+          events default to "public" (server action); edits keep their value. */}
+      {event && <input type="hidden" name="category" value={event.category} />}
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <label className="flex flex-col gap-2 sm:col-span-2">
@@ -56,19 +59,6 @@ export function EventForm({ event }: { event?: EventRow }) {
             defaultValue={event?.title}
             className={inputClass}
           />
-        </label>
-
-        <label className="flex flex-col gap-2">
-          <span className={labelClass}>Category *</span>
-          <select
-            name="category"
-            defaultValue={event?.category ?? "public"}
-            className={inputClass}
-          >
-            <option value="public">Public</option>
-            <option value="private">Private</option>
-            <option value="recurring">Recurring</option>
-          </select>
         </label>
 
         <label className="flex flex-col gap-2">
