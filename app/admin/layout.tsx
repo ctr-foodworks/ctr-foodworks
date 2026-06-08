@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { auth } from "@/auth";
 import { getUnreadCounts } from "@/lib/submissions-db";
 import { ToastProvider, FlashToasts } from "@/components/admin/toast";
-import { AdminSidebar } from "@/components/admin/sidebar";
+import { AdminChrome } from "@/components/admin/sidebar";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -27,8 +27,8 @@ export default async function AdminLayout({
         <FlashToasts />
       </Suspense>
       <div className="min-h-screen bg-white text-[var(--text-dark)]">
-        {signedIn && <AdminSidebar counts={counts} />}
-        <div className={signedIn ? "lg:pl-[228px]" : ""}>{children}</div>
+        {signedIn && <AdminChrome counts={counts} />}
+        <div className={signedIn ? "pl-[64px] pt-[60px]" : ""}>{children}</div>
       </div>
     </ToastProvider>
   );
