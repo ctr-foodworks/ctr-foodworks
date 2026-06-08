@@ -54,8 +54,8 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             <span
               className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-white ${
                 t.tone === "success"
-                  ? "bg-[var(--primary)]"
-                  : "bg-[var(--text-dark)]"
+                  ? "bg-[#16a34a]"
+                  : "bg-[var(--primary)]"
               }`}
             >
               {t.tone === "success" ? (
