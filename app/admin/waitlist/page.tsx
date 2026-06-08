@@ -1,5 +1,6 @@
 import { isDbConfigured } from "@/lib/db";
 import { getWaitlistSignups } from "@/lib/submissions-db";
+import { markWaitlistReadAction } from "../actions";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 
 export const dynamic = "force-dynamic";
@@ -27,18 +28,31 @@ export default async function WaitlistPage() {
   }
 
   const rows = await getWaitlistSignups();
+  const unread = rows.filter((r) => !r.read).length;
 
   return (
     <main className="mx-auto max-w-[1100px] px-6 py-12">
-      <div className="mb-8">
-        <Eyebrow tone="primary">Submissions</Eyebrow>
-        <h1 className="mt-3 font-display text-[36px] font-black uppercase leading-[1] tracking-[-0.5px]">
-          Waitlist
-          <span className="ml-3 align-middle text-[16px] font-medium text-[var(--text-muted-dark)]">
-            {rows.length}
-          </span>
-        </h1>
-        <div className="mt-3 h-[2px] w-12 bg-[var(--primary)]" />
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <Eyebrow tone="primary">Submissions</Eyebrow>
+          <h1 className="mt-3 font-display text-[36px] font-black uppercase leading-[1] tracking-[-0.5px]">
+            Waitlist
+            <span className="ml-3 align-middle text-[16px] font-medium text-[var(--text-muted-dark)]">
+              {rows.length}
+            </span>
+          </h1>
+          <div className="mt-3 h-[2px] w-12 bg-[var(--primary)]" />
+        </div>
+        {unread > 0 && (
+          <form action={markWaitlistReadAction}>
+            <button
+              type="submit"
+              className="inline-flex h-[40px] items-center justify-center border border-[var(--text-dark)]/20 px-5 text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
+            >
+              Mark all as read ({unread})
+            </button>
+          </form>
+        )}
       </div>
 
       {rows.length === 0 ? (
@@ -52,6 +66,12 @@ export default async function WaitlistPage() {
               key={r.id}
               className="flex flex-wrap items-center gap-4 border-b border-[var(--text-dark)]/10 py-3"
             >
+              <span
+                className={`h-2 w-2 flex-shrink-0 rounded-full ${
+                  r.read ? "bg-transparent" : "bg-[var(--primary)]"
+                }`}
+                title={r.read ? undefined : "Unread"}
+              />
               <a
                 href={`mailto:${r.email}`}
                 className="min-w-[240px] flex-1 text-[14px] font-medium text-[var(--text-dark)] hover:text-[var(--primary)]"

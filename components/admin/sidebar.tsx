@@ -13,12 +13,25 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { adminSignOut } from "@/app/admin/actions";
 
+type Counts = { waitlist: number; contact: number };
+
 type Item = {
   href: string;
   label: string;
   Icon: LucideIcon;
   isActive: (path: string) => boolean;
+  /** Which unread count (if any) drives this item's badge. */
+  countKey?: keyof Counts;
 };
+
+function Badge({ n }: { n: number }) {
+  if (n <= 0) return null;
+  return (
+    <span className="absolute -right-1.5 -top-1.5 flex h-[16px] min-w-[16px] items-center justify-center rounded-full bg-[var(--primary)] px-1 text-[9px] font-bold leading-none text-white">
+      {n > 9 ? "9+" : n}
+    </span>
+  );
+}
 
 const items: Item[] = [
   {
@@ -33,12 +46,14 @@ const items: Item[] = [
     label: "Waitlist",
     Icon: UserPlus,
     isActive: (p) => p.startsWith("/admin/waitlist"),
+    countKey: "waitlist",
   },
   {
     href: "/admin/contact",
     label: "Messages",
     Icon: MessageSquare,
     isActive: (p) => p.startsWith("/admin/contact"),
+    countKey: "contact",
   },
   {
     href: "/admin/account",
@@ -54,7 +69,7 @@ function useActivePath() {
   return pathname.replace(/\/+$/, "") || "/";
 }
 
-export function AdminSidebar() {
+export function AdminSidebar({ counts }: { counts: Counts }) {
   const path = useActivePath();
 
   return (
@@ -72,8 +87,9 @@ export function AdminSidebar() {
         </div>
 
         <nav className="flex flex-1 flex-col gap-1 p-3">
-          {items.map(({ href, label, Icon, isActive }) => {
+          {items.map(({ href, label, Icon, isActive, countKey }) => {
             const active = isActive(path);
+            const n = countKey ? counts[countKey] : 0;
             return (
               <Link
                 key={href}
@@ -89,7 +105,10 @@ export function AdminSidebar() {
                 {active && (
                   <span className="absolute bottom-1.5 left-0 top-1.5 w-[3px] rounded-full bg-[var(--primary)]" />
                 )}
-                <Icon className="h-[18px] w-[18px] flex-shrink-0" />
+                <span className="relative flex-shrink-0">
+                  <Icon className="h-[18px] w-[18px]" />
+                  <Badge n={n} />
+                </span>
                 <span>{label}</span>
               </Link>
             );
@@ -129,8 +148,9 @@ export function AdminSidebar() {
           />
         </Link>
         <nav className="flex items-center gap-1">
-          {items.map(({ href, label, Icon, isActive }) => {
+          {items.map(({ href, label, Icon, isActive, countKey }) => {
             const active = isActive(path);
+            const n = countKey ? counts[countKey] : 0;
             return (
               <Link
                 key={href}
@@ -138,13 +158,14 @@ export function AdminSidebar() {
                 title={label}
                 aria-label={label}
                 aria-current={active ? "page" : undefined}
-                className={`flex h-9 w-9 items-center justify-center rounded-md transition-colors ${
+                className={`relative flex h-9 w-9 items-center justify-center rounded-md transition-colors ${
                   active
                     ? "bg-[var(--primary)]/10 text-[var(--primary)]"
                     : "text-[var(--text-dark)]/65 hover:text-[var(--primary)]"
                 }`}
               >
                 <Icon className="h-[18px] w-[18px]" />
+                <Badge n={n} />
               </Link>
             );
           })}

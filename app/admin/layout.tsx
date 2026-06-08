@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { auth } from "@/auth";
+import { getUnreadCounts } from "@/lib/submissions-db";
 import { ToastProvider, FlashToasts } from "@/components/admin/toast";
 import { AdminSidebar } from "@/components/admin/sidebar";
 
@@ -16,6 +17,9 @@ export default async function AdminLayout({
 }) {
   const session = await auth();
   const signedIn = Boolean(session?.user);
+  const counts = signedIn
+    ? await getUnreadCounts()
+    : { waitlist: 0, contact: 0 };
 
   return (
     <ToastProvider>
@@ -23,7 +27,7 @@ export default async function AdminLayout({
         <FlashToasts />
       </Suspense>
       <div className="min-h-screen bg-white text-[var(--text-dark)]">
-        {signedIn && <AdminSidebar />}
+        {signedIn && <AdminSidebar counts={counts} />}
         <div className={signedIn ? "lg:pl-[228px]" : ""}>{children}</div>
       </div>
     </ToastProvider>
