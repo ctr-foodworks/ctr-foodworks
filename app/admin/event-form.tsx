@@ -3,6 +3,7 @@
 import { useActionState, useState, type ChangeEvent } from "react";
 import Link from "next/link";
 import { saveEvent, type EventFormState } from "./actions";
+import { useToast } from "@/components/admin/toast";
 import type { EventRow } from "@/lib/db/schema";
 
 const inputClass =
@@ -19,6 +20,7 @@ export function EventForm({ event }: { event?: EventRow }) {
   const [imageUrl, setImageUrl] = useState(event?.imageUrl ?? "");
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | undefined>();
+  const toast = useToast();
 
   async function onFile(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -33,8 +35,10 @@ export function EventForm({ event }: { event?: EventRow }) {
       if (!res.ok) throw new Error("upload failed");
       const data = (await res.json()) as { url: string };
       setImageUrl(data.url);
+      toast("Image uploaded.");
     } catch {
       setUploadError("Upload failed. Try again.");
+      toast("Image upload failed.", "error");
     } finally {
       setUploading(false);
     }

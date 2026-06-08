@@ -54,11 +54,6 @@ export function AccountForm() {
           {state.error}
         </p>
       )}
-      {state?.success && (
-        <p className="text-[13px] font-light text-[var(--text-dark)]" role="status">
-          Password updated.
-        </p>
-      )}
 
       <button
         type="submit"

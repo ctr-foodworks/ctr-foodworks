@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { adminSignOut } from "./actions";
+import { ToastProvider, FlashToasts } from "@/components/admin/toast";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -16,7 +18,11 @@ export default async function AdminLayout({
   const session = await auth();
 
   return (
-    <div className="min-h-screen bg-white text-[var(--text-dark)]">
+    <ToastProvider>
+      <Suspense>
+        <FlashToasts />
+      </Suspense>
+      <div className="min-h-screen bg-white text-[var(--text-dark)]">
       {session?.user && (
         <header className="border-b border-[var(--text-dark)]/10 bg-white">
           <div className="mx-auto flex max-w-[1100px] flex-wrap items-center justify-between gap-4 px-6 py-4">
@@ -75,7 +81,8 @@ export default async function AdminLayout({
           </div>
         </header>
       )}
-      {children}
-    </div>
+        {children}
+      </div>
+    </ToastProvider>
   );
 }
