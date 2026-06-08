@@ -65,7 +65,7 @@ function placeholderFill(tint: string) {
 // Extra bottom darkening for real photos so the copy always reads. Mirrors the
 // PageHero / Hero gradients. (Placeholders already darken toward the bottom.)
 const LEGIBILITY_GRADIENT =
-  "linear-gradient(180deg, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.42) 40%, rgba(0,0,0,0.72) 78%, rgba(0,0,0,0.92) 100%)";
+  "linear-gradient(180deg, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.56) 38%, rgba(0,0,0,0.8) 76%, rgba(0,0,0,0.95) 100%)";
 
 const AUTOPLAY_MS = 6500;
 const SWIPE_THRESHOLD_PX = 40;

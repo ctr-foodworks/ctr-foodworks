@@ -43,6 +43,9 @@ export function EventForm({ event }: { event?: EventRow }) {
   return (
     <form action={formAction} className="flex flex-col gap-6">
       {event && <input type="hidden" name="id" value={event.id} />}
+      {/* Slug is auto-derived from the title for new events and preserved
+          (stable) for existing ones — no need to expose it to editors. */}
+      {event && <input type="hidden" name="slug" value={event.slug} />}
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <label className="flex flex-col gap-2 sm:col-span-2">
@@ -51,16 +54,6 @@ export function EventForm({ event }: { event?: EventRow }) {
             name="title"
             required
             defaultValue={event?.title}
-            className={inputClass}
-          />
-        </label>
-
-        <label className="flex flex-col gap-2">
-          <span className={labelClass}>Slug</span>
-          <input
-            name="slug"
-            defaultValue={event?.slug}
-            placeholder="auto from title"
             className={inputClass}
           />
         </label>
@@ -99,7 +92,7 @@ export function EventForm({ event }: { event?: EventRow }) {
           />
         </label>
 
-        <label className="flex flex-col gap-2 sm:col-span-2">
+        <label className="flex flex-col gap-2">
           <span className={labelClass}>Time</span>
           <input
             name="time"
