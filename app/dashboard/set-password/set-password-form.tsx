@@ -27,7 +27,7 @@ export function SetPasswordForm({ defaultName }: { defaultName: string }) {
     setError(undefined);
     try {
       const res = await fetch(
-        `/api/admin/upload/?filename=${encodeURIComponent(file.name)}`,
+        `/api/admin/upload?filename=${encodeURIComponent(file.name)}`,
         { method: "POST", body: file },
       );
       if (!res.ok) throw new Error("upload failed");

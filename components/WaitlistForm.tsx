@@ -55,7 +55,7 @@ export function WaitlistForm({
     const botField = String(formData.get("bot-field") ?? "");
 
     try {
-      const res = await fetch("/api/waitlist/", {
+      const res = await fetch("/api/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, source, botField }),
