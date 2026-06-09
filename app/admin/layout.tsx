@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { auth } from "@/auth";
 import { getCurrentUser } from "@/lib/current-user";
 import { getUnreadCounts } from "@/lib/submissions-db";
 import { ToastProvider, FlashToasts } from "@/components/admin/toast";
@@ -16,8 +15,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-  const me = session?.user ? await getCurrentUser() : null;
+  const me = await getCurrentUser();
 
   // Invited users must set a password first — render a clean, chrome-less
   // screen (the set-password page) until they do.
