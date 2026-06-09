@@ -1,27 +1,28 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { signOut } from "@/auth";
 import { getCurrentUser } from "@/lib/current-user";
 import { updatePassword } from "@/lib/users-db";
 import { validatePassword } from "@/lib/validation";
 
-export type SetPasswordState = { error?: string } | undefined;
-
-export async function setPasswordAction(
-  _prev: SetPasswordState,
-  formData: FormData,
-): Promise<SetPasswordState> {
+/**
+ * Plain form action (NOT useActionState) so signOut() works cleanly — calling
+ * signOut inside a useActionState action triggers "An unexpected response was
+ * received from the server." The form validates client-side first; this is the
+ * server-side safety net.
+ */
+export async function setPasswordAction(formData: FormData): Promise<void> {
   const me = await getCurrentUser();
-  if (!me) return { error: "Not authorized." };
+  if (!me) redirect("/dashboard/login");
 
   const next = String(formData.get("next") ?? "");
   const confirm = String(formData.get("confirm") ?? "");
-  const pwError = validatePassword(next);
-  if (pwError) return { error: pwError };
-  if (next !== confirm) return { error: "Passwords don't match." };
+  if (validatePassword(next) || next !== confirm) {
+    redirect("/dashboard/set-password?error=1");
+  }
 
-  // Sets the password and clears mustChangePassword.
-  await updatePassword(me.email, next);
-  // Sign out so a fresh token (mustChangePassword=false) is issued on re-login.
+  await updatePassword(me.email, next); // clears mustChangePassword
+  // Sign out so the next login issues a fresh token (mustChangePassword=false).
   await signOut({ redirectTo: "/dashboard/login" });
 }
