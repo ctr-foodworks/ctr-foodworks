@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { auth, signOut } from "@/auth";
+import { signOut } from "@/auth";
+import { getCurrentUser } from "@/lib/current-user";
 import {
   createEvent,
   updateEvent,
@@ -65,8 +66,10 @@ function parseEvent(formData: FormData):
 }
 
 async function requireAdmin(): Promise<boolean> {
-  const session = await auth();
-  return Boolean(session?.user);
+  // Verify against the DB, not just the token — a deleted/disabled user may
+  // still hold a valid JWT until it expires.
+  const me = await getCurrentUser();
+  return Boolean(me);
 }
 
 /** Create (no id) or update (with id) — used by the shared EventForm. */

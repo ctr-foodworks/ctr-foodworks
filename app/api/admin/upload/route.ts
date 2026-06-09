@@ -1,6 +1,6 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
-import { auth } from "@/auth";
+import { getCurrentUser } from "@/lib/current-user";
 
 /**
  * Admin-only image upload → Vercel Blob. The browser POSTs the raw file body
@@ -11,8 +11,8 @@ import { auth } from "@/auth";
  * photos should be optimized before upload.
  */
 export async function POST(request: Request): Promise<Response> {
-  const session = await auth();
-  if (!session?.user) {
+  const me = await getCurrentUser();
+  if (!me) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
