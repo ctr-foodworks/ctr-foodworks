@@ -2,19 +2,19 @@ import { NextResponse } from "next/server";
 import { getDb, isDbConfigured, schema } from "@/lib/db";
 import { sendMail, emailLayout, escapeHtml } from "@/lib/email";
 
-// Category → destination inbox (configured via env). Press→PR,
-// General/Careers→Management, Partnerships→Marketing.
+// Category → destination inbox (configured via env). Press goes to PR; every
+// other category falls back to CONTACT_TO_GENERAL unless given its own override.
 function routeFor(category: string | null): string | undefined {
+  const general = process.env.CONTACT_TO_GENERAL;
   switch (category) {
     case "Press":
-      return process.env.CONTACT_TO_PRESS;
+      return process.env.CONTACT_TO_PRESS ?? general;
     case "Partnerships":
-      return process.env.CONTACT_TO_MARKETING;
-    case "General":
+      return process.env.CONTACT_TO_PARTNERSHIPS ?? general;
     case "Careers":
-      return process.env.CONTACT_TO_MANAGEMENT;
+      return process.env.CONTACT_TO_CAREERS ?? general;
     default:
-      return process.env.CONTACT_TO_MANAGEMENT;
+      return general;
   }
 }
 
