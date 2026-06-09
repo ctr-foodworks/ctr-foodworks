@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { getCurrentUser } from "@/lib/current-user";
 import { verifyCredentials, updatePassword, updateProfile } from "@/lib/users-db";
+import { validatePassword } from "@/lib/validation";
 
 export type ProfileState = { error?: string } | undefined;
 
@@ -35,9 +36,8 @@ export async function changePassword(
   const next = String(formData.get("next") ?? "");
   const confirm = String(formData.get("confirm") ?? "");
 
-  if (next.length < 8) {
-    return { error: "New password must be at least 8 characters." };
-  }
+  const pwError = validatePassword(next);
+  if (pwError) return { error: pwError };
   if (next !== confirm) {
     return { error: "New passwords don't match." };
   }

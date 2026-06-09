@@ -3,6 +3,7 @@
 import { signOut } from "@/auth";
 import { getCurrentUser } from "@/lib/current-user";
 import { updatePassword } from "@/lib/users-db";
+import { validatePassword } from "@/lib/validation";
 
 export type SetPasswordState = { error?: string } | undefined;
 
@@ -15,9 +16,8 @@ export async function setPasswordAction(
 
   const next = String(formData.get("next") ?? "");
   const confirm = String(formData.get("confirm") ?? "");
-  if (next.length < 8) {
-    return { error: "Password must be at least 8 characters." };
-  }
+  const pwError = validatePassword(next);
+  if (pwError) return { error: pwError };
   if (next !== confirm) return { error: "Passwords don't match." };
 
   // Sets the password and clears mustChangePassword.
