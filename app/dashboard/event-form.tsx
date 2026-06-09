@@ -41,7 +41,7 @@ export function EventForm({ event }: { event?: EventRow }) {
 
   async function uploadFile(f: File): Promise<string> {
     const res = await fetch(
-      `/api/admin/upload/?filename=${encodeURIComponent(f.name)}`,
+      `/api/admin/upload?filename=${encodeURIComponent(f.name)}`,
       { method: "POST", body: f },
     );
     if (!res.ok) throw new Error("upload failed");
