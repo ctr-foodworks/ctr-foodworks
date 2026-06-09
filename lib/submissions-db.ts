@@ -5,7 +5,7 @@ import type { WaitlistRow, ContactRow } from "./db/schema";
 
 /**
  * Read access for form submissions surfaced in the admin. DB required — these
- * are only ever called from protected /admin pages.
+ * are only ever called from protected /dashboard pages.
  */
 export async function getWaitlistSignups(): Promise<WaitlistRow[]> {
   const db = getDb();

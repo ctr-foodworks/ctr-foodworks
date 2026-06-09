@@ -75,7 +75,7 @@ export default function RootLayout({
       </head>
       <body className="h-full font-primary bg-[var(--bg-warm-white)]">
         {/* Site chrome (NavBar/Footer/WelcomeModal/CookieNotice) lives in the
-            (site) route-group layout so /admin can have its own minimal shell. */}
+            (site) route-group layout so /dashboard can have its own minimal shell. */}
         {children}
       </body>
     </html>

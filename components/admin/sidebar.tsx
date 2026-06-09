@@ -14,7 +14,7 @@ import {
   LogOut,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { adminSignOut } from "@/app/admin/actions";
+import { adminSignOut } from "@/app/dashboard/actions";
 import { canManageUsers } from "@/lib/roles";
 import type { UserRole } from "@/lib/db/schema";
 
@@ -36,40 +36,40 @@ type Item = {
 
 const items: Item[] = [
   {
-    href: "/admin",
+    href: "/dashboard",
     label: "Events",
     Icon: CalendarDays,
     isActive: (p) =>
-      p === "/admin" || p.startsWith("/admin/new") || /^\/admin\/\d+\/edit/.test(p),
+      p === "/dashboard" || p.startsWith("/dashboard/new") || /^\/dashboard\/\d+\/edit/.test(p),
   },
   {
-    href: "/admin/waitlist",
+    href: "/dashboard/waitlist",
     label: "Waitlist",
     Icon: UserPlus,
-    isActive: (p) => p.startsWith("/admin/waitlist"),
+    isActive: (p) => p.startsWith("/dashboard/waitlist"),
     countKey: "waitlist",
   },
   {
-    href: "/admin/contact",
+    href: "/dashboard/contact",
     label: "Messages",
     Icon: MessageSquare,
-    isActive: (p) => p.startsWith("/admin/contact"),
+    isActive: (p) => p.startsWith("/dashboard/contact"),
     countKey: "contact",
   },
   {
-    href: "/admin/account",
+    href: "/dashboard/account",
     label: "Account",
     Icon: UserCog,
-    isActive: (p) => p.startsWith("/admin/account"),
+    isActive: (p) => p.startsWith("/dashboard/account"),
   },
 ];
 
 // Shown only to roles that can manage users (super_admin / admin).
 const usersItem: Item = {
-  href: "/admin/users",
+  href: "/dashboard/users",
   label: "Users",
   Icon: Users,
-  isActive: (p) => p.startsWith("/admin/users"),
+  isActive: (p) => p.startsWith("/dashboard/users"),
 };
 
 function Badge({ n }: { n: number }) {
@@ -133,7 +133,7 @@ export function AdminChrome({
     <>
       {/* Top header — holds the logo, above the page */}
       <header className="fixed inset-x-0 top-0 z-50 flex h-[60px] items-center justify-between border-b border-[var(--text-dark)]/10 bg-white px-5">
-        <Link href="/admin" aria-label="CTR Food Works admin">
+        <Link href="/dashboard" aria-label="CTR Food Works admin">
           <img
             src="/logos/ctr-inline-black.svg"
             alt="CTR Food Works"
@@ -189,7 +189,7 @@ export function AdminChrome({
             </div>
 
             <Link
-              href="/admin/account"
+              href="/dashboard/account"
               onClick={() => setMenuOpen(false)}
               role="menuitem"
               className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-[var(--text-dark)] transition-colors hover:bg-black/[0.04]"

@@ -23,5 +23,5 @@ export async function setPasswordAction(
   // Sets the password and clears mustChangePassword.
   await updatePassword(me.email, next);
   // Sign out so a fresh token (mustChangePassword=false) is issued on re-login.
-  await signOut({ redirectTo: "/admin/login" });
+  await signOut({ redirectTo: "/dashboard/login" });
 }

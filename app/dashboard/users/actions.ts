@@ -32,8 +32,8 @@ function str(fd: FormData, k: string): string {
 
 function inviteHtml(tempPw: string): string {
   const url = process.env.NEXT_PUBLIC_SITE_URL
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}/admin`
-    : "/admin";
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`
+    : "/dashboard";
   return emailLayout(
     "You've been invited to CTR Food Works",
     `<p style="margin:0 0 20px;font-size:14px;line-height:1.65;color:#444">An account was created for you. Use the temporary password below to sign in — you'll set your own on first login.</p>
@@ -82,7 +82,7 @@ export async function createUserAction(
     html: inviteHtml(pw),
   });
 
-  revalidatePath("/admin/users");
+  revalidatePath("/dashboard/users");
   return {
     success: "User created and emailed their temporary password.",
     tempPassword: pw,
@@ -97,8 +97,8 @@ export async function deleteUserAction(formData: FormData): Promise<void> {
   const target = await getUserById(id);
   if (!target || !canManageTarget(me.role, target.role)) return;
   await deleteUser(id);
-  revalidatePath("/admin/users");
-  redirect("/admin/users?flash=user-deleted");
+  revalidatePath("/dashboard/users");
+  redirect("/dashboard/users?flash=user-deleted");
 }
 
 export async function resetUserPasswordAction(
@@ -118,6 +118,6 @@ export async function resetUserPasswordAction(
     subject: "Your CTR Food Works password was reset",
     html: inviteHtml(pw),
   });
-  revalidatePath("/admin/users");
-  redirect("/admin/users?flash=password-reset");
+  revalidatePath("/dashboard/users");
+  redirect("/dashboard/users?flash=password-reset");
 }

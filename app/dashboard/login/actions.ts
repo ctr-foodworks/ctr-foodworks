@@ -5,7 +5,7 @@ import { signIn } from "@/auth";
 
 /**
  * Server action for the admin login form. On success, signIn throws a redirect
- * to /admin (which must propagate). On bad credentials it returns an error
+ * to /dashboard (which must propagate). On bad credentials it returns an error
  * string for the form to display.
  */
 export async function authenticate(
@@ -16,7 +16,7 @@ export async function authenticate(
     await signIn("credentials", {
       email: formData.get("email"),
       password: formData.get("password"),
-      redirectTo: "/admin",
+      redirectTo: "/dashboard",
     });
   } catch (error) {
     if (error instanceof AuthError) {

@@ -4,7 +4,7 @@ import { CookieNotice } from "@/components/CookieNotice";
 import { WelcomeModal } from "@/components/WelcomeModal";
 
 /**
- * Layout for the public marketing site — wraps every route except /admin and
+ * Layout for the public marketing site — wraps every route except /dashboard and
  * /api. Holds the shared NavBar/Footer plus the first-visit WelcomeModal and
  * CookieNotice. (Route groups don't affect URLs, so paths are unchanged.)
  */
