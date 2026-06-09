@@ -10,8 +10,8 @@ export const dynamic = "force-dynamic";
 
 export default async function UsersPage() {
   const me = await getCurrentUser();
-  if (!me) redirect("/admin/login");
-  if (!canManageUsers(me.role)) redirect("/admin");
+  if (!me) redirect("/dashboard/login");
+  if (!canManageUsers(me.role)) redirect("/dashboard");
 
   const users = await listUsers();
 

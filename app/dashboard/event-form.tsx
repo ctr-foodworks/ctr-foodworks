@@ -213,7 +213,7 @@ export function EventForm({ event }: { event?: EventRow }) {
           {isPending ? "Saving…" : event ? "Save changes" : "Create event"}
         </button>
         <Link
-          href="/admin"
+          href="/dashboard"
           className="text-[12px] font-semibold tracking-[3px] uppercase text-[var(--text-muted-dark)] hover:text-[var(--text-dark)]"
         >
           Cancel

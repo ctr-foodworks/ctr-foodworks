@@ -1,6 +1,6 @@
 # Events CMS — setup
 
-The Public Events feed is editable through a small built-in CMS at **`/admin`**,
+The Public Events feed is editable through a small built-in CMS at **`/dashboard`**,
 backed by Postgres (Neon). Until `DATABASE_URL` is set, the public site falls
 back to the static seed in `lib/events.ts`, so nothing breaks before setup.
 
@@ -40,7 +40,7 @@ AUTH_SECRET="<npx auth secret>"
 npm run admin:create -- "web@ctrfoodworks.com" "your-strong-password"
 ```
 
-Editors can change their own password later at **/admin/account**.
+Editors can change their own password later at **/dashboard/account**.
 
 ## 4. Image uploads (Vercel Blob)
 
@@ -54,9 +54,9 @@ npm run dev
 ```
 
 - Public events: <http://localhost:3000/events>
-- Admin CMS: <http://localhost:3000/admin> (redirects to `/admin/login`)
+- Admin CMS: <http://localhost:3000/dashboard> (redirects to `/dashboard/login`)
 
-Editing in `/admin` writes to Neon and revalidates `/events`, so changes appear
+Editing in `/dashboard` writes to Neon and revalidates `/events`, so changes appear
 within seconds — no redeploy.
 
 ---
@@ -75,5 +75,5 @@ within seconds — no redeploy.
 The waitlist and contact forms (previously Netlify Forms) now POST to
 `/api/waitlist` and `/api/contact` and store rows in Neon
 (`waitlist_signups`, `contact_messages`). View them via `npm run db:studio`.
-A future enhancement could surface these inside `/admin` and/or email a ping on
+A future enhancement could surface these inside `/dashboard` and/or email a ping on
 new submissions (e.g. with Resend).

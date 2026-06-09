@@ -12,25 +12,25 @@ export const authConfig = {
   // JWT session that expires 1 hour after sign-in → admin is logged out
   // automatically. (maxAge < the default updateAge, so it's a hard 1h TTL.)
   session: { strategy: "jwt", maxAge: 60 * 60 },
-  pages: { signIn: "/admin/login" },
+  pages: { signIn: "/dashboard/login" },
   callbacks: {
-    // Gate /admin (and /api/admin) behind a session. The login page itself
+    // Gate /dashboard (and /api/admin) behind a session. The login page itself
     // stays public. Invited users (mustChangePassword) are forced to
-    // /admin/set-password until they set a real password.
+    // /dashboard/set-password until they set a real password.
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = Boolean(auth?.user);
       const path = nextUrl.pathname;
-      const isLogin = path.startsWith("/admin/login");
+      const isLogin = path.startsWith("/dashboard/login");
       const isProtected =
-        path.startsWith("/admin") || path.startsWith("/api/admin");
+        path.startsWith("/dashboard") || path.startsWith("/api/admin");
       if (isLogin) return true;
       if (!isProtected) return true;
       if (!isLoggedIn) return false;
 
       const mustChange = auth?.user?.mustChangePassword;
-      const onSetPassword = path.startsWith("/admin/set-password");
+      const onSetPassword = path.startsWith("/dashboard/set-password");
       if (mustChange && !onSetPassword) {
-        return Response.redirect(new URL("/admin/set-password", nextUrl));
+        return Response.redirect(new URL("/dashboard/set-password", nextUrl));
       }
       return true;
     },

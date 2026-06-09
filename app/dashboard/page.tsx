@@ -39,7 +39,7 @@ export default async function AdminDashboard() {
           <div className="mt-3 h-[2px] w-12 bg-[var(--primary)]" />
         </div>
         <Link
-          href="/admin/new"
+          href="/dashboard/new"
           className="inline-flex h-[44px] items-center justify-center bg-[var(--primary)] px-6 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
         >
           + New event
@@ -65,7 +65,7 @@ export default async function AdminDashboard() {
               </span>
               <div className="flex items-center gap-5">
                 <Link
-                  href={`/admin/${e.id}/edit`}
+                  href={`/dashboard/${e.id}/edit`}
                   className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] hover:text-[var(--primary)]"
                 >
                   Edit

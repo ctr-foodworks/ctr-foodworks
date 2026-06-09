@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AccountPage() {
   const me = await getCurrentUser();
-  if (!me) redirect("/admin/login");
+  if (!me) redirect("/dashboard/login");
 
   return (
     <main className="mx-auto max-w-[760px] px-6 py-12">

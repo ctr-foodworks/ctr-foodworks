@@ -96,8 +96,8 @@ export async function saveEvent(
   }
 
   revalidatePath("/events");
-  revalidatePath("/admin");
-  redirect(idRaw ? "/admin?flash=event-updated" : "/admin?flash=event-created");
+  revalidatePath("/dashboard");
+  redirect(idRaw ? "/dashboard?flash=event-updated" : "/dashboard?flash=event-created");
 }
 
 export async function removeEvent(formData: FormData): Promise<void> {
@@ -106,24 +106,24 @@ export async function removeEvent(formData: FormData): Promise<void> {
   if (!Number.isFinite(id)) return;
   await deleteEvent(id);
   revalidatePath("/events");
-  revalidatePath("/admin");
-  redirect("/admin?flash=event-deleted");
+  revalidatePath("/dashboard");
+  redirect("/dashboard?flash=event-deleted");
 }
 
 export async function markWaitlistReadAction(): Promise<void> {
   if (!(await requireAdmin())) return;
   await markWaitlistRead();
-  revalidatePath("/admin", "layout");
-  revalidatePath("/admin/waitlist");
+  revalidatePath("/dashboard", "layout");
+  revalidatePath("/dashboard/waitlist");
 }
 
 export async function markContactReadAction(): Promise<void> {
   if (!(await requireAdmin())) return;
   await markContactRead();
-  revalidatePath("/admin", "layout");
-  revalidatePath("/admin/contact");
+  revalidatePath("/dashboard", "layout");
+  revalidatePath("/dashboard/contact");
 }
 
 export async function adminSignOut(): Promise<void> {
-  await signOut({ redirectTo: "/admin/login" });
+  await signOut({ redirectTo: "/dashboard/login" });
 }

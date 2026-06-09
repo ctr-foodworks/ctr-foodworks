@@ -18,8 +18,8 @@ export async function updateProfileAction(
   const name = String(formData.get("name") ?? "").trim() || null;
   const imageUrl = String(formData.get("imageUrl") ?? "").trim() || null;
   await updateProfile(me.email, { name, imageUrl });
-  revalidatePath("/admin", "layout"); // refresh header avatar/name
-  redirect("/admin/account?flash=profile-updated");
+  revalidatePath("/dashboard", "layout"); // refresh header avatar/name
+  redirect("/dashboard/account?flash=profile-updated");
 }
 
 export type PasswordState = { error?: string; success?: boolean } | undefined;
@@ -46,5 +46,5 @@ export async function changePassword(
   if (!user) return { error: "Current password is incorrect." };
 
   await updatePassword(email, next);
-  redirect("/admin/account?flash=password-updated");
+  redirect("/dashboard/account?flash=password-updated");
 }

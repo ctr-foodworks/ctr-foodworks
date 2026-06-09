@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 
 export default async function SetPasswordPage() {
   const me = await getCurrentUser();
-  if (!me) redirect("/admin/login");
+  if (!me) redirect("/dashboard/login");
   // Already has a real password — no need for the forced flow.
-  if (!me.mustChangePassword) redirect("/admin");
+  if (!me.mustChangePassword) redirect("/dashboard");
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6 py-16">
