@@ -16,6 +16,19 @@ export default function Error({
   useEffect(() => {
     // Surface in the console for debugging (digest links to the server log).
     console.error("App error boundary:", error);
+    // Auto-recover from deployment skew / transient Server Action errors by
+    // hard-reloading once (loads the current client bundle). Loop-guarded: if
+    // it errors again within 12s, we stop and show the fallback instead.
+    try {
+      const KEY = "ctr-err-autoreload";
+      const last = Number(sessionStorage.getItem(KEY) || "0");
+      if (Date.now() - last > 12000) {
+        sessionStorage.setItem(KEY, String(Date.now()));
+        window.location.reload();
+      }
+    } catch {
+      // sessionStorage unavailable — skip auto-reload.
+    }
   }, [error]);
 
   return (
