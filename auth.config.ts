@@ -38,10 +38,18 @@ export const authConfig = {
       }
       return true;
     },
-    jwt({ token, user }) {
+    jwt({ token, user, trigger, session }) {
       if (user) {
         token.role = user.role;
         token.mustChangePassword = user.mustChangePassword;
+      }
+      // Allow in-place updates (e.g. clearing mustChangePassword after the
+      // forced set-password) so the user stays logged in — no re-login needed.
+      if (trigger === "update" && session) {
+        const s = session as { user?: { mustChangePassword?: boolean } };
+        if (typeof s.user?.mustChangePassword === "boolean") {
+          token.mustChangePassword = s.user.mustChangePassword;
+        }
       }
       return token;
     },
