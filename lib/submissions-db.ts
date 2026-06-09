@@ -30,14 +30,17 @@ export async function getUnreadCounts(): Promise<{
 }> {
   if (!isDbConfigured()) return { waitlist: 0, contact: 0 };
   const db = getDb();
-  const [w] = await db
-    .select({ n: count() })
-    .from(schema.waitlistSignups)
-    .where(eq(schema.waitlistSignups.read, false));
-  const [c] = await db
-    .select({ n: count() })
-    .from(schema.contactMessages)
-    .where(eq(schema.contactMessages.read, false));
+  // Run both counts concurrently to halve the round-trip latency.
+  const [[w], [c]] = await Promise.all([
+    db
+      .select({ n: count() })
+      .from(schema.waitlistSignups)
+      .where(eq(schema.waitlistSignups.read, false)),
+    db
+      .select({ n: count() })
+      .from(schema.contactMessages)
+      .where(eq(schema.contactMessages.read, false)),
+  ]);
   return { waitlist: Number(w?.n ?? 0), contact: Number(c?.n ?? 0) };
 }
 
