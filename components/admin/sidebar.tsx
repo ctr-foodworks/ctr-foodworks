@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -9,6 +9,9 @@ import {
   MessageSquare,
   UserCog,
   Users,
+  ChevronDown,
+  ExternalLink,
+  LogOut,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { adminSignOut } from "@/app/admin/actions";
@@ -94,6 +97,8 @@ export function AdminChrome({
 }) {
   const path = useActivePath();
   const [confirmSignOut, setConfirmSignOut] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   const navItems = canManageUsers(user.role) ? [...items, usersItem] : items;
 
   useEffect(() => {
@@ -104,6 +109,25 @@ export function AdminChrome({
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
   }, [confirmSignOut]);
+
+  // Close the user menu on outside click / Escape.
+  useEffect(() => {
+    if (!menuOpen) return;
+    function onClick(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setMenuOpen(false);
+    }
+    document.addEventListener("mousedown", onClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
 
   return (
     <>
@@ -116,9 +140,15 @@ export function AdminChrome({
             className="h-5 w-auto"
           />
         </Link>
-        <div className="flex items-center gap-4">
-          {/* Authenticated user */}
-          <div className="flex items-center gap-2">
+        {/* User menu — name to the far right, opens an animated dropdown */}
+        <div className="relative" ref={menuRef}>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((o) => !o)}
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            className="flex items-center gap-2 rounded-full py-1 pl-1 pr-2 transition-colors hover:bg-black/[0.04]"
+          >
             {user.imageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -131,27 +161,68 @@ export function AdminChrome({
                 {(user.name || user.email).charAt(0)}
               </span>
             )}
-            <span className="hidden max-w-[160px] truncate text-[12px] font-medium text-[var(--text-dark)] sm:inline">
+            <span className="hidden max-w-[180px] truncate text-[13px] font-medium text-[var(--text-dark)] sm:inline">
               {user.name || user.email}
             </span>
-          </div>
-
-          <span className="h-5 w-px bg-[var(--text-dark)]/15" />
-
-          <Link
-            href="/events"
-            target="_blank"
-            className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-muted-dark)] transition-colors hover:text-[var(--primary)]"
-          >
-            View site ↗
-          </Link>
-          <button
-            type="button"
-            onClick={() => setConfirmSignOut(true)}
-            className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-muted-dark)] transition-colors hover:text-[var(--primary)]"
-          >
-            Sign out
+            <ChevronDown
+              className={`h-4 w-4 text-[var(--text-muted-dark)] transition-transform duration-150 ${
+                menuOpen ? "rotate-180" : ""
+              }`}
+            />
           </button>
+
+          <div
+            role="menu"
+            className={`absolute right-0 top-[calc(100%+10px)] w-60 origin-top-right rounded-xl border border-[var(--text-dark)]/10 bg-white py-2 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.3)] transition duration-150 ease-out ${
+              menuOpen
+                ? "scale-100 opacity-100"
+                : "pointer-events-none scale-95 opacity-0"
+            }`}
+          >
+            <div className="border-b border-[var(--text-dark)]/10 px-4 pb-3 pt-1">
+              <p className="truncate text-[13px] font-semibold text-[var(--text-dark)]">
+                {user.name || "—"}
+              </p>
+              <p className="truncate text-[12px] font-light text-[var(--text-muted-dark)]">
+                {user.email}
+              </p>
+            </div>
+
+            <Link
+              href="/admin/account"
+              onClick={() => setMenuOpen(false)}
+              role="menuitem"
+              className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-[var(--text-dark)] transition-colors hover:bg-black/[0.04]"
+            >
+              <UserCog className="h-4 w-4 text-[var(--text-muted-dark)]" />
+              Profile
+            </Link>
+            <Link
+              href="/events"
+              target="_blank"
+              onClick={() => setMenuOpen(false)}
+              role="menuitem"
+              className="flex items-center gap-3 px-4 py-2.5 text-[13px] text-[var(--text-dark)] transition-colors hover:bg-black/[0.04]"
+            >
+              <ExternalLink className="h-4 w-4 text-[var(--text-muted-dark)]" />
+              View site
+            </Link>
+
+            <div className="my-1 h-px bg-[var(--text-dark)]/10" />
+
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setMenuOpen(false);
+                setConfirmSignOut(true);
+              }}
+              className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-[13px] text-[var(--primary)] transition-colors hover:bg-[var(--primary)]/5"
+            >
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </button>
+          </div>
         </div>
       </header>
 
