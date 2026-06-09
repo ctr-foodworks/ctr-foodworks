@@ -35,10 +35,13 @@ function inviteHtml(tempPw: string): string {
     ? `${process.env.NEXT_PUBLIC_SITE_URL}/admin`
     : "/admin";
   return emailLayout(
-    "You've been invited to CTR Food Works admin",
-    `<p style="margin:0 0 12px">An account was created for you. Use this temporary password to sign in — you'll be asked to set your own on first login.</p>
-     <p style="margin:0 0 12px"><strong>Temporary password:</strong> <code style="background:#f3f3f3;padding:3px 6px;border-radius:4px">${escapeHtml(tempPw)}</code></p>
-     <p style="margin:0"><a href="${escapeHtml(url)}" style="color:#c43725;font-weight:700">Sign in →</a></p>`,
+    "You've been invited to CTR Food Works",
+    `<p style="margin:0 0 20px;font-size:14px;line-height:1.65;color:#444">An account was created for you. Use the temporary password below to sign in — you'll set your own on first login.</p>
+     <div style="margin:0 0 24px;padding:14px 16px;background:#f5f0eb;border:1px solid #e7e1d9;border-radius:6px">
+       <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9a938b;margin-bottom:6px">Temporary password</div>
+       <div style="font-family:Menlo,Consolas,monospace;font-size:16px;font-weight:700;color:#1a1a1a">${escapeHtml(tempPw)}</div>
+     </div>
+     <a href="${escapeHtml(url)}" style="display:inline-block;background:#c43725;color:#ffffff;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:13px 24px;border-radius:6px">Sign In</a>`,
   );
 }
 

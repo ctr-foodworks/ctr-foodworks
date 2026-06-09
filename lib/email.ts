@@ -41,13 +41,23 @@ function escapeHtml(s: string): string {
     .replace(/>/g, "&gt;");
 }
 
-/** Simple branded wrapper for transactional emails. */
+/** Branded wrapper for transactional emails (PNG logo — SVG won't render in
+ *  most mail clients). */
 export function emailLayout(title: string, bodyHtml: string): string {
-  return `<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#1a1a1a">
-  <div style="background:#c43725;padding:18px 24px"><span style="color:#fff;font-weight:700;letter-spacing:2px;text-transform:uppercase;font-size:13px">CTR Food Works</span></div>
-  <div style="padding:24px">
-    <h1 style="font-size:18px;margin:0 0 12px">${escapeHtml(title)}</h1>
-    ${bodyHtml}
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.ctrfoodworks.com";
+  const logo = `${base}/email/ctr-logo.png`;
+  return `<div style="margin:0;padding:32px 16px;background:#f5f0eb;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a">
+  <div style="max-width:520px;margin:0 auto;background:#ffffff;border:1px solid #e7e1d9;border-radius:8px;overflow:hidden">
+    <div style="padding:28px 32px 22px;text-align:center;border-bottom:3px solid #c43725">
+      <img src="${logo}" alt="CTR Food Works" width="170" style="display:inline-block;width:170px;max-width:70%;height:auto" />
+    </div>
+    <div style="padding:32px">
+      <h1 style="margin:0 0 16px;font-size:19px;line-height:1.3;font-weight:800;color:#1a1a1a">${escapeHtml(title)}</h1>
+      ${bodyHtml}
+    </div>
+    <div style="padding:16px 32px;background:#faf8f6;border-top:1px solid #efe9e2;text-align:center">
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#9a938b">CTR Food Works &middot; Downtown Atlanta</div>
+    </div>
   </div>
 </div>`;
 }
