@@ -15,6 +15,15 @@ export const passwordSchema = z
 export const PASSWORD_HINT =
   "At least 8 characters, with an uppercase letter, a lowercase letter, and a number.";
 
+/** Individual rules for the live (client) password checklist. */
+export const PASSWORD_RULES: { label: string; test: (s: string) => boolean }[] =
+  [
+    { label: "At least 8 characters", test: (s) => s.length >= 8 },
+    { label: "An uppercase letter", test: (s) => /[A-Z]/.test(s) },
+    { label: "A lowercase letter", test: (s) => /[a-z]/.test(s) },
+    { label: "A number", test: (s) => /[0-9]/.test(s) },
+  ];
+
 /** Returns the first failing requirement, or null if valid. */
 export function validatePassword(pw: string): string | null {
   const result = passwordSchema.safeParse(pw);

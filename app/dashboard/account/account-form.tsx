@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { changePassword } from "./actions";
-import { PASSWORD_HINT } from "@/lib/validation";
+import { PasswordChecklist } from "@/components/admin/password-checklist";
 
 const inputClass =
   "h-[44px] w-full max-w-[420px] border border-[var(--border-light)] bg-white px-3 text-[14px] text-[var(--text-dark)] outline-none focus:border-[var(--primary)]";
@@ -14,6 +14,7 @@ export function AccountForm() {
     changePassword,
     undefined,
   );
+  const [next, setNext] = useState("");
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -35,9 +36,16 @@ export function AccountForm() {
           required
           minLength={8}
           autoComplete="new-password"
+          value={next}
+          onChange={(e) => setNext(e.target.value)}
           className={inputClass}
         />
       </label>
+
+      <div className="max-w-[420px]">
+        <PasswordChecklist value={next} />
+      </div>
+
       <label className="flex flex-col gap-2">
         <span className={labelClass}>Confirm new password</span>
         <input
@@ -49,10 +57,6 @@ export function AccountForm() {
           className={inputClass}
         />
       </label>
-
-      <p className="text-[11px] font-light leading-[1.5] text-[var(--text-muted-dark)]">
-        {PASSWORD_HINT}
-      </p>
 
       {state?.error && (
         <p className="text-[13px] font-light text-[var(--primary)]" role="alert">

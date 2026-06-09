@@ -17,19 +17,23 @@ export const authConfig = {
     // Gate /dashboard (and /api/admin) behind a session. The login page itself
     // stays public. Invited users (mustChangePassword) are forced to
     // /dashboard/set-password until they set a real password.
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = Boolean(auth?.user);
+    authorized({ auth, request }) {
+      const { nextUrl } = request;
       const path = nextUrl.pathname;
       const isLogin = path.startsWith("/dashboard/login");
       const isProtected =
         path.startsWith("/dashboard") || path.startsWith("/api/admin");
-      if (isLogin) return true;
-      if (!isProtected) return true;
-      if (!isLoggedIn) return false;
+      if (isLogin || !isProtected) return true;
 
-      const mustChange = auth?.user?.mustChangePassword;
+      // Never redirect non-GET requests (Server Actions / API POSTs). Issuing a
+      // redirect to a POST breaks the action with "An unexpected response was
+      // received from the server." Those handlers enforce their own auth.
+      if (request.method !== "GET") return true;
+
+      if (!auth?.user) return false;
+
       const onSetPassword = path.startsWith("/dashboard/set-password");
-      if (mustChange && !onSetPassword) {
+      if (auth.user.mustChangePassword && !onSetPassword) {
         return Response.redirect(new URL("/dashboard/set-password", nextUrl));
       }
       return true;
