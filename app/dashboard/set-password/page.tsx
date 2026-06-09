@@ -25,14 +25,14 @@ export default async function SetPasswordPage() {
             className="mb-8 h-6 w-auto"
           />
           <h1 className="font-display text-[30px] font-black uppercase leading-[1] tracking-[-0.5px] text-[var(--text-dark)]">
-            Set your password
+            Finish setup
           </h1>
           <p className="mt-2 text-[14px] font-light text-[var(--text-muted-dark)]">
-            Welcome{me.name ? `, ${me.name}` : ""}. Choose a new password to
-            finish setting up your account.
+            Welcome{me.name ? `, ${me.name}` : ""}. Set a password and add your
+            photo to finish setting up your account.
           </p>
           <div className="mt-7">
-            <SetPasswordForm />
+            <SetPasswordForm defaultName={me.name ?? ""} />
           </div>
         </div>
       </div>
