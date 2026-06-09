@@ -8,11 +8,20 @@ import {
   UserPlus,
   MessageSquare,
   UserCog,
+  Users,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { adminSignOut } from "@/app/admin/actions";
+import { canManageUsers } from "@/lib/roles";
+import type { UserRole } from "@/lib/db/schema";
 
 type Counts = { waitlist: number; contact: number };
+type ChromeUser = {
+  name: string | null;
+  email: string;
+  imageUrl: string | null;
+  role: UserRole;
+};
 
 type Item = {
   href: string;
@@ -52,6 +61,14 @@ const items: Item[] = [
   },
 ];
 
+// Shown only to roles that can manage users (super_admin / admin).
+const usersItem: Item = {
+  href: "/admin/users",
+  label: "Users",
+  Icon: Users,
+  isActive: (p) => p.startsWith("/admin/users"),
+};
+
 function Badge({ n }: { n: number }) {
   if (n <= 0) return null;
   return (
@@ -68,9 +85,16 @@ function useActivePath() {
 }
 
 /** Top header (logo + utility actions) + a minimized icon rail on the left. */
-export function AdminChrome({ counts }: { counts: Counts }) {
+export function AdminChrome({
+  counts,
+  user,
+}: {
+  counts: Counts;
+  user: ChromeUser;
+}) {
   const path = useActivePath();
   const [confirmSignOut, setConfirmSignOut] = useState(false);
+  const navItems = canManageUsers(user.role) ? [...items, usersItem] : items;
 
   useEffect(() => {
     if (!confirmSignOut) return;
@@ -92,7 +116,28 @@ export function AdminChrome({ counts }: { counts: Counts }) {
             className="h-5 w-auto"
           />
         </Link>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-4">
+          {/* Authenticated user */}
+          <div className="flex items-center gap-2">
+            {user.imageUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={user.imageUrl}
+                alt=""
+                className="h-8 w-8 rounded-full object-cover"
+              />
+            ) : (
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--text-dark)]/10 text-[11px] font-semibold uppercase text-[var(--text-dark)]">
+                {(user.name || user.email).charAt(0)}
+              </span>
+            )}
+            <span className="hidden max-w-[160px] truncate text-[12px] font-medium text-[var(--text-dark)] sm:inline">
+              {user.name || user.email}
+            </span>
+          </div>
+
+          <span className="h-5 w-px bg-[var(--text-dark)]/15" />
+
           <Link
             href="/events"
             target="_blank"
@@ -112,7 +157,7 @@ export function AdminChrome({ counts }: { counts: Counts }) {
 
       {/* Minimized icon rail — labels show as tooltips on hover */}
       <aside className="fixed bottom-0 left-0 top-[60px] z-40 flex w-[64px] flex-col gap-1 border-r border-[var(--text-dark)]/10 bg-white py-4">
-        {items.map(({ href, label, Icon, isActive, countKey }) => {
+        {navItems.map(({ href, label, Icon, isActive, countKey }) => {
           const active = isActive(path);
           const n = countKey ? counts[countKey] : 0;
           return (

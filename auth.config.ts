@@ -1,4 +1,5 @@
 import type { NextAuthConfig } from "next-auth";
+import type { UserRole } from "@/lib/db/schema";
 
 /**
  * Edge-safe Auth.js config (no bcrypt / Node-only deps) so it can be imported
@@ -14,7 +15,8 @@ export const authConfig = {
   pages: { signIn: "/admin/login" },
   callbacks: {
     // Gate /admin (and /api/admin) behind a session. The login page itself
-    // stays public so users can get in.
+    // stays public. Invited users (mustChangePassword) are forced to
+    // /admin/set-password until they set a real password.
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = Boolean(auth?.user);
       const path = nextUrl.pathname;
@@ -22,8 +24,31 @@ export const authConfig = {
       const isProtected =
         path.startsWith("/admin") || path.startsWith("/api/admin");
       if (isLogin) return true;
-      if (isProtected) return isLoggedIn;
+      if (!isProtected) return true;
+      if (!isLoggedIn) return false;
+
+      const mustChange = auth?.user?.mustChangePassword;
+      const onSetPassword = path.startsWith("/admin/set-password");
+      if (mustChange && !onSetPassword) {
+        return Response.redirect(new URL("/admin/set-password", nextUrl));
+      }
       return true;
+    },
+    jwt({ token, user }) {
+      if (user) {
+        token.role = user.role;
+        token.mustChangePassword = user.mustChangePassword;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user) {
+        session.user.role = token.role as UserRole | undefined;
+        session.user.mustChangePassword = token.mustChangePassword as
+          | boolean
+          | undefined;
+      }
+      return session;
     },
   },
   providers: [], // real providers are added in auth.ts (Node runtime)

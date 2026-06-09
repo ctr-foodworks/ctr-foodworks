@@ -87,6 +87,9 @@ const FLASH_MESSAGES: Record<string, string> = {
   "event-updated": "Event updated.",
   "event-deleted": "Event deleted.",
   "password-updated": "Password updated.",
+  "user-deleted": "User removed.",
+  "password-reset": "Temporary password emailed.",
+  "profile-updated": "Profile updated.",
 };
 
 /**

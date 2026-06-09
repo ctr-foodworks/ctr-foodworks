@@ -79,13 +79,23 @@ export const contactMessages = pgTable("contact_messages", {
 
 export type ContactRow = typeof contactMessages.$inferSelect;
 
+export const userRole = pgEnum("user_role", ["super_admin", "admin", "user"]);
+
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
   /** bcrypt hash of the password (never store plaintext). */
   passwordHash: text("password_hash").notNull(),
+  /** Display name shown in the admin header. */
+  name: text("name"),
+  role: userRole("role").notNull().default("user"),
+  /** Profile photo (Vercel Blob URL). */
+  imageUrl: text("image_url"),
+  /** Set for invited users — forces a password reset on first login. */
+  mustChangePassword: boolean("must_change_password").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export type UserRow = typeof users.$inferSelect;
+export type UserRole = (typeof userRole.enumValues)[number];
