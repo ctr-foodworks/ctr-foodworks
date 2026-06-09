@@ -1,7 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { signOut } from "@/auth";
+import { unstable_update } from "@/auth";
 import { getCurrentUser } from "@/lib/current-user";
 import { updatePassword, updateProfile } from "@/lib/users-db";
 import { validatePassword } from "@/lib/validation";
@@ -30,7 +30,8 @@ export async function setPasswordAction(formData: FormData): Promise<void> {
   if (imageUrl) profile.imageUrl = imageUrl;
   if (Object.keys(profile).length) await updateProfile(me.email, profile);
 
-  await updatePassword(me.email, next); // clears mustChangePassword
-  // Sign out so the next login issues a fresh token (mustChangePassword=false).
-  await signOut({ redirectTo: "/dashboard/login" });
+  await updatePassword(me.email, next); // clears mustChangePassword in the DB
+  // Update the session token in place so they stay logged in (no re-login).
+  await unstable_update({ user: { mustChangePassword: false } });
+  redirect("/dashboard");
 }

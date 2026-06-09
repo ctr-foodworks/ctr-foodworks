@@ -8,7 +8,7 @@ import { verifyCredentials } from "./lib/users-db";
  * `users` table — verified via verifyCredentials. Seed/reset an admin with
  * `npm run admin:create`. No password material in env (only AUTH_SECRET).
  */
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
