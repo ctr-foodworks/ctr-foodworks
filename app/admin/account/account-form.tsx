@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { changePassword } from "./actions";
+import { PASSWORD_HINT } from "@/lib/validation";
 
 const inputClass =
   "h-[44px] w-full max-w-[420px] border border-[var(--border-light)] bg-white px-3 text-[14px] text-[var(--text-dark)] outline-none focus:border-[var(--primary)]";
@@ -48,6 +49,10 @@ export function AccountForm() {
           className={inputClass}
         />
       </label>
+
+      <p className="text-[11px] font-light leading-[1.5] text-[var(--text-muted-dark)]">
+        {PASSWORD_HINT}
+      </p>
 
       {state?.error && (
         <p className="text-[13px] font-light text-[var(--primary)]" role="alert">
