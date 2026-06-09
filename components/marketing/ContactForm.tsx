@@ -42,7 +42,8 @@ export function ContactForm() {
     const form = e.currentTarget;
     const formData = new FormData(form);
     const payload = {
-      name: String(formData.get("name") ?? ""),
+      firstName: String(formData.get("firstName") ?? ""),
+      lastName: String(formData.get("lastName") ?? ""),
       email: String(formData.get("email") ?? ""),
       category: String(formData.get("category") ?? ""),
       message: String(formData.get("message") ?? ""),
@@ -120,23 +121,43 @@ export function ContactForm() {
         </label>
       </p>
 
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor="contact-name"
-          className="text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)]"
-        >
-          Name
-        </label>
-        <input
-          id="contact-name"
-          name="name"
-          type="text"
-          required
-          autoComplete="name"
-          disabled={status === "submitting"}
-          className="border border-[var(--text-dark)]/20 bg-white px-4 py-3 text-[14px] font-light text-[var(--text-dark)] outline-none transition-colors placeholder:text-[var(--text-muted-dark)]/60 focus:border-[var(--primary)] disabled:opacity-60"
-          placeholder="Your full name"
-        />
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="contact-first-name"
+            className="text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)]"
+          >
+            First name
+          </label>
+          <input
+            id="contact-first-name"
+            name="firstName"
+            type="text"
+            required
+            autoComplete="given-name"
+            disabled={status === "submitting"}
+            className="border border-[var(--text-dark)]/20 bg-white px-4 py-3 text-[14px] font-light text-[var(--text-dark)] outline-none transition-colors placeholder:text-[var(--text-muted-dark)]/60 focus:border-[var(--primary)] disabled:opacity-60"
+            placeholder="First name"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="contact-last-name"
+            className="text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-dark)]"
+          >
+            Last name
+          </label>
+          <input
+            id="contact-last-name"
+            name="lastName"
+            type="text"
+            required
+            autoComplete="family-name"
+            disabled={status === "submitting"}
+            className="border border-[var(--text-dark)]/20 bg-white px-4 py-3 text-[14px] font-light text-[var(--text-dark)] outline-none transition-colors placeholder:text-[var(--text-muted-dark)]/60 focus:border-[var(--primary)] disabled:opacity-60"
+            placeholder="Last name"
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">

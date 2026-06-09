@@ -10,6 +10,8 @@ const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
  */
 export async function POST(request: Request): Promise<Response> {
   let body: {
+    firstName?: string;
+    lastName?: string;
     name?: string;
     email?: string;
     message?: string;
@@ -24,7 +26,11 @@ export async function POST(request: Request): Promise<Response> {
 
   if (body.botField) return NextResponse.json({ ok: true });
 
-  const name = String(body.name ?? "").trim();
+  const firstName = String(body.firstName ?? "").trim();
+  const lastName = String(body.lastName ?? "").trim();
+  // Combine for the stored display name; fall back to legacy `name`.
+  const name = [firstName, lastName].filter(Boolean).join(" ") ||
+    String(body.name ?? "").trim();
   const email = String(body.email ?? "").trim().toLowerCase();
   const message = String(body.message ?? "").trim();
   const category = String(body.category ?? "").trim() || null;
@@ -47,7 +53,11 @@ export async function POST(request: Request): Promise<Response> {
           name: name || null,
           email,
           message,
-          meta: category ? { category } : null,
+          meta: {
+            ...(category ? { category } : {}),
+            ...(firstName ? { firstName } : {}),
+            ...(lastName ? { lastName } : {}),
+          },
         });
     } catch {
       return NextResponse.json(
