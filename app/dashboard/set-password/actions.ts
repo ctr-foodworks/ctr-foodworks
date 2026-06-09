@@ -1,16 +1,14 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { unstable_update } from "@/auth";
 import { getCurrentUser } from "@/lib/current-user";
 import { updatePassword, updateProfile } from "@/lib/users-db";
 import { validatePassword } from "@/lib/validation";
 
 /**
- * Plain form action (NOT useActionState) so signOut() works cleanly — calling
- * signOut inside a useActionState action triggers "An unexpected response was
- * received from the server." The form validates client-side first; this is the
- * server-side safety net.
+ * Sets the user's password (+ optional profile) and clears mustChangePassword in
+ * the DB. The dashboard layout reads that flag from the DB, so a plain redirect
+ * to /dashboard lands them logged in — no token refresh / re-login needed.
  */
 export async function setPasswordAction(formData: FormData): Promise<void> {
   const me = await getCurrentUser();
@@ -31,7 +29,5 @@ export async function setPasswordAction(formData: FormData): Promise<void> {
   if (Object.keys(profile).length) await updateProfile(me.email, profile);
 
   await updatePassword(me.email, next); // clears mustChangePassword in the DB
-  // Update the session token in place so they stay logged in (no re-login).
-  await unstable_update({ user: { mustChangePassword: false } });
   redirect("/dashboard");
 }

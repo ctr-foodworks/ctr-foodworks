@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { getUserByEmail } from "@/lib/users-db";
 import { getUnreadCounts } from "@/lib/submissions-db";
@@ -51,8 +53,16 @@ export default async function AdminLayout({
     );
   }
 
-  // Invited users must set a password first — clean, chrome-less screen.
+  // Invited users must set a password first. Enforced from the DB (not the
+  // token) using the real pathname from middleware — avoids redirect loops.
   if (me?.mustChangePassword) {
+    const pathname = ((await headers()).get("x-pathname") || "").replace(
+      /\/+$/,
+      "",
+    );
+    if (pathname && pathname !== "/dashboard/set-password") {
+      redirect("/dashboard/set-password");
+    }
     return (
       <ToastProvider>
         <div className="min-h-screen bg-white text-[var(--text-dark)]">
