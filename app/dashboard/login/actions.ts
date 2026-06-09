@@ -1,28 +1,33 @@
 "use server";
 
 import { AuthError } from "next-auth";
+import { redirect } from "next/navigation";
 import { signIn } from "@/auth";
+import { getUserByEmail } from "@/lib/users-db";
 
 /**
- * Server action for the admin login form. On success, signIn throws a redirect
- * to /dashboard (which must propagate). On bad credentials it returns an error
- * string for the form to display.
+ * Server action for the login form. Signs in, then redirects in a single hop to
+ * the right place — set-password for invited users, otherwise the dashboard.
+ * (Avoids the layout having to re-redirect, which caused a blank first paint.)
  */
 export async function authenticate(
   _prev: string | undefined,
   formData: FormData,
 ): Promise<string | undefined> {
+  const email = String(formData.get("email") ?? "");
   try {
     await signIn("credentials", {
-      email: formData.get("email"),
+      email,
       password: formData.get("password"),
-      redirectTo: "/dashboard",
+      redirect: false,
     });
   } catch (error) {
     if (error instanceof AuthError) {
       return "Invalid email or password.";
     }
-    // Re-throw redirect (and any non-auth error) so Next can handle it.
     throw error;
   }
+
+  const user = await getUserByEmail(email);
+  redirect(user?.mustChangePassword ? "/dashboard/set-password" : "/dashboard");
 }
