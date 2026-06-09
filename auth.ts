@@ -24,7 +24,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         try {
           const user = await verifyCredentials(email, password);
           if (!user) return null;
-          return { id: String(user.id), email: user.email, name: "Admin" };
+          return {
+            id: String(user.id),
+            email: user.email,
+            name: user.name ?? user.email,
+            role: user.role,
+            mustChangePassword: user.mustChangePassword,
+          };
         } catch {
           // DB unavailable / not configured — fail closed.
           return null;

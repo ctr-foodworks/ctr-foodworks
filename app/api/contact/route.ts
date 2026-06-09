@@ -1,5 +1,22 @@
 import { NextResponse } from "next/server";
 import { getDb, isDbConfigured, schema } from "@/lib/db";
+import { sendMail, emailLayout, escapeHtml } from "@/lib/email";
+
+// Category → destination inbox (configured via env). Press→PR,
+// General/Careers→Management, Partnerships→Marketing.
+function routeFor(category: string | null): string | undefined {
+  switch (category) {
+    case "Press":
+      return process.env.CONTACT_TO_PRESS;
+    case "Partnerships":
+      return process.env.CONTACT_TO_MARKETING;
+    case "General":
+    case "Careers":
+      return process.env.CONTACT_TO_MANAGEMENT;
+    default:
+      return process.env.CONTACT_TO_MANAGEMENT;
+  }
+}
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -67,6 +84,24 @@ export async function POST(request: Request): Promise<Response> {
     }
   } else {
     console.warn("[contact] DATABASE_URL not set — not stored:", email);
+  }
+
+  // Forward to the routed inbox (best-effort; never blocks the response).
+  const to = routeFor(category);
+  if (to) {
+    await sendMail({
+      to,
+      replyTo: email,
+      subject: `New ${category ?? "General"} inquiry — ${name || email}`,
+      html: emailLayout(
+        `New ${category ?? "General"} inquiry`,
+        `<p style="margin:0 0 8px"><strong>Name:</strong> ${escapeHtml(name || "—")}</p>
+         <p style="margin:0 0 8px"><strong>Email:</strong> ${escapeHtml(email)}</p>
+         <p style="margin:0 0 8px"><strong>Category:</strong> ${escapeHtml(category ?? "General")}</p>
+         <p style="margin:16px 0 4px"><strong>Message</strong></p>
+         <p style="margin:0;white-space:pre-wrap">${escapeHtml(message)}</p>`,
+      ),
+    });
   }
 
   return NextResponse.json({ ok: true });
