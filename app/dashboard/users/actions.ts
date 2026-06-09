@@ -30,14 +30,16 @@ function str(fd: FormData, k: string): string {
   return String(fd.get(k) ?? "").trim();
 }
 
-function inviteHtml(tempPw: string): string {
+function inviteHtml(email: string, tempPw: string): string {
   const url = process.env.NEXT_PUBLIC_SITE_URL
     ? `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`
     : "/dashboard";
   return emailLayout(
     "You've been invited to CTR Food Works",
-    `<p style="margin:0 0 20px;font-size:14px;line-height:1.65;color:#444">An account was created for you. Use the temporary password below to sign in — you'll set your own on first login.</p>
+    `<p style="margin:0 0 20px;font-size:14px;line-height:1.65;color:#444">An account was created for you. Sign in with the email and temporary password below — you'll set your own password on first login.</p>
      <div style="margin:0 0 24px;padding:14px 16px;background:#f5f0eb;border:1px solid #e7e1d9;border-radius:6px">
+       <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9a938b;margin-bottom:6px">Email</div>
+       <div style="font-size:15px;font-weight:600;color:#1a1a1a;margin-bottom:14px">${escapeHtml(email)}</div>
        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9a938b;margin-bottom:6px">Temporary password</div>
        <div style="font-family:Menlo,Consolas,monospace;font-size:16px;font-weight:700;color:#1a1a1a">${escapeHtml(tempPw)}</div>
      </div>
@@ -79,7 +81,7 @@ export async function createUserAction(
   await sendMail({
     to: email,
     subject: "Your CTR Food Works admin access",
-    html: inviteHtml(pw),
+    html: inviteHtml(email, pw),
   });
 
   revalidatePath("/dashboard/users");
@@ -116,7 +118,7 @@ export async function resetUserPasswordAction(
   await sendMail({
     to: target.email,
     subject: "Your CTR Food Works password was reset",
-    html: inviteHtml(pw),
+    html: inviteHtml(target.email, pw),
   });
   revalidatePath("/dashboard/users");
   redirect("/dashboard/users?flash=password-reset");
