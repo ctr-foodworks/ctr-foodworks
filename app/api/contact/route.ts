@@ -1,22 +1,8 @@
 import { NextResponse } from "next/server";
 import { getDb, isDbConfigured, schema } from "@/lib/db";
 import { sendMail, emailLayout, escapeHtml } from "@/lib/email";
-
-// Category → destination inbox (configured via env). Press goes to PR; every
-// other category falls back to CONTACT_TO_GENERAL unless given its own override.
-function routeFor(category: string | null): string | undefined {
-  const general = process.env.CONTACT_TO_GENERAL;
-  switch (category) {
-    case "Press":
-      return process.env.CONTACT_TO_PRESS ?? general;
-    case "Partnerships":
-      return process.env.CONTACT_TO_PARTNERSHIPS ?? general;
-    case "Careers":
-      return process.env.CONTACT_TO_CAREERS ?? general;
-    default:
-      return general;
-  }
-}
+import { routeFor } from "@/lib/contact-routing";
+import { newReplyToken, replyAddress } from "@/lib/inbound";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
@@ -62,6 +48,10 @@ export async function POST(request: Request): Promise<Response> {
     return NextResponse.json({ error: "Message is required." }, { status: 400 });
   }
 
+  // Token for the inbound relay (Model A). Stored now, embedded in the reply-to
+  // below so a staff reply can be traced back to this thread.
+  const token = newReplyToken();
+
   if (isDbConfigured()) {
     try {
       await getDb()
@@ -70,6 +60,7 @@ export async function POST(request: Request): Promise<Response> {
           name: name || null,
           email,
           message,
+          replyToken: token,
           meta: {
             ...(category ? { category } : {}),
             ...(firstName ? { firstName } : {}),
@@ -89,9 +80,13 @@ export async function POST(request: Request): Promise<Response> {
   // Forward to the routed inbox (best-effort; never blocks the response).
   const to = routeFor(category);
   if (to) {
+    // If the relay is enabled (INBOUND_DOMAIN set), staff replies go to the
+    // token address so we can capture them; otherwise fall back to replying
+    // straight to the customer (legacy behavior).
+    const relay = replyAddress(token);
     await sendMail({
       to,
-      replyTo: email,
+      replyTo: relay ?? email,
       subject: `New ${category ?? "General"} inquiry — ${name || email}`,
       html: emailLayout(
         `New ${category ?? "General"} inquiry`,

@@ -2,6 +2,7 @@ import {
   pgTable,
   pgEnum,
   serial,
+  integer,
   text,
   timestamp,
   jsonb,
@@ -74,10 +75,35 @@ export const contactMessages = pgTable("contact_messages", {
   meta: jsonb("meta"),
   /** Admin "seen" flag — new messages are unread until marked. */
   read: boolean("read").notNull().default(false),
+  /** Unique token embedded in the reply-to address for the inbound relay
+   *  (Model A). Lets an inbound reply be traced back to this exact thread. */
+  replyToken: text("reply_token").unique(),
+  /** Flipped true when a staff reply comes back in through the relay. */
+  responded: boolean("responded").notNull().default(false),
+  respondedAt: timestamp("responded_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
 export type ContactRow = typeof contactMessages.$inferSelect;
+
+/**
+ * One message in a contact-form conversation thread (inbound relay, Model A).
+ * `direction` is 'staff' (a team reply, relayed out to the customer) or
+ * 'customer' (the customer replying back). `providerId` de-dupes webhook retries.
+ */
+export const contactReplies = pgTable("contact_replies", {
+  id: serial("id").primaryKey(),
+  messageId: integer("message_id")
+    .notNull()
+    .references(() => contactMessages.id),
+  direction: text("direction").notNull(),
+  fromAddr: text("from_addr").notNull(),
+  body: text("body").notNull(),
+  providerId: text("provider_id"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type ContactReplyRow = typeof contactReplies.$inferSelect;
 
 export const userRole = pgEnum("user_role", ["super_admin", "admin", "user"]);
 

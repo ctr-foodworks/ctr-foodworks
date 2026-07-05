@@ -11,9 +11,12 @@ export async function sendMail(opts: {
   subject: string;
   html: string;
   replyTo?: string;
+  /** Override the sender. Defaults to MAIL_FROM. Used by the relay to send
+   *  customer-facing replies from a support address instead of notifications@. */
+  from?: string;
 }): Promise<{ ok: boolean }> {
   const key = process.env.RESEND_API_KEY;
-  const from = process.env.MAIL_FROM;
+  const from = opts.from || process.env.MAIL_FROM;
   if (!key || !from) {
     console.warn("[email] RESEND_API_KEY / MAIL_FROM not set — skipping send");
     return { ok: false };

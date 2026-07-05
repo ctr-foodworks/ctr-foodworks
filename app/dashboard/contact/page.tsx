@@ -1,5 +1,9 @@
 import { isDbConfigured } from "@/lib/db";
-import { getContactMessages } from "@/lib/submissions-db";
+import {
+  getContactMessages,
+  getContactRepliesByMessageIds,
+} from "@/lib/submissions-db";
+import type { ContactReplyRow } from "@/lib/db/schema";
 import { markContactReadAction } from "../actions";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 
@@ -37,6 +41,21 @@ export default async function ContactMessagesPage() {
 
   const rows = await getContactMessages();
   const unread = rows.filter((r) => !r.read).length;
+
+  // Group the conversation replies by message for the inline thread view.
+  const replies = await getContactRepliesByMessageIds(rows.map((r) => r.id));
+  const threads = new Map<number, ContactReplyRow[]>();
+  for (const reply of replies) {
+    const list = threads.get(reply.messageId) ?? [];
+    list.push(reply);
+    threads.set(reply.messageId, list);
+  }
+
+  const fmtTime = (d: Date) =>
+    new Date(d).toLocaleString("en-US", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
 
   return (
     <main className="mx-auto max-w-[1100px] px-6 py-12">
@@ -99,6 +118,15 @@ export default async function ContactMessagesPage() {
                       {cat}
                     </span>
                   )}
+                  <span
+                    className={`px-2 py-1 text-[9px] font-semibold tracking-[2px] uppercase ${
+                      r.responded
+                        ? "bg-[#16a34a]/10 text-[#16a34a]"
+                        : "bg-[var(--text-dark)]/5 text-[var(--text-muted-dark)]"
+                    }`}
+                  >
+                    {r.responded ? "Responded" : "Awaiting reply"}
+                  </span>
                   <span className="ml-auto font-mono text-[12px] text-[var(--text-muted-dark)]">
                     {fmt(r.createdAt)}
                   </span>
@@ -107,6 +135,36 @@ export default async function ContactMessagesPage() {
                   <p className="whitespace-pre-wrap text-[14px] font-light leading-[1.7] text-[var(--text-dark)]">
                     {r.message}
                   </p>
+                )}
+
+                {(threads.get(r.id)?.length ?? 0) > 0 && (
+                  <div className="mt-1 flex flex-col gap-2 border-t border-[var(--text-dark)]/10 pt-3">
+                    {threads.get(r.id)!.map((t) => {
+                      const staff = t.direction === "staff";
+                      return (
+                        <div
+                          key={t.id}
+                          className={`rounded-md px-3 py-2 ${
+                            staff
+                              ? "bg-[var(--primary)]/5"
+                              : "bg-[var(--text-dark)]/[0.03]"
+                          }`}
+                        >
+                          <div className="mb-1 flex items-center gap-2">
+                            <span className="text-[10px] font-semibold tracking-[1.5px] uppercase text-[var(--text-muted-dark)]">
+                              {staff ? "Team" : "Customer"}
+                            </span>
+                            <span className="font-mono text-[10px] text-[var(--text-muted-dark)]">
+                              {fmtTime(t.createdAt)}
+                            </span>
+                          </div>
+                          <p className="whitespace-pre-wrap text-[13px] font-light leading-[1.6] text-[var(--text-dark)]">
+                            {t.body}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
                 )}
               </li>
             );
