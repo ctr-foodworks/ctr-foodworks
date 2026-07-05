@@ -122,10 +122,10 @@ export default async function ContactMessagesPage() {
                     className={`px-2 py-1 text-[9px] font-semibold tracking-[2px] uppercase ${
                       r.responded
                         ? "bg-[#16a34a]/10 text-[#16a34a]"
-                        : "bg-[var(--text-dark)]/5 text-[var(--text-muted-dark)]"
+                        : "bg-[#b45309]/10 text-[#b45309]"
                     }`}
                   >
-                    {r.responded ? "Responded" : "Awaiting reply"}
+                    {r.responded ? "Replied" : "Needs reply"}
                   </span>
                   <span className="ml-auto font-mono text-[12px] text-[var(--text-muted-dark)]">
                     {fmt(r.createdAt)}

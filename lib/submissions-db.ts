@@ -84,6 +84,16 @@ export async function markResponded(id: number): Promise<void> {
     .where(eq(schema.contactMessages.id, id));
 }
 
+/** Flip a thread back to "needs reply" — the customer wrote back after we
+ *  replied, so the ball is in our court again. */
+export async function markNeedsReply(id: number): Promise<void> {
+  const db = getDb();
+  await db
+    .update(schema.contactMessages)
+    .set({ responded: false })
+    .where(eq(schema.contactMessages.id, id));
+}
+
 /** Append one message to a thread. */
 export async function addContactReply(input: {
   messageId: number;

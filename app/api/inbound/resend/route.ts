@@ -12,6 +12,7 @@ import {
 import {
   getContactByToken,
   markResponded,
+  markNeedsReply,
   addContactReply,
   hasSeenInbound,
 } from "@/lib/submissions-db";
@@ -135,9 +136,10 @@ export async function POST(req: Request): Promise<Response> {
       });
     }
   } else {
-    // Customer replied — loop it back to the team (and observers) so they can
-    // answer again.
-    const subject = `Customer reply — ${msg.name || msg.email}`;
+    // Customer replied — ball's back in our court, and loop it to the team (and
+    // observers) so they can answer again.
+    await markNeedsReply(msg.id);
+    const subject = `New reply from ${msg.name || msg.email}`;
     const html = emailLayout(
       "Customer reply",
       `<p style="margin:0 0 8px"><strong>From:</strong> ${escapeHtml(
