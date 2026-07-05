@@ -59,8 +59,13 @@ export function stripQuoted(text: string): string {
   if (!text) return "";
   const lines = text.replace(/\r\n/g, "\n").split("\n");
   const out: string[] = [];
-  for (const line of lines) {
-    if (/^\s*On .+ wrote:\s*$/.test(line)) break; // "On <date>, <name> wrote:"
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    // Gmail attribution "On <date>, <name> <email> wrote:" — it commonly wraps
+    // across 2–3 lines, so look ahead for the "wrote:" tail before cutting.
+    if (/^\s*On\b/.test(line) && /\bwrote:/.test(lines.slice(i, i + 3).join(" "))) {
+      break;
+    }
     if (/^\s*-{2,}\s*Original Message\s*-{2,}/i.test(line)) break;
     if (/^\s*_{5,}\s*$/.test(line)) break; // Outlook underline separator
     if (out.length && /^\s*From:\s.+/i.test(line)) break; // forwarded header block

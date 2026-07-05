@@ -116,6 +116,24 @@ export async function POST(req: Request): Promise<Response> {
         `<p style="margin:0;white-space:pre-wrap">${escapeHtml(body)}</p>`,
       ),
     });
+    // Notify observers (CONTACT_NOTIFY_TO) that this thread was replied to.
+    const observers = notifyRecipients();
+    if (observers.length) {
+      await sendMail({
+        to: observers,
+        replyTo: relay,
+        subject: `Replied — ${msg.name || msg.email}`,
+        html: emailLayout(
+          "Reply sent to customer",
+          `<p style="margin:0 0 8px"><strong>${escapeHtml(
+            normalizeEmail(from),
+          )}</strong> replied to <strong>${escapeHtml(
+            msg.name || msg.email,
+          )}</strong> (${escapeHtml(msg.email)}):</p>
+           <p style="margin:0;white-space:pre-wrap">${escapeHtml(body)}</p>`,
+        ),
+      });
+    }
   } else {
     // Customer replied — loop it back to the team (and observers) so they can
     // answer again.
