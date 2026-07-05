@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { verifyResendWebhook } from "@/lib/resend-webhook";
 import { sendMail, emailLayout, escapeHtml } from "@/lib/email";
-import { routeFor } from "@/lib/contact-routing";
+import { routeFor, notifyRecipients } from "@/lib/contact-routing";
 import {
   extractToken,
   normalizeEmail,
@@ -117,22 +117,24 @@ export async function POST(req: Request): Promise<Response> {
       ),
     });
   } else {
-    // Customer replied — loop it back to the team so they can answer again.
+    // Customer replied — loop it back to the team (and observers) so they can
+    // answer again.
+    const subject = `Customer reply — ${msg.name || msg.email}`;
+    const html = emailLayout(
+      "Customer reply",
+      `<p style="margin:0 0 8px"><strong>From:</strong> ${escapeHtml(
+        msg.name || msg.email,
+      )} (${escapeHtml(msg.email)})</p>
+       <p style="margin:16px 0 4px"><strong>Message</strong></p>
+       <p style="margin:0;white-space:pre-wrap">${escapeHtml(body)}</p>`,
+    );
     const to = routeFor(category);
     if (to) {
-      await sendMail({
-        to,
-        replyTo: relay,
-        subject: `Customer reply — ${msg.name || msg.email}`,
-        html: emailLayout(
-          "Customer reply",
-          `<p style="margin:0 0 8px"><strong>From:</strong> ${escapeHtml(
-            msg.name || msg.email,
-          )} (${escapeHtml(msg.email)})</p>
-           <p style="margin:16px 0 4px"><strong>Message</strong></p>
-           <p style="margin:0;white-space:pre-wrap">${escapeHtml(body)}</p>`,
-        ),
-      });
+      await sendMail({ to, replyTo: relay, subject, html });
+    }
+    const observers = notifyRecipients().filter((addr) => addr !== to);
+    if (observers.length) {
+      await sendMail({ to: observers, replyTo: relay, subject, html });
     }
   }
 

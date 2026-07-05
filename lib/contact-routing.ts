@@ -21,3 +21,15 @@ export function routeFor(
       return general;
   }
 }
+
+/**
+ * Always-notified observers (comma-separated in CONTACT_NOTIFY_TO), on top of
+ * category routing. They receive every new inquiry AND every customer reply,
+ * regardless of category — e.g. a COO/GM who wants full oversight.
+ */
+export function notifyRecipients(): string[] {
+  return (process.env.CONTACT_NOTIFY_TO ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getDb, isDbConfigured, schema } from "@/lib/db";
 import { sendMail, emailLayout, escapeHtml } from "@/lib/email";
-import { routeFor } from "@/lib/contact-routing";
+import { routeFor, notifyRecipients } from "@/lib/contact-routing";
 import { newReplyToken, replyAddress } from "@/lib/inbound";
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
@@ -77,26 +77,30 @@ export async function POST(request: Request): Promise<Response> {
     console.warn("[contact] DATABASE_URL not set — not stored:", email);
   }
 
-  // Forward to the routed inbox (best-effort; never blocks the response).
+  // Notify the routed inbox + any always-on observers (e.g. COO). Best-effort;
+  // never blocks the response. If the relay is enabled (INBOUND_DOMAIN set),
+  // replies go to the token address so we capture them; otherwise reply-to is
+  // the customer directly (legacy behavior).
+  const relay = replyAddress(token);
+  const subject = `New ${category ?? "General"} inquiry — ${name || email}`;
+  const html = emailLayout(
+    `New ${category ?? "General"} inquiry`,
+    `<p style="margin:0 0 8px"><strong>Name:</strong> ${escapeHtml(name || "—")}</p>
+     <p style="margin:0 0 8px"><strong>Email:</strong> ${escapeHtml(email)}</p>
+     <p style="margin:0 0 8px"><strong>Category:</strong> ${escapeHtml(category ?? "General")}</p>
+     <p style="margin:16px 0 4px"><strong>Message</strong></p>
+     <p style="margin:0;white-space:pre-wrap">${escapeHtml(message)}</p>`,
+  );
+
   const to = routeFor(category);
   if (to) {
-    // If the relay is enabled (INBOUND_DOMAIN set), staff replies go to the
-    // token address so we can capture them; otherwise fall back to replying
-    // straight to the customer (legacy behavior).
-    const relay = replyAddress(token);
-    await sendMail({
-      to,
-      replyTo: relay ?? email,
-      subject: `New ${category ?? "General"} inquiry — ${name || email}`,
-      html: emailLayout(
-        `New ${category ?? "General"} inquiry`,
-        `<p style="margin:0 0 8px"><strong>Name:</strong> ${escapeHtml(name || "—")}</p>
-         <p style="margin:0 0 8px"><strong>Email:</strong> ${escapeHtml(email)}</p>
-         <p style="margin:0 0 8px"><strong>Category:</strong> ${escapeHtml(category ?? "General")}</p>
-         <p style="margin:16px 0 4px"><strong>Message</strong></p>
-         <p style="margin:0;white-space:pre-wrap">${escapeHtml(message)}</p>`,
-      ),
-    });
+    await sendMail({ to, replyTo: relay ?? email, subject, html });
+  }
+  // Observers get every inquiry regardless of category. Separate send so their
+  // address isn't exposed to an external routed inbox (e.g. PR).
+  const observers = notifyRecipients().filter((addr) => addr !== to);
+  if (observers.length) {
+    await sendMail({ to: observers, replyTo: relay ?? email, subject, html });
   }
 
   return NextResponse.json({ ok: true });
