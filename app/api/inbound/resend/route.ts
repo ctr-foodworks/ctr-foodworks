@@ -24,15 +24,18 @@ export const dynamic = "force-dynamic";
 
 /**
  * Inbound email relay (Model A). Resend receives a reply sent to
- * `reply+<token>@INBOUND_DOMAIN` and POSTs it here. We:
- *   1. verify the signature,
- *   2. map the token back to a contact thread,
- *   3. record the message + flag "responded" when a staff reply arrives,
- *   4. relay the reply on to the other party (staff → customer, customer → team).
+ * `reply+<token>@INBOUND_DOMAIN` and POSTs an `email.received` event here.
  *
- * We always ACK 200 for anything we can't act on (bad token, no match,
- * auto-reply, duplicate) so Resend doesn't retry a delivery that will never
- * succeed. Only a bad signature returns 400.
+ * Two-step, per Resend's design: the webhook carries **metadata only**
+ * (email_id, from, to, subject…), so we fetch the actual body/headers from the
+ * Received Emails API (GET /emails/receiving/{id}) before acting.
+ *
+ * Then we map the token → contact thread, record the message, flag "responded"
+ * on a staff reply, and relay it on (staff → customer, customer → team).
+ *
+ * We ACK 200 for anything we can't act on (bad token, no match, auto-reply,
+ * duplicate) so Resend stops retrying. A bad signature is 400; a transient
+ * fetch failure is 500 so Resend retries later.
  */
 export async function POST(req: Request): Promise<Response> {
   const raw = await req.text();
@@ -53,42 +56,46 @@ export async function POST(req: Request): Promise<Response> {
     return NextResponse.json({ ok: true });
   }
 
-  const parsed = normalizeInbound(evt);
-  if (!parsed) {
-    console.warn("[inbound] unparseable payload; top-level keys:", topKeys(evt));
-    return NextResponse.json({ ok: true });
-  }
+  const root = asRecord(evt);
+  if (root?.type !== "email.received") return NextResponse.json({ ok: true });
 
-  const token = extractToken(parsed.to);
-  if (!token) return NextResponse.json({ ok: true });
+  const data = asRecord(root.data) ?? {};
+  const emailId = str(data.email_id);
+  // The reply's envelope recipients — the reply+<token>@ address is here.
+  const recipients = [...toArray(data.to), ...toArray(data.received_for)];
+  const token = extractToken(recipients);
+  if (!token || !emailId) return NextResponse.json({ ok: true });
 
   const msg = await getContactByToken(token).catch(() => null);
   if (!msg) return NextResponse.json({ ok: true });
 
-  // Retry-safe: Resend re-delivers webhooks until it gets a 2xx.
-  if (
-    parsed.providerId &&
-    (await hasSeenInbound(parsed.providerId).catch(() => false))
-  ) {
+  // Retry-safe: Resend re-delivers until it gets a 2xx.
+  if (await hasSeenInbound(emailId).catch(() => false)) {
     return NextResponse.json({ ok: true });
   }
 
-  if (isAutoReply(parsed.from, parsed.headers)) {
-    return NextResponse.json({ ok: true });
+  // Webhook is metadata-only — fetch the real body + headers.
+  const full = await fetchReceivedEmail(emailId).catch(() => null);
+  if (!full) {
+    // Transient (API hiccup / not-yet-available). 500 → Resend retries.
+    return NextResponse.json({ error: "fetch failed" }, { status: 500 });
   }
 
-  const body = stripQuoted(parsed.text);
-  // The only two parties in a thread are the stored customer and staff. So if
-  // the sender isn't the customer, it's a staff reply.
-  const fromCustomer = normalizeEmail(parsed.from) === normalizeEmail(msg.email);
+  const from = str(data.from) ?? full.from;
+  if (isAutoReply(from, full.headers)) return NextResponse.json({ ok: true });
+
+  const body = stripQuoted(full.text || htmlToText(full.html));
+  // The only two parties in a thread are the stored customer and staff — so if
+  // the sender isn't the customer, treat it as a staff reply.
+  const fromCustomer = normalizeEmail(from) === normalizeEmail(msg.email);
   const direction: "staff" | "customer" = fromCustomer ? "customer" : "staff";
 
   await addContactReply({
     messageId: msg.id,
     direction,
-    fromAddr: normalizeEmail(parsed.from),
+    fromAddr: normalizeEmail(from),
     body,
-    providerId: parsed.providerId,
+    providerId: emailId,
   });
 
   const relay = replyAddress(token) ?? undefined;
@@ -132,67 +139,41 @@ export async function POST(req: Request): Promise<Response> {
   return NextResponse.json({ ok: true });
 }
 
-// ── Payload normalization ────────────────────────────────────────────────────
-// Resend wraps events as { type, created_at, data }. Inbound field names can
-// vary, so we read defensively with fallbacks. If Resend's shape differs, the
-// `topKeys` log above shows what actually arrived.
+// ── Received Emails API ──────────────────────────────────────────────────────
 
-type Parsed = {
+type ReceivedEmail = {
   from: string;
-  to: string[];
   subject: string;
   text: string;
+  html: string;
   headers: Record<string, string>;
-  providerId: string | null;
 };
 
-function normalizeInbound(evt: unknown): Parsed | null {
-  const root = asRecord(evt);
-  if (!root) return null;
-  const data = asRecord(root.data) ?? root; // some webhooks are flat
-
-  const from = extractAddr(data.from ?? data.sender);
-  const toRaw = data.to ?? data.recipient ?? data.recipients ?? [];
-  const to = (Array.isArray(toRaw) ? toRaw : [toRaw])
-    .map(extractAddr)
-    .filter(Boolean);
-  if (!from && to.length === 0) return null;
-
-  const headers = normalizeHeaders(data.headers);
-  const text =
-    typeof data.text === "string"
-      ? data.text
-      : typeof data.plain === "string"
-        ? data.plain
-        : typeof data.html === "string"
-          ? htmlToText(data.html)
-          : "";
-
-  const providerId =
-    str(data.email_id) ??
-    str(data.message_id) ??
-    str(data.id) ??
-    (headers["message-id"] || null);
-
+/** Fetch the full inbound email by id (webhook only gives metadata). */
+async function fetchReceivedEmail(id: string): Promise<ReceivedEmail | null> {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return null;
+  const res = await fetch(
+    `https://api.resend.com/emails/receiving/${encodeURIComponent(id)}`,
+    { headers: { Authorization: `Bearer ${key}` }, cache: "no-store" },
+  );
+  if (!res.ok) return null;
+  const j = asRecord(await res.json());
+  if (!j) return null;
   return {
-    from,
-    to,
-    subject: str(data.subject) ?? "",
-    text,
-    headers,
-    providerId,
+    from: str(j.from) ?? "",
+    subject: str(j.subject) ?? "",
+    text: typeof j.text === "string" ? j.text : "",
+    html: typeof j.html === "string" ? j.html : "",
+    headers: normalizeHeaders(j.headers),
   };
 }
 
-/** Extract a bare email from a string ("Name <e@x>") or an object shape. */
-function extractAddr(v: unknown): string {
-  if (typeof v === "string") return v;
-  const r = asRecord(v);
-  if (r) {
-    const a = str(r.address) ?? str(r.email);
-    if (a) return a;
-  }
-  return "";
+// ── Small parsing helpers ────────────────────────────────────────────────────
+
+function toArray(v: unknown): string[] {
+  if (Array.isArray(v)) return v.filter((x): x is string => typeof x === "string");
+  return typeof v === "string" ? [v] : [];
 }
 
 /** Headers may arrive as an object or an array of {name,value}. Lowercase keys. */
@@ -237,9 +218,4 @@ function str(v: unknown): string | null {
 function metaCategory(meta: unknown): string | null {
   const r = asRecord(meta);
   return r && typeof r.category === "string" ? r.category : null;
-}
-
-function topKeys(evt: unknown): string[] {
-  const r = asRecord(evt);
-  return r ? Object.keys(r) : [];
 }
