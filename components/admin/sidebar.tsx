@@ -226,8 +226,8 @@ export function AdminChrome({
         </div>
       </header>
 
-      {/* Minimized icon rail — labels show as tooltips on hover */}
-      <aside className="fixed bottom-0 left-0 top-[60px] z-40 flex w-[64px] flex-col gap-1 border-r border-[var(--text-dark)]/10 bg-white py-4">
+      {/* Minimized icon rail (tablet/desktop) — labels show as tooltips on hover */}
+      <aside className="fixed bottom-0 left-0 top-[60px] z-40 hidden w-[64px] flex-col gap-1 border-r border-[var(--text-dark)]/10 bg-white py-4 sm:flex">
         {navItems.map(({ href, label, Icon, isActive, countKey }) => {
           const active = isActive(path);
           const n = countKey ? counts[countKey] : 0;
@@ -258,6 +258,38 @@ export function AdminChrome({
           );
         })}
       </aside>
+
+      {/* Bottom nav bar — phones only */}
+      <nav className="fixed inset-x-0 bottom-0 z-40 flex h-[62px] items-stretch border-t border-[var(--text-dark)]/10 bg-white sm:hidden">
+        {navItems.map(({ href, label, Icon, isActive, countKey }) => {
+          const active = isActive(path);
+          const n = countKey ? counts[countKey] : 0;
+          return (
+            <Link
+              key={href}
+              href={href}
+              aria-label={label}
+              aria-current={active ? "page" : undefined}
+              className={`relative flex flex-1 flex-col items-center justify-center gap-1 transition-colors ${
+                active
+                  ? "text-[var(--primary)]"
+                  : "text-[var(--text-dark)]/55"
+              }`}
+            >
+              {active && (
+                <span className="absolute inset-x-3 top-0 h-[3px] rounded-b-full bg-[var(--primary)]" />
+              )}
+              <span className="relative">
+                <Icon className="h-[20px] w-[20px]" />
+                <Badge n={n} />
+              </span>
+              <span className="text-[9px] font-semibold uppercase tracking-[1px]">
+                {label}
+              </span>
+            </Link>
+          );
+        })}
+      </nav>
 
       {/* Sign-out confirmation modal */}
       {confirmSignOut && (

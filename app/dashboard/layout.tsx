@@ -91,7 +91,9 @@ export default async function AdminLayout({
             }}
           />
         )}
-        <div className={me ? "pl-[64px] pt-[60px]" : ""}>{children}</div>
+        <div className={me ? "pt-[60px] pb-[62px] sm:pb-0 sm:pl-[64px]" : ""}>
+          {children}
+        </div>
       </div>
     </ToastProvider>
   );
