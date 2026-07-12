@@ -59,6 +59,11 @@ export function ContactForm() {
       if (res.ok) {
         setStatus("success");
         form.reset();
+        // Google Ads conversion — "Submit lead form". Fired here (not on a
+        // separate thank-you page) because this form succeeds inline via AJAX.
+        window.gtag?.("event", "conversion", {
+          send_to: "AW-18316984603/v8w3CNOk5c4cEJuCnJ5E",
+        });
       } else {
         setStatus("error");
       }
