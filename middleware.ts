@@ -14,11 +14,15 @@ export default auth((req) => {
   const { nextUrl } = req;
   const path = nextUrl.pathname;
   const isLoggedIn = Boolean(req.auth?.user);
-  const isLogin = path.startsWith("/dashboard/login");
+  // Pre-auth pages anyone can reach: sign-in + the forgot/reset password flow.
+  const isPublic =
+    path.startsWith("/dashboard/login") ||
+    path.startsWith("/dashboard/forgot-password") ||
+    path.startsWith("/dashboard/reset-password");
   const isProtected =
     path.startsWith("/dashboard") || path.startsWith("/api/admin");
 
-  if (isProtected && !isLogin && req.method === "GET" && !isLoggedIn) {
+  if (isProtected && !isPublic && req.method === "GET" && !isLoggedIn) {
     return NextResponse.redirect(new URL("/dashboard/login", nextUrl));
   }
 

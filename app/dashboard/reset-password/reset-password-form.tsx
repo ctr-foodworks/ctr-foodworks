@@ -1,45 +1,38 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
-import { authenticate } from "./actions";
+import { resetPasswordAction } from "./actions";
+import { PasswordChecklist } from "@/components/admin/password-checklist";
 
 const inputClass =
   "h-12 w-full rounded-lg border border-[var(--border-light)] bg-white px-4 text-[14px] text-[var(--text-dark)] outline-none transition-colors placeholder:text-[var(--text-muted-dark)]/50 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/15";
 const labelClass =
   "text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)]";
 
-export function LoginForm() {
-  const [errorMessage, formAction, isPending] = useActionState(
-    authenticate,
+export function ResetPasswordForm({ token }: { token: string }) {
+  const [error, formAction, isPending] = useActionState(
+    resetPasswordAction,
     undefined,
   );
+  const [next, setNext] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [show, setShow] = useState(false);
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
-      <label className="flex flex-col gap-2">
-        <span className={labelClass}>Email</span>
-        <input
-          type="email"
-          name="email"
-          required
-          autoComplete="email"
-          placeholder="you@ctrfoodworks.com"
-          className={inputClass}
-        />
-      </label>
+      <input type="hidden" name="token" value={token} />
 
       <label className="flex flex-col gap-2">
-        <span className={labelClass}>Password</span>
+        <span className={labelClass}>New password</span>
         <div className="relative">
           <input
             type={show ? "text" : "password"}
-            name="password"
+            name="next"
             required
-            autoComplete="current-password"
-            placeholder="••••••••••"
+            autoComplete="new-password"
+            value={next}
+            onChange={(e) => setNext(e.target.value)}
             className={`${inputClass} pr-12`}
           />
           <button
@@ -53,16 +46,24 @@ export function LoginForm() {
         </div>
       </label>
 
-      <Link
-        href="/dashboard/forgot-password"
-        className="-mt-2 self-end text-[12px] font-medium text-[var(--text-muted-dark)] transition-colors hover:text-[var(--primary)]"
-      >
-        Forgot password?
-      </Link>
+      <PasswordChecklist value={next} />
 
-      {errorMessage && (
+      <label className="flex flex-col gap-2">
+        <span className={labelClass}>Confirm new password</span>
+        <input
+          type="password"
+          name="confirm"
+          required
+          autoComplete="new-password"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+          className={inputClass}
+        />
+      </label>
+
+      {error && (
         <p className="text-[13px] font-light text-[var(--primary)]" role="alert">
-          {errorMessage}
+          {error}
         </p>
       )}
 
@@ -71,7 +72,7 @@ export function LoginForm() {
         disabled={isPending}
         className="mt-1 inline-flex h-12 items-center justify-center rounded-lg bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d] disabled:cursor-wait disabled:opacity-60"
       >
-        {isPending ? "Signing in…" : "Sign In"}
+        {isPending ? "Saving…" : "Set new password"}
       </button>
     </form>
   );

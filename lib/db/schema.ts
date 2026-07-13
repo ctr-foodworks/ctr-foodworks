@@ -125,3 +125,21 @@ export const users = pgTable("users", {
 
 export type UserRow = typeof users.$inferSelect;
 export type UserRole = (typeof userRole.enumValues)[number];
+
+/**
+ * Single-use, expiring tokens for the "forgot password" flow. Only the SHA-256
+ * hash of the token is stored (never the raw value), so a DB leak can't be used
+ * to reset anyone's password. `usedAt` set → consumed.
+ */
+export const passwordResetTokens = pgTable("password_reset_tokens", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id),
+  tokenHash: text("token_hash").notNull(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  usedAt: timestamp("used_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export type PasswordResetTokenRow = typeof passwordResetTokens.$inferSelect;
