@@ -63,6 +63,8 @@ export function ContactForm() {
         // separate thank-you page) because this form succeeds inline via AJAX.
         window.gtag?.("event", "conversion", {
           send_to: "AW-18316984603/v8w3CNOk5c4cEJuCnJ5E",
+          value: 1.0,
+          currency: "USD",
         });
       } else {
         setStatus("error");
