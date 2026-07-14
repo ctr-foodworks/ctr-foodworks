@@ -29,5 +29,5 @@ export async function authenticate(
   }
 
   const user = await getUserByEmail(email);
-  redirect(user?.mustChangePassword ? "/dashboard/set-password" : "/dashboard");
+  redirect(user?.mustChangePassword ? "/dashboard/set-password" : "/dashboard/reports");
 }

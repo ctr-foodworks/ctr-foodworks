@@ -37,11 +37,11 @@ type Item = {
 
 const items: Item[] = [
   {
-    href: "/dashboard",
+    href: "/dashboard/events",
     label: "Events",
     Icon: CalendarDays,
     isActive: (p) =>
-      p === "/dashboard" || p.startsWith("/dashboard/new") || /^\/dashboard\/\d+\/edit/.test(p),
+      p.startsWith("/dashboard/events") || p.startsWith("/dashboard/new") || /^\/dashboard\/\d+\/edit/.test(p),
   },
   {
     href: "/dashboard/waitlist",

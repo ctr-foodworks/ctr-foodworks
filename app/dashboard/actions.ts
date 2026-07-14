@@ -100,7 +100,7 @@ export async function saveEvent(
 
   revalidatePath("/events");
   revalidatePath("/dashboard");
-  redirect(idRaw ? "/dashboard?flash=event-updated" : "/dashboard?flash=event-created");
+  redirect(idRaw ? "/dashboard/events?flash=event-updated" : "/dashboard/events?flash=event-created");
 }
 
 export async function removeEvent(formData: FormData): Promise<void> {
@@ -110,7 +110,7 @@ export async function removeEvent(formData: FormData): Promise<void> {
   await deleteEvent(id);
   revalidatePath("/events");
   revalidatePath("/dashboard");
-  redirect("/dashboard?flash=event-deleted");
+  redirect("/dashboard/events?flash=event-deleted");
 }
 
 export async function markWaitlistReadAction(): Promise<void> {

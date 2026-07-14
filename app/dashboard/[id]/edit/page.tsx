@@ -18,7 +18,7 @@ export default async function EditEventPage({
   return (
     <main className="mx-auto max-w-[760px] px-6 py-12">
       <Link
-        href="/dashboard"
+        href="/dashboard/events"
         className="text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-muted-dark)] hover:text-[var(--primary)]"
       >
         ← Back
