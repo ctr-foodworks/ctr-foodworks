@@ -1,4 +1,4 @@
-import { count, desc, gte, sql } from "drizzle-orm";
+import { count, desc, eq, gte, sql } from "drizzle-orm";
 import { getDb, isDbConfigured, schema } from "./db";
 
 /**
@@ -44,7 +44,43 @@ export type RecentItem = {
   createdAt: string;
 };
 
+export type DailyPoint = {
+  /** UTC calendar day, `YYYY-MM-DD`. */
+  day: string;
+  contacts: number;
+  waitlist: number;
+};
+
+export type QuickCounts = { contacts: number; waitlist: number };
+
+export type CumulativePoint = {
+  /** Monday of the ISO week, `YYYY-MM-DD` (UTC). */
+  weekStart: string;
+  /** Running total of ALL waitlist signups up to this week's end. */
+  total: number;
+};
+
+export type HeatmapData = {
+  /** 7 rows (Sun..Sat) x 24 cols (UTC hour 0..23) of contact+waitlist counts. */
+  grid: number[][];
+  /** e.g. "Tuesday" — null when there is no data at all. */
+  busiestDay: string | null;
+  /** e.g. "2 PM" (UTC) — null when there is no data at all. */
+  busiestHour: string | null;
+};
+
+export type ResponseTime = {
+  /** Average hours from a message arriving to its first staff reply. */
+  avgHours: number | null;
+  /** Number of messages that have at least one staff reply. */
+  replied: number;
+};
+
+export type RangeDays = 7 | 30 | 90;
+
 export type DashboardMetrics = {
+  /** The selected range in days (echo of the argument). */
+  rangeDays: RangeDays;
   totals: {
     contacts: number;
     contactsUnread: number;
@@ -67,12 +103,61 @@ export type DashboardMetrics = {
   replyRate: { replied: number; total: number; pct: number };
   /** Newest 8 across contacts + waitlist, newest first. */
   recent: RecentItem[];
+  /** Last `rangeDays` UTC days including today, oldest first. Zero-filled. */
+  daily: DailyPoint[];
+  /** Totals across the `daily` window. */
+  period: QuickCounts;
+  /** The equal-length window immediately before `daily`, plus pct deltas. */
+  prevPeriod: {
+    contacts: number;
+    waitlist: number;
+    /** null when the previous period had 0 contacts. */
+    contactsPct: number | null;
+    /** null when the previous period had 0 waitlist signups. */
+    waitlistPct: number | null;
+  };
+  quick: { today: QuickCounts; last7: QuickCounts; last30: QuickCounts };
+  /** Last 12 ISO weeks, running total of all waitlist signups. Always 12. */
+  cumulativeWaitlist: CumulativePoint[];
+  /** Day-of-week x hour submission heatmap (UTC, all time). */
+  heatmap: HeatmapData;
+  /** Events by category enum (public/private/recurring), zero-filled. */
+  eventsByCategory: LabelCount[];
+  responseTime: ResponseTime;
 };
 
 // ── Date helpers (all UTC) ───────────────────────────────────────────────────
 
+const DAY_NAMES = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
 function isoDate(d: Date): string {
   return d.toISOString().slice(0, 10);
+}
+
+/** Midnight UTC of the calendar day containing `d`. */
+function utcDayStart(d: Date): Date {
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+}
+
+/**
+ * `n` consecutive UTC day keys ending `endDaysAgo` days before today
+ * (0 = the window ends today), oldest first.
+ */
+function dayKeys(n: number, endDaysAgo = 0): string[] {
+  const end = utcDayStart(new Date()).getTime() - endDaysAgo * 86400000;
+  const out: string[] = [];
+  for (let i = n - 1; i >= 0; i--) {
+    out.push(isoDate(new Date(end - i * 86400000)));
+  }
+  return out;
 }
 
 /** Monday 00:00 UTC of the ISO week containing `d`. */
@@ -116,6 +201,13 @@ function pctChange(current: number, previous: number): number | null {
   return ((current - previous) / previous) * 100;
 }
 
+/** 0..23 → "12 AM" / "2 PM" style label. */
+function hourLabel(h: number): string {
+  if (h === 0) return "12 AM";
+  if (h === 12) return "12 PM";
+  return h < 12 ? `${h} AM` : `${h - 12} PM`;
+}
+
 function metaCategory(meta: unknown): string {
   if (meta && typeof meta === "object" && "category" in meta) {
     const c = (meta as { category?: unknown }).category;
@@ -124,8 +216,13 @@ function metaCategory(meta: unknown): string {
   return "General";
 }
 
-function zeroedMetrics(): DashboardMetrics {
+function emptyHeatmapGrid(): number[][] {
+  return Array.from({ length: 7 }, () => Array<number>(24).fill(0));
+}
+
+function zeroedMetrics(rangeDays: RangeDays): DashboardMetrics {
   return {
+    rangeDays,
     totals: {
       contacts: 0,
       contactsUnread: 0,
@@ -152,13 +249,33 @@ function zeroedMetrics(): DashboardMetrics {
     })),
     replyRate: { replied: 0, total: 0, pct: 0 },
     recent: [],
+    daily: dayKeys(rangeDays).map((day) => ({ day, contacts: 0, waitlist: 0 })),
+    period: { contacts: 0, waitlist: 0 },
+    prevPeriod: { contacts: 0, waitlist: 0, contactsPct: null, waitlistPct: null },
+    quick: {
+      today: { contacts: 0, waitlist: 0 },
+      last7: { contacts: 0, waitlist: 0 },
+      last30: { contacts: 0, waitlist: 0 },
+    },
+    cumulativeWaitlist: lastWeekStarts(12).map((weekStart) => ({
+      weekStart,
+      total: 0,
+    })),
+    heatmap: { grid: emptyHeatmapGrid(), busiestDay: null, busiestHour: null },
+    eventsByCategory: schema.eventCategory.enumValues.map((label) => ({
+      label,
+      count: 0,
+    })),
+    responseTime: { avgHours: null, replied: 0 },
   };
 }
 
 // ── Metrics ──────────────────────────────────────────────────────────────────
 
-export async function getDashboardMetrics(): Promise<DashboardMetrics> {
-  if (!isDbConfigured()) return zeroedMetrics();
+export async function getDashboardMetrics(
+  rangeDays: RangeDays = 30,
+): Promise<DashboardMetrics> {
+  if (!isDbConfigured()) return zeroedMetrics(rangeDays);
 
   const db = getDb();
   const todayStr = isoDate(new Date());
@@ -167,16 +284,46 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
   const weeklySince = new Date(`${weekStarts[0]}T00:00:00.000Z`);
   const monthlySince = new Date(`${months[0].key}-01T00:00:00.000Z`);
 
+  // Daily windows: the selected range ending today, and the equal-length
+  // window immediately before it. One grouped query covers both.
+  const currentDays = dayKeys(rangeDays);
+  const prevDays = dayKeys(rangeDays, rangeDays);
+  const dailySinceIso = `${prevDays[0]}T00:00:00.000Z`;
+
+  // Quick-stat cutoffs (UTC midnights).
+  const todayStartMs = utcDayStart(new Date()).getTime();
+  const todayIso = new Date(todayStartMs).toISOString();
+  const last7Iso = new Date(todayStartMs - 6 * 86400000).toISOString();
+  const last30Iso = new Date(todayStartMs - 29 * 86400000).toISOString();
+
   // Postgres date_trunc('week', …) truncates to Monday, matching the JS ISO
   // week starts above. `at time zone 'UTC'` pins the bucket to UTC days.
   const contactWeek = sql<string>`to_char(date_trunc('week', ${schema.contactMessages.createdAt} at time zone 'UTC'), 'YYYY-MM-DD')`;
   const waitlistWeek = sql<string>`to_char(date_trunc('week', ${schema.waitlistSignups.createdAt} at time zone 'UTC'), 'YYYY-MM-DD')`;
   const contactMonth = sql<string>`to_char(date_trunc('month', ${schema.contactMessages.createdAt} at time zone 'UTC'), 'YYYY-MM')`;
   const waitlistMonth = sql<string>`to_char(date_trunc('month', ${schema.waitlistSignups.createdAt} at time zone 'UTC'), 'YYYY-MM')`;
+  const contactDayExpr = sql<string>`to_char(date_trunc('day', ${schema.contactMessages.createdAt} at time zone 'UTC'), 'YYYY-MM-DD')`;
+  const waitlistDayExpr = sql<string>`to_char(date_trunc('day', ${schema.waitlistSignups.createdAt} at time zone 'UTC'), 'YYYY-MM-DD')`;
   // events.date is a `YYYY-MM-DD` text column — left(date, 7) is the month key.
   const eventMonth = sql<string>`left(${schema.events.date}, 7)`;
   const categoryExpr = sql<string>`coalesce(${schema.contactMessages.meta} ->> 'category', 'General')`;
   const sourceExpr = sql<string>`coalesce(${schema.waitlistSignups.source}, 'unknown')`;
+  // Heatmap buckets: dow 0=Sunday..6=Saturday, hour 0..23, both in UTC.
+  const contactDow = sql<number>`extract(dow from (${schema.contactMessages.createdAt} at time zone 'UTC'))::int`.mapWith(Number);
+  const contactHour = sql<number>`extract(hour from (${schema.contactMessages.createdAt} at time zone 'UTC'))::int`.mapWith(Number);
+  const waitlistDow = sql<number>`extract(dow from (${schema.waitlistSignups.createdAt} at time zone 'UTC'))::int`.mapWith(Number);
+  const waitlistHour = sql<number>`extract(hour from (${schema.waitlistSignups.createdAt} at time zone 'UTC'))::int`.mapWith(Number);
+
+  // First staff reply per message → joined back for time-to-first-response.
+  const firstStaffReplies = db
+    .select({
+      messageId: schema.contactReplies.messageId,
+      firstReplyAt: sql`min(${schema.contactReplies.createdAt})`.as("first_reply_at"),
+    })
+    .from(schema.contactReplies)
+    .where(eq(schema.contactReplies.direction, "staff"))
+    .groupBy(schema.contactReplies.messageId)
+    .as("first_staff_replies");
 
   const [
     [contactTotals],
@@ -191,6 +338,14 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
     sourceRows,
     recentContacts,
     recentWaitlist,
+    contactDaily,
+    waitlistDaily,
+    [contactQuick],
+    [waitlistQuick],
+    contactHeat,
+    waitlistHeat,
+    eventCatRows,
+    [responseRow],
   ] = await Promise.all([
     db
       .select({
@@ -235,6 +390,8 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
     db
       .select({ bucket: eventMonth, n: count() })
       .from(schema.events)
+      // Only the last 6 months feed the monthly table — skip older rows.
+      .where(gte(schema.events.date, `${months[0].key}-01`))
       .groupBy(eventMonth),
     db
       .select({ label: categoryExpr, n: count() })
@@ -263,6 +420,54 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
       .from(schema.waitlistSignups)
       .orderBy(desc(schema.waitlistSignups.createdAt))
       .limit(8),
+    db
+      .select({ bucket: contactDayExpr, n: count() })
+      .from(schema.contactMessages)
+      .where(sql`${schema.contactMessages.createdAt} >= ${dailySinceIso}`)
+      .groupBy(contactDayExpr),
+    db
+      .select({ bucket: waitlistDayExpr, n: count() })
+      .from(schema.waitlistSignups)
+      .where(sql`${schema.waitlistSignups.createdAt} >= ${dailySinceIso}`)
+      .groupBy(waitlistDayExpr),
+    db
+      .select({
+        today: sql<number>`count(*) filter (where ${schema.contactMessages.createdAt} >= ${todayIso})`.mapWith(Number),
+        last7: sql<number>`count(*) filter (where ${schema.contactMessages.createdAt} >= ${last7Iso})`.mapWith(Number),
+        last30: sql<number>`count(*) filter (where ${schema.contactMessages.createdAt} >= ${last30Iso})`.mapWith(Number),
+      })
+      .from(schema.contactMessages),
+    db
+      .select({
+        today: sql<number>`count(*) filter (where ${schema.waitlistSignups.createdAt} >= ${todayIso})`.mapWith(Number),
+        last7: sql<number>`count(*) filter (where ${schema.waitlistSignups.createdAt} >= ${last7Iso})`.mapWith(Number),
+        last30: sql<number>`count(*) filter (where ${schema.waitlistSignups.createdAt} >= ${last30Iso})`.mapWith(Number),
+      })
+      .from(schema.waitlistSignups),
+    db
+      .select({ dow: contactDow, hour: contactHour, n: count() })
+      .from(schema.contactMessages)
+      .groupBy(contactDow, contactHour),
+    db
+      .select({ dow: waitlistDow, hour: waitlistHour, n: count() })
+      .from(schema.waitlistSignups)
+      .groupBy(waitlistDow, waitlistHour),
+    db
+      .select({ label: schema.events.category, n: count() })
+      .from(schema.events)
+      .groupBy(schema.events.category),
+    db
+      .select({
+        avgHours: sql<
+          string | null
+        >`avg(extract(epoch from (${firstStaffReplies.firstReplyAt} - ${schema.contactMessages.createdAt})) / 3600.0)`,
+        replied: count(),
+      })
+      .from(firstStaffReplies)
+      .innerJoin(
+        schema.contactMessages,
+        eq(schema.contactMessages.id, firstStaffReplies.messageId),
+      ),
   ]);
 
   const toMap = (rows: { bucket: string; n: number }[]) =>
@@ -273,6 +478,8 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
   const contactByMonth = toMap(contactMonths);
   const waitlistByMonth = toMap(waitlistMonths);
   const eventsByMonth = toMap(eventMonths);
+  const contactByDay = toMap(contactDaily);
+  const waitlistByDay = toMap(waitlistDaily);
 
   const weekly: WeeklyPoint[] = weekStarts.map((weekStart) => ({
     weekStart,
@@ -315,13 +522,73 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
 
   const contactsTotal = Number(contactTotals?.total ?? 0);
   const replied = Number(contactTotals?.replied ?? 0);
+  const waitlistTotal = Number(waitlistTotals?.total ?? 0);
+
+  // Daily series (selected range) + previous-period comparison.
+  const daily: DailyPoint[] = currentDays.map((day) => ({
+    day,
+    contacts: contactByDay.get(day) ?? 0,
+    waitlist: waitlistByDay.get(day) ?? 0,
+  }));
+  const periodContacts = daily.reduce((s, d) => s + d.contacts, 0);
+  const periodWaitlist = daily.reduce((s, d) => s + d.waitlist, 0);
+  const prevContacts = prevDays.reduce(
+    (s, day) => s + (contactByDay.get(day) ?? 0),
+    0,
+  );
+  const prevWaitlist = prevDays.reduce(
+    (s, day) => s + (waitlistByDay.get(day) ?? 0),
+    0,
+  );
+
+  // Cumulative waitlist: signups before the 12-week window seed the baseline;
+  // each week adds its own count. The current week's "end" is simply now.
+  const windowWaitlistSum = weekly.reduce((s, w) => s + w.waitlist, 0);
+  let running = Math.max(0, waitlistTotal - windowWaitlistSum);
+  const cumulativeWaitlist: CumulativePoint[] = weekly.map((w) => {
+    running += w.waitlist;
+    return { weekStart: w.weekStart, total: running };
+  });
+
+  // Heatmap: combine both tables into one 7x24 grid.
+  const grid = emptyHeatmapGrid();
+  for (const rows of [contactHeat, waitlistHeat]) {
+    for (const r of rows) {
+      const d = Number(r.dow);
+      const h = Number(r.hour);
+      if (Number.isInteger(d) && d >= 0 && d < 7 && Number.isInteger(h) && h >= 0 && h < 24) {
+        grid[d][h] += Number(r.n);
+      }
+    }
+  }
+  let bestD = -1;
+  let bestH = -1;
+  let bestN = 0;
+  grid.forEach((row, d) =>
+    row.forEach((n, h) => {
+      if (n > bestN) {
+        bestN = n;
+        bestD = d;
+        bestH = h;
+      }
+    }),
+  );
+
+  const catCounts = new Map(eventCatRows.map((r) => [r.label, Number(r.n)]));
+  const eventsByCategory: LabelCount[] = schema.eventCategory.enumValues.map(
+    (label) => ({ label, count: catCounts.get(label) ?? 0 }),
+  );
+
+  const avgRaw = responseRow?.avgHours;
+  const avgNum = avgRaw === null || avgRaw === undefined ? null : Number(avgRaw);
 
   return {
+    rangeDays,
     totals: {
       contacts: contactsTotal,
       contactsUnread: Number(contactTotals?.unread ?? 0),
       needsReply: Number(contactTotals?.needsReply ?? 0),
-      waitlist: Number(waitlistTotals?.total ?? 0),
+      waitlist: waitlistTotal,
       waitlistUnread: Number(waitlistTotals?.unread ?? 0),
       events: Number(eventTotals?.total ?? 0),
       eventsUpcoming: Number(eventTotals?.upcoming ?? 0),
@@ -350,5 +617,38 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
       pct: contactsTotal === 0 ? 0 : Math.round((replied / contactsTotal) * 100),
     },
     recent,
+    daily,
+    period: { contacts: periodContacts, waitlist: periodWaitlist },
+    prevPeriod: {
+      contacts: prevContacts,
+      waitlist: prevWaitlist,
+      contactsPct: pctChange(periodContacts, prevContacts),
+      waitlistPct: pctChange(periodWaitlist, prevWaitlist),
+    },
+    quick: {
+      today: {
+        contacts: Number(contactQuick?.today ?? 0),
+        waitlist: Number(waitlistQuick?.today ?? 0),
+      },
+      last7: {
+        contacts: Number(contactQuick?.last7 ?? 0),
+        waitlist: Number(waitlistQuick?.last7 ?? 0),
+      },
+      last30: {
+        contacts: Number(contactQuick?.last30 ?? 0),
+        waitlist: Number(waitlistQuick?.last30 ?? 0),
+      },
+    },
+    cumulativeWaitlist,
+    heatmap: {
+      grid,
+      busiestDay: bestN > 0 ? DAY_NAMES[bestD] : null,
+      busiestHour: bestN > 0 ? hourLabel(bestH) : null,
+    },
+    eventsByCategory,
+    responseTime: {
+      avgHours: avgNum !== null && Number.isFinite(avgNum) ? avgNum : null,
+      replied: Number(responseRow?.replied ?? 0),
+    },
   };
 }

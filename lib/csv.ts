@@ -3,11 +3,13 @@
  * RFC-4180-style quoting plus a guard against spreadsheet formula injection.
  */
 
-/** Quote one cell. Nullish → empty; leading = + - @ is neutralized so a
- *  malicious submission can't become a live formula when opened in Excel. */
+/** Quote one cell. Nullish → empty; formula-looking cells are neutralized so a
+ *  malicious submission can't become a live formula when opened in Excel.
+ *  Covers leading = + - @, leading tab / carriage return, and the
+ *  leading-whitespace-then-formula variants some spreadsheets still parse. */
 export function escapeCsvCell(value: unknown): string {
   let s = value === null || value === undefined ? "" : String(value);
-  if (/^[=+\-@]/.test(s)) s = `'${s}`;
+  if (/^[\t\r]/.test(s) || /^\s*[=+\-@]/.test(s)) s = `'${s}`;
   return `"${s.replace(/"/g, '""')}"`;
 }
 
