@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Download } from "lucide-react";
 import { isDbConfigured } from "@/lib/db";
 import { getAllEventRows } from "@/lib/events-db";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -38,12 +39,21 @@ export default async function AdminDashboard() {
           </h1>
           <div className="mt-3 h-[2px] w-12 bg-[var(--primary)]" />
         </div>
-        <Link
-          href="/dashboard/new"
-          className="inline-flex h-[44px] items-center justify-center bg-[var(--primary)] px-6 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
-        >
-          + New event
-        </Link>
+        <div className="flex flex-wrap items-center gap-3">
+          <a
+            href="/api/admin/export/events"
+            className="inline-flex h-[44px] items-center gap-2 border border-[var(--text-dark)]/20 px-5 text-[12px] font-semibold tracking-[3px] uppercase transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
+          >
+            <Download className="h-4 w-4" />
+            Export CSV
+          </a>
+          <Link
+            href="/dashboard/new"
+            className="inline-flex h-[44px] items-center justify-center bg-[var(--primary)] px-6 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
+          >
+            + New event
+          </Link>
+        </div>
       </div>
 
       {events.length === 0 ? (

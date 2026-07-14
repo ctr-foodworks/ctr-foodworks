@@ -1,3 +1,4 @@
+import { Download } from "lucide-react";
 import { isDbConfigured } from "@/lib/db";
 import {
   getContactMessages,
@@ -70,16 +71,25 @@ export default async function ContactMessagesPage() {
           </h1>
           <div className="mt-3 h-[2px] w-12 bg-[var(--primary)]" />
         </div>
-        {unread > 0 && (
-          <form action={markContactReadAction}>
-            <button
-              type="submit"
-              className="inline-flex h-[40px] items-center justify-center border border-[var(--text-dark)]/20 px-5 text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
-            >
-              Mark all as read ({unread})
-            </button>
-          </form>
-        )}
+        <div className="flex flex-wrap items-center gap-3">
+          {unread > 0 && (
+            <form action={markContactReadAction}>
+              <button
+                type="submit"
+                className="inline-flex h-[40px] items-center justify-center border border-[var(--text-dark)]/20 px-5 text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
+              >
+                Mark all as read ({unread})
+              </button>
+            </form>
+          )}
+          <a
+            href="/api/admin/export/contacts"
+            className="inline-flex h-[40px] items-center gap-2 border border-[var(--text-dark)]/20 px-5 text-[11px] font-semibold tracking-[2px] uppercase transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
+          >
+            <Download className="h-4 w-4" />
+            Export CSV
+          </a>
+        </div>
       </div>
 
       {rows.length === 0 ? (

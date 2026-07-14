@@ -7,6 +7,7 @@ import {
   CalendarDays,
   UserPlus,
   MessageSquare,
+  BarChart3,
   UserCog,
   Users,
   ChevronDown,
@@ -55,6 +56,12 @@ const items: Item[] = [
     Icon: MessageSquare,
     isActive: (p) => p.startsWith("/dashboard/contact"),
     countKey: "contact",
+  },
+  {
+    href: "/dashboard/reports",
+    label: "Reports",
+    Icon: BarChart3,
+    isActive: (p) => p.startsWith("/dashboard/reports"),
   },
   {
     href: "/dashboard/account",
