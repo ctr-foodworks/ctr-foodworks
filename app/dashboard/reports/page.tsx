@@ -740,13 +740,13 @@ export default async function ReportsPage({
 
       {/* Exports */}
       <div className="gl-fade" style={{ animationDelay: "480ms" }}>
-        <Panel title="Export data" subtitle="CSV files open directly in Excel" icon={<Download size={16} />}>
+        <Panel title="Export data" subtitle="Branded Excel workbooks (.xlsx)" icon={<Download size={16} />}>
           <div className="flex flex-wrap gap-3">
             {(
               [
-                ["Contacts CSV", "/api/admin/export/contacts"],
-                ["Waitlist CSV", "/api/admin/export/waitlist"],
-                ["Events CSV", "/api/admin/export/events"],
+                ["Contacts Excel", "/api/admin/export/contacts"],
+                ["Waitlist Excel", "/api/admin/export/waitlist"],
+                ["Events Excel", "/api/admin/export/events"],
               ] as const
             ).map(([label, href]) => (
               <a

@@ -60,7 +60,7 @@ export default async function WaitlistPage() {
             className="inline-flex h-[40px] items-center gap-2 border border-[var(--text-dark)]/20 px-5 text-[11px] font-semibold tracking-[2px] uppercase transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
           >
             <Download className="h-4 w-4" />
-            Export CSV
+            Export Excel
           </a>
         </div>
       </div>

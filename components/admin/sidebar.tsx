@@ -144,7 +144,7 @@ export function AdminChrome({
           <img
             src="/logos/ctr-inline-black.svg"
             alt="CTR Food Works"
-            className="h-5 w-auto"
+            className="h-8 w-auto"
           />
         </Link>
         {/* User menu — name to the far right, opens an animated dropdown */}

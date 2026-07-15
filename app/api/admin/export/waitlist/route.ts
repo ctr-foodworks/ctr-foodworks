@@ -2,13 +2,13 @@ import { desc } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getDb, schema } from "@/lib/db";
-import { csvResponse, toCsv } from "@/lib/csv";
+import { xlsxFromTable } from "@/lib/xlsx";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 /**
- * Waitlist signups → CSV download. Also guarded by middleware (matcher
+ * Waitlist signups → branded Excel download. Also guarded by middleware (matcher
  * /api/admin/:path*); the auth() check here is defense-in-depth.
  */
 export async function GET(): Promise<Response> {
@@ -23,7 +23,7 @@ export async function GET(): Promise<Response> {
     .from(schema.waitlistSignups)
     .orderBy(desc(schema.waitlistSignups.createdAt));
 
-  const csv = toCsv(
+  return xlsxFromTable("waitlist", "Waitlist", "Waitlist signups",
     ["ID", "Created At", "Email", "Source", "Read"],
     rows.map((r) => [
       r.id,
@@ -34,5 +34,4 @@ export async function GET(): Promise<Response> {
     ]),
   );
 
-  return csvResponse("waitlist", csv);
 }

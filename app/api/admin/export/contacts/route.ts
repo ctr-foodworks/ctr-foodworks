@@ -2,7 +2,7 @@ import { desc } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getDb, schema } from "@/lib/db";
-import { csvResponse, toCsv } from "@/lib/csv";
+import { xlsxFromTable } from "@/lib/xlsx";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -16,7 +16,7 @@ function metaCategory(meta: unknown): string {
 }
 
 /**
- * Contact messages → CSV download. Also guarded by middleware (matcher
+ * Contact messages → branded Excel download. Also guarded by middleware (matcher
  * /api/admin/:path*); the auth() check here is defense-in-depth.
  */
 export async function GET(): Promise<Response> {
@@ -31,7 +31,7 @@ export async function GET(): Promise<Response> {
     .from(schema.contactMessages)
     .orderBy(desc(schema.contactMessages.createdAt));
 
-  const csv = toCsv(
+  return xlsxFromTable("contacts", "Contacts", "Contact messages",
     [
       "ID",
       "Created At",
@@ -58,5 +58,4 @@ export async function GET(): Promise<Response> {
     ]),
   );
 
-  return csvResponse("contacts", csv);
 }

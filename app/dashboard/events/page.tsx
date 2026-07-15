@@ -45,7 +45,7 @@ export default async function AdminDashboard() {
             className="inline-flex h-[44px] items-center gap-2 border border-[var(--text-dark)]/20 px-5 text-[12px] font-semibold tracking-[3px] uppercase transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
           >
             <Download className="h-4 w-4" />
-            Export CSV
+            Export Excel
           </a>
           <Link
             href="/dashboard/new"
