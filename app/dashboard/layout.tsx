@@ -79,7 +79,7 @@ export default async function AdminLayout({
       <Suspense>
         <FlashToasts />
       </Suspense>
-      <div className="min-h-screen bg-white text-[var(--text-dark)]">
+      <div className="min-h-screen bg-[#f4f6fa] text-[var(--text-dark)]">
         {me && (
           <AdminChrome
             counts={counts}

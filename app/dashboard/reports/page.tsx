@@ -1,513 +1,154 @@
 import Link from "next/link";
-import { ArrowDownRight, ArrowUpRight, Download } from "lucide-react";
-import { isDbConfigured } from "@/lib/db";
 import {
-  getDashboardMetrics,
-  type CumulativePoint,
-  type DailyPoint,
-  type DashboardMetrics,
-  type HeatmapData,
-  type LabelCount,
-  type QuickCounts,
-  type RangeDays,
-  type ResponseTime,
-} from "@/lib/metrics-db";
+  Activity,
+  BarChart3,
+  CalendarClock,
+  CalendarDays,
+  Clock,
+  Download,
+  Gauge,
+  LineChart,
+  Mail,
+  MessageCircle,
+  PieChart,
+  Reply,
+  TrendingDown,
+  TrendingUp,
+  UserPlus,
+  Users,
+} from "lucide-react";
+import { getDashboardMetrics, type RangeDays } from "@/lib/metrics-db";
 import { CountUp } from "@/components/admin/count-up";
 import { AutoRefresh } from "@/components/admin/auto-refresh";
 
-// Admin data should always be current.
+// Live analytics — always fresh.
 export const dynamic = "force-dynamic";
 
-/* ── Palette (validated for CVD separation + contrast on #0B1220) ──────────── */
-
-const CANVAS = "#0B1220";
-const BRAND = "#c43725"; // brick red — fills, pills
-const ACCENT = "#ec5b41"; // brightened brick for strokes on the dark canvas
-const AMBER = "#c9820a";
-const ROSE = "#ef4d71";
-const SKY = "#1d9bd1";
-const GREEN = "#34d399"; // status: up
-const ROSE_DOWN = "#fb7185"; // status: down
-const SERIES = [ACCENT, AMBER, ROSE, SKY, "rgba(255,255,255,0.35)"];
+/* ── Ghostline-style tokens (light SaaS look; accent = CTR brick red) ───── */
+const ACCENT = "#c43725";
+const ACCENT_RGB = "196, 55, 37";
+const TINT = "#fbeeeb";
+const FG = "#1c2130";
+const MUTED = "#828b9e";
+const BORDER = "#e4e8f1";
+const TRACK = "#eef1f7";
+const GREEN = "#35b57c";
+const RED = "#e4524e";
+const TEAL = "#39c6b2";
+const CHART_PALETTE = [ACCENT, "#f29a1f", GREEN, TEAL, "#8b5cf6", "#e4524e"];
 
 const nf = new Intl.NumberFormat("en-US");
 
-const DAYS_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-function fmtDay(iso: string): string {
-  return new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-  });
-}
-
-function fmtDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-/* ── Tiny presentational helpers ───────────────────────────────────────────── */
-
-function Panel({
-  children,
-  delay = 0,
-  className = "",
-}: {
-  children: React.ReactNode;
-  delay?: number;
-  className?: string;
-}) {
-  return (
-    <section
-      className={`a-fadeUp rounded-xl bg-white/[0.04] p-5 ring-1 ring-white/10 md:p-6 ${className}`}
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      {children}
-    </section>
-  );
-}
-
-function PanelTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="text-[11px] font-semibold uppercase tracking-[2px] text-white/40">
-      {children}
-    </h2>
-  );
-}
-
-function EmptyNote({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex min-h-[120px] items-center justify-center">
-      <p className="text-[13px] font-light text-white/35">{children}</p>
-    </div>
-  );
-}
-
-function Delta({ pct }: { pct: number | null }) {
-  if (pct === null) {
-    return <span className="text-[11px] text-white/35">no prior data</span>;
-  }
-  const rounded = Math.round(Math.abs(pct));
-  if (pct === 0) return <span className="text-[11px] text-white/35">±0%</span>;
-  const up = pct > 0;
-  const Icon = up ? ArrowUpRight : ArrowDownRight;
-  return (
-    <span
-      className="inline-flex items-center gap-0.5 text-[11px] font-semibold"
-      style={{ color: up ? GREEN : ROSE_DOWN }}
-    >
-      <Icon className="h-3 w-3" aria-hidden="true" />
-      {nf.format(rounded)}%
-    </span>
-  );
-}
-
-function Sparkline({
-  series,
-  color,
-  delay,
-}: {
-  series: number[];
-  color: string;
-  delay: number;
-}) {
-  const W = 90;
-  const H = 28;
-  const P = 2;
-  const n = series.length;
-  const max = Math.max(1, ...series);
-  const x = (i: number) => (n <= 1 ? W / 2 : P + (i / (n - 1)) * (W - P * 2));
-  const y = (v: number) => H - P - (v / max) * (H - P * 2);
-  const d = series
-    .map((v, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)} ${y(v).toFixed(1)}`)
-    .join(" ");
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} width={W} height={H} aria-hidden="true" className="shrink-0">
-      <path
-        d={d}
-        fill="none"
-        stroke={color}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        pathLength={1}
-        className="a-draw"
-        style={{ animationDelay: `${delay}ms` }}
-      />
-    </svg>
-  );
-}
+/* ── Small building blocks ────────────────────────────────────────────────── */
 
 function KpiCard({
+  icon,
   label,
   value,
-  suffix = "",
-  delay,
+  suffix,
   delta,
-  spark,
-  sparkColor = ACCENT,
+  deltaLabel,
 }: {
+  icon: React.ReactNode;
   label: string;
   value: number;
   suffix?: string;
-  delay: number;
-  /** undefined = no delta row; null = "no prior data". */
   delta?: number | null;
-  spark?: number[];
-  sparkColor?: string;
+  deltaLabel?: string;
 }) {
   return (
-    <div
-      className="a-fadeUp rounded-xl bg-white/[0.04] p-5 ring-1 ring-white/10"
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      <div className="flex items-end justify-between gap-2">
-        <CountUp
-          value={value}
-          suffix={suffix}
-          className="font-display text-[30px] font-black leading-none text-white"
-        />
-        {spark && <Sparkline series={spark} color={sparkColor} delay={delay + 500} />}
-      </div>
-      <p className="mt-2.5 text-[10px] font-semibold uppercase tracking-[2px] text-white/40">
+    <div className="rounded-2xl border bg-white px-4 py-3" style={{ borderColor: BORDER }}>
+      <div
+        className="flex items-center gap-1.5 text-xs uppercase tracking-wide"
+        style={{ color: MUTED }}
+      >
+        {icon}
         {label}
+      </div>
+      <p className="mt-1.5 text-2xl font-semibold tabular-nums" style={{ color: FG }}>
+        <CountUp value={value} suffix={suffix} />
       </p>
-      {delta !== undefined && (
-        <p className="mt-2 flex items-center gap-1.5 text-[11px] text-white/35">
-          <Delta pct={delta} />
-          <span>vs prev. period</span>
+      {delta !== undefined && delta !== null && (
+        <p
+          className="mt-1 flex items-center gap-1 text-xs font-medium tabular-nums"
+          style={{ color: delta >= 0 ? GREEN : RED }}
+        >
+          {delta >= 0 ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
+          {delta >= 0 ? "+" : ""}
+          {delta}% {deltaLabel}
         </p>
       )}
     </div>
   );
 }
 
-function QuickStat({
-  label,
-  counts,
-  delay,
+function Panel({
+  title,
+  subtitle,
+  icon,
+  children,
+  className = "",
 }: {
-  label: string;
-  counts: QuickCounts;
-  delay: number;
+  title: string;
+  subtitle?: string;
+  icon: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <div
-      className="a-fadeUp flex items-center justify-between gap-4 rounded-xl bg-white/[0.04] px-5 py-4 ring-1 ring-white/10"
-      style={{ animationDelay: `${delay}ms` }}
+    <section
+      className={`rounded-2xl border bg-white p-5 ${className}`}
+      style={{ borderColor: BORDER }}
     >
-      <span className="text-[10px] font-semibold uppercase tracking-[2px] text-white/40">
-        {label}
-      </span>
-      <span className="flex items-baseline gap-5">
-        <span className="flex items-baseline gap-1.5">
-          <CountUp
-            value={counts.contacts}
-            className="font-display text-[22px] font-black leading-none text-white"
-          />
-          <span className="text-[10px] uppercase tracking-[1px] text-white/40">
-            inquiries
-          </span>
-        </span>
-        <span className="flex items-baseline gap-1.5">
-          <CountUp
-            value={counts.waitlist}
-            className="font-display text-[22px] font-black leading-none text-white"
-          />
-          <span className="text-[10px] uppercase tracking-[1px] text-white/40">
-            waitlist
-          </span>
-        </span>
-      </span>
-    </div>
-  );
-}
-
-/* ── Main trend chart ──────────────────────────────────────────────────────── */
-
-function TrendChart({ daily }: { daily: DailyPoint[] }) {
-  const W = 1000;
-  const H = 280;
-  const padL = 46;
-  const padR = 14;
-  const padT = 14;
-  const padB = 30;
-  const innerW = W - padL - padR;
-  const innerH = H - padT - padB;
-  const n = daily.length;
-  const maxVal = Math.max(0, ...daily.map((d) => Math.max(d.contacts, d.waitlist)));
-  const yMax = Math.max(4, Math.ceil(maxVal / 4) * 4);
-  const x = (i: number) => (n <= 1 ? padL + innerW / 2 : padL + (i / (n - 1)) * innerW);
-  const y = (v: number) => padT + innerH - (v / yMax) * innerH;
-  const toPath = (get: (d: DailyPoint) => number) =>
-    daily
-      .map((d, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)} ${y(get(d)).toFixed(1)}`)
-      .join(" ");
-  const lineC = toPath((d) => d.contacts);
-  const lineW = toPath((d) => d.waitlist);
-  const areaC = `${lineC} L${x(n - 1).toFixed(1)} ${(padT + innerH).toFixed(1)} L${x(0).toFixed(1)} ${(padT + innerH).toFixed(1)} Z`;
-  const labelStep = n <= 7 ? 1 : n <= 30 ? 5 : 15;
-  const bandW = n <= 1 ? innerW : innerW / (n - 1);
-  const gridTicks = [0, 1, 2, 3, 4];
-
-  return (
-    <svg
-      viewBox={`0 0 ${W} ${H}`}
-      className="mt-4 w-full"
-      role="img"
-      aria-label={`Daily inquiries and waitlist signups, last ${n} days`}
-    >
-      <defs>
-        <linearGradient id="trend-grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={ACCENT} stopOpacity="0.32" />
-          <stop offset="100%" stopColor={ACCENT} stopOpacity="0" />
-        </linearGradient>
-        <mask id="trend-wl-mask" maskUnits="userSpaceOnUse" x="0" y="0" width={W} height={H}>
-          <path
-            d={lineW}
-            fill="none"
-            stroke="#fff"
-            strokeWidth="8"
-            strokeLinecap="round"
-            pathLength={1}
-            className="a-draw"
-            style={{ animationDelay: "650ms" }}
-          />
-        </mask>
-      </defs>
-
-      {gridTicks.map((k) => {
-        const v = (yMax / 4) * k;
-        const gy = y(v);
-        return (
-          <g key={k}>
-            <line
-              x1={padL}
-              y1={gy}
-              x2={W - padR}
-              y2={gy}
-              stroke="rgba(255,255,255,0.07)"
-              strokeWidth="1"
-            />
-            <text
-              x={padL - 8}
-              y={gy + 3.5}
-              textAnchor="end"
-              fontSize="11"
-              fill="rgba(255,255,255,0.35)"
-            >
-              {nf.format(v)}
-            </text>
-          </g>
-        );
-      })}
-
-      {daily.map((d, i) =>
-        i % labelStep === 0 ? (
-          <text
-            key={d.day}
-            x={x(i)}
-            y={H - 8}
-            textAnchor="middle"
-            fontSize="11"
-            fill="rgba(255,255,255,0.35)"
-          >
-            {fmtDay(d.day)}
-          </text>
-        ) : null,
-      )}
-
-      <path
-        d={areaC}
-        fill="url(#trend-grad)"
-        className="a-fadeIn"
-        style={{ animationDelay: "1300ms" }}
-      />
-      <path
-        d={lineC}
-        fill="none"
-        stroke={ACCENT}
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        pathLength={1}
-        className="a-draw"
-        style={{
-          animationDelay: "450ms",
-          filter: "drop-shadow(0 0 6px rgba(236,91,65,0.5))",
-        }}
-      />
-      <g mask="url(#trend-wl-mask)">
-        <path
-          d={lineW}
-          fill="none"
-          stroke={AMBER}
-          strokeWidth="2"
-          strokeLinejoin="round"
-          pathLength={1}
-          strokeDasharray="0.015 0.01"
-        />
-      </g>
-
-      {daily.map((d, i) => (
-        <g key={d.day} className="pt-band">
-          <rect
-            x={x(i) - bandW / 2}
-            y={padT}
-            width={bandW}
-            height={innerH}
-            fill="transparent"
-          >
-            <title>{`${fmtDay(d.day)} — ${nf.format(d.contacts)} inquiries · ${nf.format(d.waitlist)} waitlist`}</title>
-          </rect>
-          <circle
-            className="pt-dot"
-            cx={x(i)}
-            cy={y(d.contacts)}
-            r="3.5"
-            fill={ACCENT}
-            stroke={CANVAS}
-            strokeWidth="1.5"
-          />
-          <circle
-            className="pt-dot"
-            cx={x(i)}
-            cy={y(d.waitlist)}
-            r="3.5"
-            fill={AMBER}
-            stroke={CANVAS}
-            strokeWidth="1.5"
-          />
-        </g>
-      ))}
-    </svg>
-  );
-}
-
-/* ── Donut ─────────────────────────────────────────────────────────────────── */
-
-function arcPath(cx: number, cy: number, r: number, a0: number, a1: number): string {
-  const x0 = cx + r * Math.cos(a0);
-  const y0 = cy + r * Math.sin(a0);
-  const x1 = cx + r * Math.cos(a1);
-  const y1 = cy + r * Math.sin(a1);
-  const large = a1 - a0 > Math.PI ? 1 : 0;
-  return `M ${x0.toFixed(2)} ${y0.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`;
-}
-
-function CategoryDonut({ items }: { items: LabelCount[] }) {
-  const total = items.reduce((s, i) => s + i.count, 0);
-  if (total === 0) return <EmptyNote>No inquiries yet.</EmptyNote>;
-
-  const shown = items.slice(0, 4);
-  const restCount = items.slice(4).reduce((s, i) => s + i.count, 0);
-  if (restCount > 0) shown.push({ label: "Other", count: restCount });
-
-  const TAU = Math.PI * 2;
-  const gap = shown.length > 1 ? 0.06 : 0.04;
-  let acc = 0;
-  const segs = shown.map((s, i) => {
-    const frac = s.count / total;
-    const a0 = acc * TAU - Math.PI / 2 + gap / 2;
-    let a1 = (acc + frac) * TAU - Math.PI / 2 - gap / 2;
-    if (a1 <= a0) a1 = a0 + 0.02;
-    acc += frac;
-    return {
-      ...s,
-      pct: Math.round(frac * 100),
-      color: SERIES[i] ?? SERIES[SERIES.length - 1],
-      d: arcPath(100, 100, 72, a0, a1),
-    };
-  });
-
-  return (
-    <div className="mt-5 flex flex-wrap items-center gap-6">
-      <div className="relative h-[168px] w-[168px] shrink-0">
-        <svg viewBox="0 0 200 200" className="h-full w-full" role="img" aria-label="Inquiries by category">
-          {segs.map((s, i) => (
-            <path
-              key={s.label}
-              d={s.d}
-              fill="none"
-              stroke={s.color}
-              strokeWidth="22"
-              pathLength={1}
-              className="a-draw"
-              style={{ animationDelay: `${400 + i * 150}ms`, animationDuration: "0.9s" }}
-            >
-              <title>{`${s.label}: ${nf.format(s.count)} (${s.pct}%)`}</title>
-            </path>
-          ))}
-        </svg>
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <CountUp
-            value={total}
-            className="font-display text-[30px] font-black leading-none text-white"
-          />
-          <span className="mt-1 text-[9px] font-semibold uppercase tracking-[2px] text-white/40">
-            inquiries
-          </span>
-        </div>
+      <div className="mb-4">
+        <h2 className="flex items-center gap-2 text-sm font-semibold" style={{ color: FG }}>
+          <span style={{ color: ACCENT }}>{icon}</span>
+          {title}
+        </h2>
+        {subtitle && (
+          <p className="mt-0.5 text-xs" style={{ color: MUTED }}>
+            {subtitle}
+          </p>
+        )}
       </div>
-      <ul className="min-w-[140px] flex-1 space-y-2.5">
-        {segs.map((s) => (
-          <li key={s.label} className="flex items-center gap-2.5">
-            <span
-              className="h-2.5 w-2.5 shrink-0 rounded-sm"
-              style={{ backgroundColor: s.color }}
-              aria-hidden="true"
-            />
-            <span className="min-w-0 flex-1 truncate text-[13px] text-white/75">
-              {s.label}
-            </span>
-            <span className="font-mono text-[12px] text-white/50">
-              {nf.format(s.count)}
-            </span>
-          </li>
-        ))}
-      </ul>
-    </div>
+      {children}
+    </section>
   );
 }
 
-/* ── Horizontal bars ───────────────────────────────────────────────────────── */
-
-function BarList({
-  items,
-  baseDelay = 350,
-  capitalize = false,
-}: {
-  items: LabelCount[];
-  baseDelay?: number;
-  capitalize?: boolean;
-}) {
-  const max = Math.max(1, ...items.map((i) => i.count));
+function EmptyNote({ children }: { children: React.ReactNode }) {
   return (
-    <ul className="mt-5 space-y-4">
-      {items.map((item, i) => (
-        <li key={item.label}>
-          <div className="flex items-baseline justify-between gap-3">
-            <span
-              className={`min-w-0 truncate text-[13px] text-white/75 ${capitalize ? "capitalize" : ""}`}
-            >
-              {item.label}
+    <p className="py-10 text-center text-sm" style={{ color: MUTED }}>
+      {children}
+    </p>
+  );
+}
+
+function MeterRows({
+  data,
+  color = ACCENT,
+}: {
+  data: { label: string; count: number }[];
+  color?: string;
+}) {
+  const max = Math.max(1, ...data.map((d) => d.count));
+  if (data.length === 0) return <EmptyNote>No data yet.</EmptyNote>;
+  return (
+    <ul className="flex flex-col gap-3">
+      {data.map((d) => (
+        <li key={d.label}>
+          <div className="mb-1 flex items-center justify-between gap-3">
+            <span className="truncate text-sm" style={{ color: FG }}>
+              {d.label}
             </span>
-            <span className="font-mono text-[12px] text-white/50">
-              {nf.format(item.count)}
+            <span className="text-sm font-medium tabular-nums" style={{ color: MUTED }}>
+              {nf.format(d.count)}
             </span>
           </div>
-          <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-white/[0.06]">
+          <div className="h-1.5 w-full rounded-full" style={{ background: TRACK }}>
             <div
-              className="a-grow h-full rounded-full"
-              style={{
-                width: `${Math.max(1.5, (item.count / max) * 100)}%`,
-                background: `linear-gradient(90deg, #8a2416, ${ACCENT})`,
-                animationDelay: `${baseDelay + i * 90}ms`,
-              }}
+              className="h-1.5 rounded-full"
+              style={{ width: `${(d.count / max) * 100}%`, background: color }}
             />
           </div>
         </li>
@@ -516,628 +157,610 @@ function BarList({
   );
 }
 
-/* ── Reply-rate gauge ──────────────────────────────────────────────────────── */
+/* ── SVG chart builders (server-rendered, no chart libraries) ─────────────── */
 
-function ReplyGauge({
-  replyRate,
-  responseTime,
-}: {
-  replyRate: DashboardMetrics["replyRate"];
-  responseTime: ResponseTime;
-}) {
-  const frac = Math.min(1, Math.max(0, replyRate.pct / 100));
-  const gaugeArc = "M 16 100 A 84 84 0 0 1 184 100";
-  return (
-    <div className="mt-5 flex flex-col items-center">
-      <div className="relative w-full max-w-[230px]">
-        <svg
-          viewBox="0 0 200 112"
-          className="w-full"
-          role="img"
-          aria-label={`Reply rate ${replyRate.pct}%`}
-        >
-          <path
-            d={gaugeArc}
-            fill="none"
-            stroke="rgba(255,255,255,0.08)"
-            strokeWidth="14"
-            strokeLinecap="round"
-          />
-          {frac > 0 && (
-            <path
-              d={gaugeArc}
-              fill="none"
-              stroke={ACCENT}
-              strokeWidth="14"
-              strokeLinecap="round"
-              pathLength={1}
-              className="a-sweep"
-              style={{
-                strokeDasharray: `${frac.toFixed(4)} 1`,
-                animationDelay: "500ms",
-                filter: "drop-shadow(0 0 8px rgba(236,91,65,0.45))",
-              }}
-            />
-          )}
-        </svg>
-        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center">
-          <CountUp
-            value={replyRate.pct}
-            suffix="%"
-            className="font-display text-[34px] font-black leading-none text-white"
-          />
-          <span className="mt-1 text-[9px] font-semibold uppercase tracking-[2px] text-white/40">
-            reply rate
-          </span>
-        </div>
-      </div>
-      <p className="mt-5 text-[13px] text-white/75">
-        {responseTime.avgHours === null
-          ? "No replies yet"
-          : `Avg first response: ${responseTime.avgHours.toFixed(1)}h`}
-      </p>
-      <p className="mt-1 text-[11px] text-white/40">
-        {nf.format(replyRate.replied)} of {nf.format(replyRate.total)} inquiries
-        replied
-      </p>
-    </div>
-  );
+const CHART_W = 1000;
+const CHART_H = 240;
+const PAD = { l: 36, r: 10, t: 12, b: 26 };
+
+function linePoints(values: number[], yMax: number): [number, number][] {
+  const innerW = CHART_W - PAD.l - PAD.r;
+  const innerH = CHART_H - PAD.t - PAD.b;
+  const step = values.length > 1 ? innerW / (values.length - 1) : 0;
+  return values.map((v, i) => [
+    PAD.l + i * step,
+    PAD.t + innerH - (v / yMax) * innerH,
+  ]);
 }
 
-/* ── Heatmap ───────────────────────────────────────────────────────────────── */
-
-function SubmissionHeatmap({ heatmap }: { heatmap: HeatmapData }) {
-  const max = Math.max(0, ...heatmap.grid.flat());
-  return (
-    <div className="mt-5 overflow-x-auto">
-      <div
-        className="grid min-w-[620px] gap-[3px]"
-        style={{ gridTemplateColumns: "34px repeat(24, minmax(0, 1fr))" }}
-      >
-        {heatmap.grid.map((row, r) => (
-          <div key={r} className="contents">
-            <div className="flex items-center text-[10px] font-medium text-white/35">
-              {DAYS_SHORT[r]}
-            </div>
-            {row.map((n, c) => (
-              <div
-                key={c}
-                className="a-cell h-4 rounded-[3px]"
-                title={`${DAYS_SHORT[r]} ${String(c).padStart(2, "0")}:00 UTC — ${nf.format(n)} submission${n === 1 ? "" : "s"}`}
-                style={{
-                  backgroundColor:
-                    n > 0 && max > 0
-                      ? `rgba(236, 91, 65, ${(0.12 + 0.78 * (n / max)).toFixed(3)})`
-                      : "rgba(255,255,255,0.05)",
-                  animationDelay: `${Math.min(1000, (r * 24 + c) * 6)}ms`,
-                }}
-              />
-            ))}
-          </div>
-        ))}
-        <div className="contents">
-          <div />
-          {Array.from({ length: 24 }, (_, c) => (
-            <div key={c} className="pt-1 text-[9px] text-white/30">
-              {c % 4 === 0 ? `${String(c).padStart(2, "0")}h` : ""}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+function toPolyline(pts: [number, number][]): string {
+  return pts.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
 }
 
-/* ── Cumulative waitlist chart ─────────────────────────────────────────────── */
-
-function CumulativeChart({ series }: { series: CumulativePoint[] }) {
-  const W = 1000;
-  const H = 200;
-  const padL = 46;
-  const padR = 14;
-  const padT = 14;
-  const padB = 26;
-  const innerW = W - padL - padR;
-  const innerH = H - padT - padB;
-  const n = series.length;
-  const maxVal = Math.max(0, ...series.map((p) => p.total));
-  const yMax = Math.max(4, Math.ceil(maxVal / 4) * 4);
-  const x = (i: number) => (n <= 1 ? padL + innerW / 2 : padL + (i / (n - 1)) * innerW);
-  const y = (v: number) => padT + innerH - (v / yMax) * innerH;
-  const line = series
-    .map((p, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(1)} ${y(p.total).toFixed(1)}`)
+function toAreaPath(pts: [number, number][]): string {
+  if (pts.length === 0) return "";
+  const baseline = CHART_H - PAD.b;
+  const line = pts
+    .map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`)
     .join(" ");
-  const area = `${line} L${x(n - 1).toFixed(1)} ${(padT + innerH).toFixed(1)} L${x(0).toFixed(1)} ${(padT + innerH).toFixed(1)} Z`;
-  const bandW = n <= 1 ? innerW : innerW / (n - 1);
+  return `${line} L${pts[pts.length - 1][0].toFixed(1)} ${baseline} L${pts[0][0].toFixed(1)} ${baseline} Z`;
+}
+
+function TrendChart({
+  daily,
+}: {
+  daily: { day: string; contacts: number; waitlist: number }[];
+}) {
+  const allZero = daily.every((d) => d.contacts === 0 && d.waitlist === 0);
+  if (allZero) return <EmptyNote>No activity in this period yet.</EmptyNote>;
+
+  const yMax = Math.max(4, ...daily.map((d) => Math.max(d.contacts, d.waitlist)));
+  const cPts = linePoints(daily.map((d) => d.contacts), yMax);
+  const wPts = linePoints(daily.map((d) => d.waitlist), yMax);
+  const innerH = CHART_H - PAD.t - PAD.b;
+  const gridYs = [0, 0.25, 0.5, 0.75, 1].map((f) => PAD.t + innerH - f * innerH);
+  const labelEvery = Math.max(1, Math.ceil(daily.length / 8));
 
   return (
-    <svg
-      viewBox={`0 0 ${W} ${H}`}
-      className="mt-4 w-full"
-      role="img"
-      aria-label="Cumulative waitlist signups, last 12 weeks"
-    >
-      <defs>
-        <linearGradient id="cume-grad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={AMBER} stopOpacity="0.28" />
-          <stop offset="100%" stopColor={AMBER} stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      {[0, 2, 4].map((k) => {
-        const v = (yMax / 4) * k;
-        const gy = y(v);
-        return (
-          <g key={k}>
-            <line
-              x1={padL}
-              y1={gy}
-              x2={W - padR}
-              y2={gy}
-              stroke="rgba(255,255,255,0.07)"
-              strokeWidth="1"
-            />
-            <text
-              x={padL - 8}
-              y={gy + 3.5}
-              textAnchor="end"
-              fontSize="11"
-              fill="rgba(255,255,255,0.35)"
-            >
-              {nf.format(v)}
+    <div>
+      <div className="mb-3 flex items-center gap-4 text-xs" style={{ color: MUTED }}>
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-sm" style={{ background: ACCENT }} />
+          Inquiries
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-sm" style={{ background: TEAL }} />
+          Waitlist
+        </span>
+      </div>
+      <svg viewBox={`0 0 ${CHART_W} ${CHART_H}`} width="100%" role="img" aria-label="Daily activity trend">
+        <defs>
+          <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={ACCENT} stopOpacity="0.18" />
+            <stop offset="100%" stopColor={ACCENT} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        {gridYs.map((y, i) => (
+          <g key={i}>
+            <line x1={PAD.l} x2={CHART_W - PAD.r} y1={y} y2={y} stroke={TRACK} strokeWidth="1" />
+            <text x={PAD.l - 8} y={y + 3} textAnchor="end" fontSize="10" fill={MUTED}>
+              {Math.round((yMax * i) / 4)}
             </text>
           </g>
-        );
-      })}
-      {series.map((p, i) =>
-        i % 2 === 0 ? (
-          <text
-            key={p.weekStart}
-            x={x(i)}
-            y={H - 6}
-            textAnchor="middle"
-            fontSize="11"
-            fill="rgba(255,255,255,0.35)"
-          >
-            {fmtDay(p.weekStart)}
-          </text>
-        ) : null,
-      )}
-      <path
-        d={area}
-        fill="url(#cume-grad)"
-        className="a-fadeIn"
-        style={{ animationDelay: "1300ms" }}
-      />
-      <path
-        d={line}
-        fill="none"
-        stroke={AMBER}
-        strokeWidth="2.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        pathLength={1}
-        className="a-draw"
-        style={{ animationDelay: "500ms" }}
-      />
-      {series.map((p, i) => (
-        <g key={p.weekStart} className="pt-band">
-          <rect
-            x={x(i) - bandW / 2}
-            y={padT}
-            width={bandW}
-            height={innerH}
-            fill="transparent"
-          >
-            <title>{`Week of ${fmtDay(p.weekStart)} — ${nf.format(p.total)} total signups`}</title>
-          </rect>
-          <circle
-            className="pt-dot"
-            cx={x(i)}
-            cy={y(p.total)}
-            r="3.5"
-            fill={AMBER}
-            stroke={CANVAS}
-            strokeWidth="1.5"
-          />
-        </g>
-      ))}
-    </svg>
+        ))}
+        <path d={toAreaPath(cPts)} fill="url(#areaFill)" />
+        <polyline
+          points={toPolyline(cPts)}
+          fill="none"
+          stroke={ACCENT}
+          strokeWidth="2.5"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+          pathLength={1}
+          className="gl-draw"
+        />
+        <polyline
+          points={toPolyline(wPts)}
+          fill="none"
+          stroke={TEAL}
+          strokeWidth="2"
+          strokeDasharray="5 4"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+        {cPts.map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r="2.6" fill={ACCENT}>
+            <title>{`${daily[i].day}: ${daily[i].contacts} inquiries, ${daily[i].waitlist} waitlist`}</title>
+          </circle>
+        ))}
+        {daily.map((d, i) =>
+          i % labelEvery === 0 ? (
+            <text
+              key={d.day}
+              x={cPts[i][0]}
+              y={CHART_H - 8}
+              textAnchor="middle"
+              fontSize="10"
+              fill={MUTED}
+            >
+              {d.day.slice(5).replace("-", "/")}
+            </text>
+          ) : null,
+        )}
+      </svg>
+    </div>
   );
 }
 
-/* ── Page ──────────────────────────────────────────────────────────────────── */
-
-const RANGES: { days: RangeDays; label: string }[] = [
-  { days: 7, label: "7D" },
-  { days: 30, label: "30D" },
-  { days: 90, label: "90D" },
-];
-
-const exportButtonClass =
-  "inline-flex h-[44px] items-center gap-2 rounded-lg px-5 text-[11px] font-semibold uppercase tracking-[2px] text-white/70 ring-1 ring-white/15 transition-colors hover:bg-white/[0.06] hover:text-white hover:ring-white/30";
-
-const styles = `
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } }
-@keyframes growBar { from { transform: scaleX(0); } }
-@keyframes drawLine { from { stroke-dashoffset: 1; } }
-@keyframes sweep { from { stroke-dasharray: 0 1; } }
-@keyframes fadeCell { from { opacity: 0; transform: scale(0.5); } }
-@keyframes fadeIn { from { opacity: 0; } }
-@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(1.9); } }
-.a-fadeUp { animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.a-grow { transform-origin: left; animation: growBar 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; }
-.a-draw { stroke-dasharray: 1; animation: drawLine 1.2s cubic-bezier(0.33, 1, 0.68, 1) both; }
-.a-sweep { animation: sweep 1s cubic-bezier(0.33, 1, 0.68, 1) backwards; }
-.a-cell { animation: fadeCell 0.5s ease-out both; }
-.a-fadeIn { animation: fadeIn 0.8s ease-out both; }
-.a-pulse { animation: pulse 2s ease-in-out infinite; }
-.pt-dot { opacity: 0; transition: opacity 0.15s ease; }
-.pt-band:hover .pt-dot { opacity: 1; }
-@media (prefers-reduced-motion: reduce) {
-  .a-fadeUp, .a-grow, .a-draw, .a-sweep, .a-cell, .a-fadeIn, .a-pulse { animation: none !important; }
-  .pt-dot { transition: none; }
+function Donut({ data }: { data: { label: string; count: number }[] }) {
+  const total = data.reduce((s, d) => s + d.count, 0);
+  if (total === 0) return <EmptyNote>No inquiries yet.</EmptyNote>;
+  const R = 52;
+  const C = 2 * Math.PI * R;
+  let acc = 0;
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-6">
+      <svg viewBox="0 0 140 140" width="150" height="150" role="img" aria-label="Inquiries by category">
+        <circle cx="70" cy="70" r={R} fill="none" stroke={TRACK} strokeWidth="16" />
+        {data.map((d, i) => {
+          const frac = d.count / total;
+          const seg = (
+            <circle
+              key={d.label}
+              cx="70"
+              cy="70"
+              r={R}
+              fill="none"
+              stroke={CHART_PALETTE[i % CHART_PALETTE.length]}
+              strokeWidth="16"
+              strokeDasharray={`${(frac * C).toFixed(2)} ${C.toFixed(2)}`}
+              strokeDashoffset={(-acc * C).toFixed(2)}
+              transform="rotate(-90 70 70)"
+            >
+              <title>{`${d.label}: ${d.count}`}</title>
+            </circle>
+          );
+          acc += frac;
+          return seg;
+        })}
+        <text x="70" y="66" textAnchor="middle" fontSize="24" fontWeight="600" fill={FG}>
+          {nf.format(total)}
+        </text>
+        <text x="70" y="84" textAnchor="middle" fontSize="10" fill={MUTED}>
+          total
+        </text>
+      </svg>
+      <ul className="flex min-w-[140px] flex-col gap-1.5">
+        {data.map((d, i) => (
+          <li key={d.label} className="flex items-center gap-2 text-sm">
+            <span
+              className="h-2.5 w-2.5 shrink-0 rounded-sm"
+              style={{ background: CHART_PALETTE[i % CHART_PALETTE.length] }}
+            />
+            <span className="truncate" style={{ color: FG }}>
+              {d.label}
+            </span>
+            <span className="ml-auto font-medium tabular-nums" style={{ color: MUTED }}>
+              {nf.format(d.count)}
+            </span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
-`;
+
+function ReplyGauge({
+  pct,
+  replied,
+  total,
+  avgHours,
+}: {
+  pct: number;
+  replied: number;
+  total: number;
+  avgHours: number | null;
+}) {
+  // Semicircle gauge: r=56, half-circumference = PI * r.
+  const R = 56;
+  const HALF = Math.PI * R;
+  const frac = Math.min(1, Math.max(0, pct / 100));
+  return (
+    <div className="flex flex-col items-center">
+      <svg viewBox="0 0 140 84" width="170" role="img" aria-label="Reply rate">
+        <path
+          d={`M 14 76 A ${R} ${R} 0 0 1 126 76`}
+          fill="none"
+          stroke={TRACK}
+          strokeWidth="12"
+          strokeLinecap="round"
+        />
+        <path
+          d={`M 14 76 A ${R} ${R} 0 0 1 126 76`}
+          fill="none"
+          stroke={ACCENT}
+          strokeWidth="12"
+          strokeLinecap="round"
+          strokeDasharray={`${(frac * HALF).toFixed(1)} ${HALF.toFixed(1)}`}
+        />
+        <text x="70" y="66" textAnchor="middle" fontSize="26" fontWeight="600" fill={FG}>
+          {Math.round(pct)}%
+        </text>
+        <text x="70" y="80" textAnchor="middle" fontSize="9" fill={MUTED}>
+          reply rate
+        </text>
+      </svg>
+      <p className="mt-3 text-sm" style={{ color: FG }}>
+        {avgHours !== null ? (
+          <>
+            Avg first response:{" "}
+            <span className="font-semibold tabular-nums">{avgHours.toFixed(1)}h</span>
+          </>
+        ) : (
+          "No replies yet"
+        )}
+      </p>
+      <p className="mt-0.5 text-xs tabular-nums" style={{ color: MUTED }}>
+        {nf.format(replied)} of {nf.format(total)} messages answered
+      </p>
+    </div>
+  );
+}
+
+const DOW = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+function Heatmap({
+  matrix,
+  busiestDay,
+  busiestHour,
+}: {
+  matrix: number[][];
+  busiestDay: string | null;
+  busiestHour: string | null;
+}) {
+  const max = Math.max(0, ...matrix.flat());
+  if (max === 0) return <EmptyNote>No submissions recorded yet.</EmptyNote>;
+  return (
+    <div>
+      {busiestDay && busiestHour && (
+        <span
+          className="mb-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium"
+          style={{ background: TINT, color: ACCENT }}
+        >
+          <Clock size={12} />
+          Busiest: {busiestDay} around {busiestHour}
+        </span>
+      )}
+      <div className="overflow-x-auto">
+        <div className="min-w-[560px]">
+          {matrix.map((row, d) => (
+            <div key={d} className="mb-[3px] flex items-center gap-[3px]">
+              <span className="w-8 shrink-0 text-[10px]" style={{ color: MUTED }}>
+                {DOW[d]}
+              </span>
+              {row.map((v, h) => (
+                <div
+                  key={h}
+                  className="h-3.5 flex-1 rounded-[3px]"
+                  style={{
+                    background:
+                      v === 0 ? TRACK : `rgba(${ACCENT_RGB}, ${0.15 + 0.85 * (v / max)})`,
+                  }}
+                  title={`${DOW[d]} ${h}:00 UTC — ${v} submission${v === 1 ? "" : "s"}`}
+                />
+              ))}
+            </div>
+          ))}
+          <div className="ml-8 flex gap-[3px]">
+            {Array.from({ length: 24 }).map((_, h) => (
+              <span
+                key={h}
+                className="flex-1 text-center text-[9px]"
+                style={{ color: h % 4 === 0 ? MUTED : "transparent" }}
+              >
+                {h}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <p className="mt-2 text-[11px]" style={{ color: MUTED }}>
+        Hours shown in UTC.
+      </p>
+    </div>
+  );
+}
+
+function CumulativeChart({ points }: { points: { weekStart: string; total: number }[] }) {
+  const finalTotal = points.length ? points[points.length - 1].total : 0;
+  if (finalTotal === 0) return <EmptyNote>No waitlist signups yet.</EmptyNote>;
+  const yMax = Math.max(4, ...points.map((p) => p.total));
+  const pts = linePoints(points.map((p) => p.total), yMax);
+  return (
+    <div>
+      <p className="mb-2 text-2xl font-semibold tabular-nums" style={{ color: FG }}>
+        <CountUp value={finalTotal} />{" "}
+        <span className="text-sm font-normal" style={{ color: MUTED }}>
+          total signups
+        </span>
+      </p>
+      <svg viewBox={`0 0 ${CHART_W} ${CHART_H}`} width="100%" role="img" aria-label="Waitlist growth">
+        <defs>
+          <linearGradient id="cumFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={TEAL} stopOpacity="0.2" />
+            <stop offset="100%" stopColor={TEAL} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <path d={toAreaPath(pts)} fill="url(#cumFill)" />
+        <polyline
+          points={toPolyline(pts)}
+          fill="none"
+          stroke={TEAL}
+          strokeWidth="2.5"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+          pathLength={1}
+          className="gl-draw"
+        />
+        {pts.map(([x, y], i) => (
+          <circle key={i} cx={x} cy={y} r="2.4" fill={TEAL}>
+            <title>{`Week of ${points[i].weekStart}: ${points[i].total} total`}</title>
+          </circle>
+        ))}
+        {points.map((p, i) =>
+          i % 2 === 0 ? (
+            <text key={p.weekStart} x={pts[i][0]} y={CHART_H - 8} textAnchor="middle" fontSize="10" fill={MUTED}>
+              {p.weekStart.slice(5).replace("-", "/")}
+            </text>
+          ) : null,
+        )}
+      </svg>
+    </div>
+  );
+}
+
+/* ── Page ─────────────────────────────────────────────────────────────────── */
+
+const RANGES: RangeDays[] = [7, 30, 90];
 
 export default async function ReportsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<{ range?: string }>;
 }) {
   const sp = await searchParams;
-  const rawRange = Array.isArray(sp.range) ? sp.range[0] : sp.range;
-  const range: RangeDays = rawRange === "7" ? 7 : rawRange === "90" ? 90 : 30;
-
-  if (!isDbConfigured()) {
-    return (
-      <main className="mx-auto max-w-[1280px] px-4 py-8 sm:px-6">
-        <div className="rounded-2xl bg-[#0B1220] p-6 text-white ring-1 ring-white/10 md:p-10">
-          <p className="text-[11px] font-semibold uppercase tracking-[3px] text-[#f08a75]">
-            Setup needed
-          </p>
-          <h1 className="mt-3 font-display text-[32px] font-black uppercase leading-[1] tracking-[-0.5px]">
-            Database not connected
-          </h1>
-          <div className="mt-3 h-[2px] w-12 bg-[#c43725]" />
-          <p className="mt-5 max-w-[640px] text-[15px] font-light leading-[1.8] text-white/50">
-            Set <code className="font-mono text-[13px] text-white/80">DATABASE_URL</code>{" "}
-            (and the other env vars in{" "}
-            <code className="font-mono text-[13px] text-white/80">SETUP.md</code>), run{" "}
-            <code className="font-mono text-[13px] text-white/80">npm run db:push</code>{" "}
-            and <code className="font-mono text-[13px] text-white/80">npm run db:seed</code>,
-            then reload.
-          </p>
-        </div>
-      </main>
-    );
-  }
-
-  const metrics = await getDashboardMetrics(range);
-  const {
-    totals,
-    daily,
-    period,
-    prevPeriod,
-    quick,
-    replyRate,
-    responseTime,
-    heatmap,
-    cumulativeWaitlist,
-    eventsByCategory,
-  } = metrics;
-
-  const trendEmpty = daily.every((d) => d.contacts === 0 && d.waitlist === 0);
-  const dailyContacts = daily.map((d) => d.contacts);
-  const dailyWaitlist = daily.map((d) => d.waitlist);
-  const heatmapEmpty = heatmap.grid.every((row) => row.every((n) => n === 0));
-  const cumeTotal = cumulativeWaitlist[cumulativeWaitlist.length - 1]?.total ?? 0;
-  const eventsEmpty = eventsByCategory.every((c) => c.count === 0);
+  const range: RangeDays = sp.range === "7" ? 7 : sp.range === "90" ? 90 : 30;
+  const m = await getDashboardMetrics(range);
 
   return (
-    <main className="mx-auto max-w-[1280px] px-4 py-8 sm:px-6">
-      <div className="relative overflow-hidden rounded-2xl bg-[#0B1220] p-6 text-white ring-1 ring-white/10 md:p-10">
-        <style>{styles}</style>
+    <main className="mx-auto max-w-[1200px] px-6 py-8" style={{ color: FG }}>
+      <style>{`
+        @keyframes glFadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+        @keyframes glDraw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+        .gl-fade { animation: glFadeUp .5s ease-out both; }
+        .gl-draw { stroke-dasharray: 1; animation: glDraw 1.2s ease-out .15s both; }
+        @media (prefers-reduced-motion: reduce) { .gl-fade, .gl-draw { animation: none; stroke-dasharray: none; } }
+      `}</style>
 
-        {/* Ambient accent glow */}
-        <div
-          className="pointer-events-none absolute -top-28 right-[-60px] h-72 w-72 rounded-full blur-3xl"
-          style={{ backgroundColor: "rgba(196,55,37,0.18)" }}
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute -bottom-32 left-[-80px] h-72 w-72 rounded-full blur-3xl"
-          style={{ backgroundColor: "rgba(196,55,37,0.08)" }}
-          aria-hidden="true"
-        />
-
-        <div className="relative flex flex-col gap-8">
-          {/* ── a. Header ─────────────────────────────────────────────────── */}
-          <header className="a-fadeUp flex flex-wrap items-start justify-between gap-5">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[3px] text-[#f08a75]">
-                Insights
-              </p>
-              <h1 className="mt-3 font-display text-[34px] font-black uppercase leading-[1] tracking-[-0.5px] md:text-[38px]">
-                Reports &amp; Analytics
-              </h1>
-              <div className="mt-3 h-[2px] w-12" style={{ backgroundColor: BRAND }} />
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              <AutoRefresh />
-              <nav
-                className="flex items-center gap-1 rounded-full bg-white/[0.04] p-1 ring-1 ring-white/10"
-                aria-label="Date range"
+      {/* Header */}
+      <div className="gl-fade mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Reports &amp; Analytics</h1>
+          <p className="mt-1 text-sm" style={{ color: MUTED }}>
+            Live overview of inquiries, waitlist signups and events.
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <AutoRefresh />
+          <div className="flex items-center gap-1.5">
+            {RANGES.map((r) => (
+              <Link
+                key={r}
+                href={`/dashboard/reports?range=${r}`}
+                className="inline-flex h-9 items-center rounded-xl border px-3.5 text-[13px] font-medium transition-colors"
+                style={
+                  r === range
+                    ? { background: ACCENT, borderColor: ACCENT, color: "#fff" }
+                    : { background: "#fff", borderColor: BORDER, color: MUTED }
+                }
               >
-                {RANGES.map((r) => {
-                  const active = r.days === range;
-                  return (
-                    <Link
-                      key={r.days}
-                      href={`/dashboard/reports?range=${r.days}`}
-                      aria-current={active ? "page" : undefined}
-                      className={`rounded-full px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[1px] transition-colors ${
-                        active
-                          ? "text-white"
-                          : "text-white/50 ring-1 ring-inset ring-white/15 hover:text-white hover:ring-white/30"
-                      }`}
-                      style={active ? { backgroundColor: BRAND } : undefined}
-                    >
-                      {r.label}
-                    </Link>
-                  );
-                })}
-              </nav>
-            </div>
-          </header>
-
-          {/* ── b. Quick stats ────────────────────────────────────────────── */}
-          <div className="grid gap-3 sm:grid-cols-3">
-            <QuickStat label="Today" counts={quick.today} delay={80} />
-            <QuickStat label="Last 7 days" counts={quick.last7} delay={140} />
-            <QuickStat label="Last 30 days" counts={quick.last30} delay={200} />
+                {r}D
+              </Link>
+            ))}
           </div>
+        </div>
+      </div>
 
-          {/* ── c. KPI grid ───────────────────────────────────────────────── */}
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <KpiCard label="Total inquiries" value={totals.contacts} delay={160} />
-            <KpiCard label="Unread" value={totals.contactsUnread} delay={210} />
-            <KpiCard label="Needs reply" value={totals.needsReply} delay={260} />
-            <KpiCard label="Reply rate" value={replyRate.pct} suffix="%" delay={310} />
-            <KpiCard label="Waitlist total" value={totals.waitlist} delay={360} />
-            <KpiCard
-              label={`Inquiries · last ${range}d`}
-              value={period.contacts}
-              delay={410}
-              delta={prevPeriod.contactsPct}
-              spark={dailyContacts}
-              sparkColor={ACCENT}
-            />
-            <KpiCard
-              label={`Waitlist · last ${range}d`}
-              value={period.waitlist}
-              delay={460}
-              delta={prevPeriod.waitlistPct}
-              spark={dailyWaitlist}
-              sparkColor={AMBER}
-            />
-            <KpiCard label="Upcoming events" value={totals.eventsUpcoming} delay={510} />
-          </div>
-
-          {/* ── d. Main trend chart ───────────────────────────────────────── */}
-          <Panel delay={240}>
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <PanelTitle>Daily activity — last {range} days</PanelTitle>
-              <div className="flex items-center gap-5">
-                <span className="flex items-center gap-2 text-[11px] text-white/50">
-                  <span
-                    className="inline-block h-[2px] w-4 rounded-full"
-                    style={{ backgroundColor: ACCENT }}
-                    aria-hidden="true"
-                  />
-                  Inquiries
-                </span>
-                <span className="flex items-center gap-2 text-[11px] text-white/50">
-                  <span
-                    className="inline-block w-4 border-t-2 border-dashed"
-                    style={{ borderColor: AMBER }}
-                    aria-hidden="true"
-                  />
-                  Waitlist
-                </span>
-              </div>
+      {/* Quick stats */}
+      <div className="gl-fade mb-3 grid grid-cols-1 gap-3 sm:grid-cols-3" style={{ animationDelay: "60ms" }}>
+        {(
+          [
+            ["Today", m.quick.today],
+            ["Last 7 days", m.quick.last7],
+            ["Last 30 days", m.quick.last30],
+          ] as const
+        ).map(([label, q]) => (
+          <div key={label} className="rounded-2xl border bg-white px-4 py-3" style={{ borderColor: BORDER }}>
+            <div className="flex items-center gap-1.5 text-xs uppercase tracking-wide" style={{ color: MUTED }}>
+              <CalendarClock size={14} />
+              {label}
             </div>
-            {trendEmpty ? (
-              <EmptyNote>No activity in the last {range} days yet.</EmptyNote>
-            ) : (
-              <TrendChart daily={daily} />
-            )}
-          </Panel>
-
-          {/* ── e. Donut / sources / gauge ────────────────────────────────── */}
-          <div className="grid gap-3 lg:grid-cols-3">
-            <Panel delay={320}>
-              <PanelTitle>Inquiries by category</PanelTitle>
-              <CategoryDonut items={metrics.categories} />
-            </Panel>
-            <Panel delay={380}>
-              <PanelTitle>Waitlist by source</PanelTitle>
-              {metrics.sources.length === 0 ? (
-                <EmptyNote>No signups yet.</EmptyNote>
-              ) : (
-                <BarList items={metrics.sources} />
-              )}
-            </Panel>
-            <Panel delay={440}>
-              <PanelTitle>Response performance</PanelTitle>
-              <ReplyGauge replyRate={replyRate} responseTime={responseTime} />
-            </Panel>
-          </div>
-
-          {/* ── f. Heatmap ────────────────────────────────────────────────── */}
-          <Panel delay={500}>
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <PanelTitle>When people reach out</PanelTitle>
-              {heatmap.busiestDay && heatmap.busiestHour ? (
-                <span
-                  className="rounded-full px-3 py-1 text-[11px] font-medium"
-                  style={{
-                    color: "#f08a75",
-                    backgroundColor: "rgba(236,91,65,0.10)",
-                    boxShadow: "inset 0 0 0 1px rgba(236,91,65,0.3)",
-                  }}
-                >
-                  Busiest: {heatmap.busiestDay} around {heatmap.busiestHour}
+            <div className="mt-1.5 flex items-baseline gap-4">
+              <span className="text-xl font-semibold tabular-nums">
+                <CountUp value={q.contacts} />{" "}
+                <span className="text-xs font-normal" style={{ color: MUTED }}>
+                  inquiries
                 </span>
-              ) : (
-                <span className="text-[11px] text-white/35">No submissions yet</span>
-              )}
-            </div>
-            <SubmissionHeatmap heatmap={heatmap} />
-            <p className="mt-3 text-[10px] text-white/30">
-              Submissions per hour of day{heatmapEmpty ? "" : " — darker is busier"}. All
-              times UTC.
-            </p>
-          </Panel>
-
-          {/* ── g. Waitlist growth ────────────────────────────────────────── */}
-          <Panel delay={560}>
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <PanelTitle>Waitlist growth — last 12 weeks</PanelTitle>
-              <span className="flex items-baseline gap-2">
-                <CountUp
-                  value={cumeTotal}
-                  className="font-display text-[24px] font-black leading-none text-white"
-                />
-                <span className="text-[10px] uppercase tracking-[1px] text-white/40">
-                  on the waitlist
+              </span>
+              <span className="text-xl font-semibold tabular-nums">
+                <CountUp value={q.waitlist} />{" "}
+                <span className="text-xs font-normal" style={{ color: MUTED }}>
+                  waitlist
                 </span>
               </span>
             </div>
-            {cumeTotal === 0 ? (
-              <EmptyNote>No waitlist signups yet.</EmptyNote>
-            ) : (
-              <CumulativeChart series={cumulativeWaitlist} />
-            )}
-          </Panel>
-
-          {/* ── h. Events by category ─────────────────────────────────────── */}
-          <div className="grid gap-3 lg:grid-cols-2">
-            <Panel delay={620}>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <PanelTitle>Events by category</PanelTitle>
-                <span className="text-[11px] text-white/40">
-                  {nf.format(totals.eventsUpcoming)} upcoming ·{" "}
-                  {nf.format(totals.events)} total
-                </span>
-              </div>
-              {eventsEmpty ? (
-                <EmptyNote>No events yet.</EmptyNote>
-              ) : (
-                <BarList items={eventsByCategory} capitalize />
-              )}
-            </Panel>
-
-            {/* ── i. Monthly summary ──────────────────────────────────────── */}
-            <Panel delay={680}>
-              <PanelTitle>Monthly summary</PanelTitle>
-              <div className="mt-4 overflow-x-auto">
-                <table className="w-full min-w-[380px] text-left">
-                  <thead>
-                    <tr className="text-[10px] font-semibold uppercase tracking-[2px] text-white/35">
-                      <th className="pb-2 font-semibold">Month</th>
-                      <th className="pb-2 text-right font-semibold">Inquiries</th>
-                      <th className="pb-2 text-right font-semibold">Waitlist</th>
-                      <th className="pb-2 text-right font-semibold">Events</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-white/10 border-t border-white/10">
-                    {metrics.monthly.map((m) => (
-                      <tr key={m.key}>
-                        <td className="py-2.5 text-[13px] font-medium text-white/80">
-                          {m.label}
-                        </td>
-                        <td className="py-2.5 text-right font-mono text-[12px] text-white/60">
-                          {nf.format(m.contacts)}
-                        </td>
-                        <td className="py-2.5 text-right font-mono text-[12px] text-white/60">
-                          {nf.format(m.waitlist)}
-                        </td>
-                        <td className="py-2.5 text-right font-mono text-[12px] text-white/60">
-                          {nf.format(m.events)}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </Panel>
           </div>
+        ))}
+      </div>
 
-          {/* ── j. Recent activity ────────────────────────────────────────── */}
-          <Panel delay={740}>
-            <PanelTitle>Recent activity</PanelTitle>
-            {metrics.recent.length === 0 ? (
-              <EmptyNote>No activity yet.</EmptyNote>
-            ) : (
-              <ul className="mt-4 divide-y divide-white/10 border-t border-white/10">
-                {metrics.recent.map((item, i) => (
-                  <li
-                    key={`${item.type}-${item.createdAt}-${i}`}
-                    className="flex flex-wrap items-center gap-3 py-3"
+      {/* KPI grid */}
+      <div className="gl-fade mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4" style={{ animationDelay: "120ms" }}>
+        <KpiCard icon={<MessageCircle size={14} />} label="Total inquiries" value={m.totals.contacts} />
+        <KpiCard icon={<Mail size={14} />} label="Unread" value={m.totals.contactsUnread} />
+        <KpiCard icon={<Reply size={14} />} label="Needs reply" value={m.totals.needsReply} />
+        <KpiCard icon={<Gauge size={14} />} label="Reply rate" value={m.replyRate.pct} suffix="%" />
+        <KpiCard icon={<Users size={14} />} label="Waitlist signups" value={m.totals.waitlist} />
+        <KpiCard
+          icon={<MessageCircle size={14} />}
+          label={`Inquiries · ${range}d`}
+          value={m.period.contacts}
+          delta={m.prevPeriod.contactsPct}
+          deltaLabel="vs prev period"
+        />
+        <KpiCard
+          icon={<UserPlus size={14} />}
+          label={`Waitlist · ${range}d`}
+          value={m.period.waitlist}
+          delta={m.prevPeriod.waitlistPct}
+          deltaLabel="vs prev period"
+        />
+        <KpiCard icon={<CalendarDays size={14} />} label="Upcoming events" value={m.totals.eventsUpcoming} />
+      </div>
+
+      {/* Trend */}
+      <div className="gl-fade mb-4" style={{ animationDelay: "180ms" }}>
+        <Panel
+          title="Daily activity"
+          subtitle={`Inquiries vs waitlist signups over the last ${range} days`}
+          icon={<LineChart size={16} />}
+        >
+          <TrendChart daily={m.daily} />
+        </Panel>
+      </div>
+
+      {/* Breakdown row */}
+      <div className="gl-fade mb-4 grid gap-4 md:grid-cols-3" style={{ animationDelay: "240ms" }}>
+        <Panel title="Inquiries by category" icon={<PieChart size={16} />}>
+          <Donut data={m.categories} />
+        </Panel>
+        <Panel title="Waitlist by source" icon={<Users size={16} />}>
+          <MeterRows data={m.sources} />
+        </Panel>
+        <Panel title="Response performance" icon={<Gauge size={16} />}>
+          <ReplyGauge
+            pct={m.replyRate.pct}
+            replied={m.replyRate.replied}
+            total={m.replyRate.total}
+            avgHours={m.responseTime.avgHours}
+          />
+        </Panel>
+      </div>
+
+      {/* Heatmap */}
+      <div className="gl-fade mb-4" style={{ animationDelay: "300ms" }}>
+        <Panel
+          title="When people reach out"
+          subtitle="Submissions by day of week and hour"
+          icon={<Clock size={16} />}
+        >
+          <Heatmap
+            matrix={m.heatmap.grid}
+            busiestDay={m.heatmap.busiestDay}
+            busiestHour={m.heatmap.busiestHour}
+          />
+        </Panel>
+      </div>
+
+      {/* Growth + events */}
+      <div className="gl-fade mb-4 grid gap-4 md:grid-cols-2" style={{ animationDelay: "360ms" }}>
+        <Panel title="Waitlist growth" subtitle="Running total, last 12 weeks" icon={<TrendingUp size={16} />}>
+          <CumulativeChart points={m.cumulativeWaitlist} />
+        </Panel>
+        <Panel title="Events by category" icon={<CalendarDays size={16} />}>
+          <MeterRows data={m.eventsByCategory} />
+          <p className="mt-4 text-xs" style={{ color: MUTED }}>
+            {nf.format(m.totals.eventsUpcoming)} upcoming · {nf.format(m.totals.events)} total events
+          </p>
+        </Panel>
+      </div>
+
+      {/* Monthly + recent */}
+      <div className="gl-fade mb-4 grid gap-4 md:grid-cols-2" style={{ animationDelay: "420ms" }}>
+        <Panel title="Monthly summary" subtitle="Last 6 months" icon={<BarChart3 size={16} />}>
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-left text-xs uppercase tracking-wide" style={{ color: MUTED }}>
+                <th className="pb-2 font-medium">Month</th>
+                <th className="pb-2 text-right font-medium">Inquiries</th>
+                <th className="pb-2 text-right font-medium">Waitlist</th>
+                <th className="pb-2 text-right font-medium">Events</th>
+              </tr>
+            </thead>
+            <tbody>
+              {m.monthly.map((row) => (
+                <tr key={row.key} className="border-t" style={{ borderColor: TRACK }}>
+                  <td className="py-2.5" style={{ color: FG }}>
+                    {row.label}
+                  </td>
+                  <td className="py-2.5 text-right tabular-nums" style={{ color: FG }}>
+                    {nf.format(row.contacts)}
+                  </td>
+                  <td className="py-2.5 text-right tabular-nums" style={{ color: FG }}>
+                    {nf.format(row.waitlist)}
+                  </td>
+                  <td className="py-2.5 text-right tabular-nums" style={{ color: FG }}>
+                    {nf.format(row.events)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Panel>
+        <Panel title="Recent activity" subtitle="Latest inquiries and signups" icon={<Activity size={16} />}>
+          {m.recent.length === 0 ? (
+            <EmptyNote>Nothing yet.</EmptyNote>
+          ) : (
+            <ul>
+              {m.recent.map((item, i) => (
+                <li
+                  key={`${item.type}-${item.createdAt}-${i}`}
+                  className={`flex items-center gap-3 py-2.5 ${i > 0 ? "border-t" : ""}`}
+                  style={{ borderColor: TRACK }}
+                >
+                  <span
+                    className="shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+                    style={
+                      item.type === "contact"
+                        ? { background: TINT, color: ACCENT }
+                        : { background: TRACK, color: MUTED }
+                    }
                   >
-                    <span
-                      className={`rounded px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[2px] ${
-                        item.type === "contact" ? "" : "text-white/50 ring-1 ring-white/20"
-                      }`}
-                      style={
-                        item.type === "contact"
-                          ? {
-                              color: "#f08a75",
-                              backgroundColor: "rgba(236,91,65,0.12)",
-                              boxShadow: "inset 0 0 0 1px rgba(236,91,65,0.35)",
-                            }
-                          : undefined
-                      }
-                    >
-                      {item.type}
-                    </span>
-                    <span className="text-[13px] font-medium text-white/85">
+                    {item.type === "contact" ? "Inquiry" : "Waitlist"}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-medium" style={{ color: FG }}>
                       {item.title}
                     </span>
-                    <span className="text-[12px] font-light text-white/45">
+                    <span className="block truncate text-xs" style={{ color: MUTED }}>
                       {item.detail}
                     </span>
-                    <span className="ml-auto font-mono text-[12px] text-white/40">
-                      {fmtDate(item.createdAt)}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Panel>
+                  </span>
+                  <span className="shrink-0 text-xs tabular-nums" style={{ color: MUTED }}>
+                    {new Date(item.createdAt).toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Panel>
+      </div>
 
-          {/* ── k. Export center ──────────────────────────────────────────── */}
-          <Panel delay={800}>
-            <PanelTitle>Export center</PanelTitle>
-            <div className="mt-4 flex flex-wrap items-center gap-3">
-              <a href="/api/admin/export/contacts" className={exportButtonClass}>
-                <Download className="h-4 w-4" aria-hidden="true" />
-                Contacts CSV
+      {/* Exports */}
+      <div className="gl-fade" style={{ animationDelay: "480ms" }}>
+        <Panel title="Export data" subtitle="CSV files open directly in Excel" icon={<Download size={16} />}>
+          <div className="flex flex-wrap gap-3">
+            {(
+              [
+                ["Contacts CSV", "/api/admin/export/contacts"],
+                ["Waitlist CSV", "/api/admin/export/waitlist"],
+                ["Events CSV", "/api/admin/export/events"],
+              ] as const
+            ).map(([label, href]) => (
+              <a
+                key={href}
+                href={href}
+                className="inline-flex h-10 items-center gap-2 rounded-xl border bg-white px-4 text-[13px] font-medium transition-colors hover:opacity-80"
+                style={{ borderColor: BORDER, color: FG }}
+              >
+                <Download size={15} style={{ color: ACCENT }} />
+                {label}
               </a>
-              <a href="/api/admin/export/waitlist" className={exportButtonClass}>
-                <Download className="h-4 w-4" aria-hidden="true" />
-                Waitlist CSV
-              </a>
-              <a href="/api/admin/export/events" className={exportButtonClass}>
-                <Download className="h-4 w-4" aria-hidden="true" />
-                Events CSV
-              </a>
-            </div>
-            <p className="mt-3 text-[11px] text-white/40">
-              CSV files open directly in Excel.
-            </p>
-          </Panel>
-        </div>
+            ))}
+          </div>
+        </Panel>
       </div>
     </main>
   );

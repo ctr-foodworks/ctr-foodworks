@@ -37,6 +37,12 @@ type Item = {
 
 const items: Item[] = [
   {
+    href: "/dashboard/reports",
+    label: "Reports",
+    Icon: BarChart3,
+    isActive: (p) => p === "/dashboard" || p.startsWith("/dashboard/reports"),
+  },
+  {
     href: "/dashboard/events",
     label: "Events",
     Icon: CalendarDays,
@@ -56,12 +62,6 @@ const items: Item[] = [
     Icon: MessageSquare,
     isActive: (p) => p.startsWith("/dashboard/contact"),
     countKey: "contact",
-  },
-  {
-    href: "/dashboard/reports",
-    label: "Reports",
-    Icon: BarChart3,
-    isActive: (p) => p.startsWith("/dashboard/reports"),
   },
   {
     href: "/dashboard/account",
@@ -139,7 +139,7 @@ export function AdminChrome({
   return (
     <>
       {/* Top header — holds the logo, above the page */}
-      <header className="fixed inset-x-0 top-0 z-50 flex h-[60px] items-center justify-between border-b border-[var(--text-dark)]/10 bg-white px-5">
+      <header className="fixed inset-x-0 top-0 z-50 flex h-[60px] items-center justify-between border-b border-[#e4e8f1] bg-white px-5">
         <Link href="/dashboard" aria-label="CTR Food Works admin">
           <img
             src="/logos/ctr-inline-black.svg"
@@ -244,15 +244,12 @@ export function AdminChrome({
               href={href}
               aria-label={label}
               aria-current={active ? "page" : undefined}
-              className={`group relative flex h-11 w-full items-center justify-center transition-colors ${
+              className={`group relative mx-auto flex h-10 w-10 items-center justify-center rounded-xl transition-colors ${
                 active
-                  ? "bg-[var(--primary)]/8 text-[var(--primary)]"
-                  : "text-[var(--text-dark)]/55 hover:bg-black/[0.04] hover:text-[var(--primary)]"
+                  ? "bg-[#fbeeeb] text-[var(--primary)]"
+                  : "text-[#828b9e] hover:bg-[#fbeeeb] hover:text-[var(--primary)]"
               }`}
             >
-              {active && (
-                <span className="absolute bottom-2 left-0 top-2 w-[3px] rounded-r-full bg-[var(--primary)]" />
-              )}
               <span className="relative">
                 <Icon className="h-[20px] w-[20px]" />
                 <Badge n={n} />
