@@ -73,8 +73,7 @@ function KpiCard({
           style={{ color: delta >= 0 ? GREEN : RED }}
         >
           {delta >= 0 ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
-          {delta >= 0 ? "+" : ""}
-          {delta}% {deltaLabel}
+          {delta >= 0 ? "+" : ""}          {Math.round(delta)}% {deltaLabel}
         </p>
       )}
     </div>
