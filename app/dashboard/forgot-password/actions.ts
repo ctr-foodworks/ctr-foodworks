@@ -37,7 +37,7 @@ export async function requestResetAction(
              one. This link expires in one hour and can only be used once.
            </p>
            <p style="margin:0 0 24px">
-             <a href="${link}" style="display:inline-block;background:#c43725;color:#fff;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 26px;border-radius:8px">
+             <a href="${link}" style="display:inline-block;background:#c43725;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 22px;border-radius:12px">
                Reset password
              </a>
            </p>

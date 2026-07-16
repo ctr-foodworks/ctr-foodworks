@@ -45,28 +45,24 @@ function escapeHtml(s: string): string {
 }
 
 /** Branded wrapper for transactional emails (PNG logo — SVG won't render in
- *  most mail clients). Modern CTR treatment: red gradient accent strip, logo,
- *  eyebrow + divider matching the site's design language, and a dark footer.
- *  All styles inline (email-client safe). */
+ *  most mail clients). Ghostline treatment matching the admin dashboard:
+ *  soft gray canvas, white card with a hairline border and 16px radius,
+ *  left-aligned semibold title, muted footer. All styles inline. */
 export function emailLayout(title: string, bodyHtml: string): string {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.ctrfoodworks.com";
   const logo = `${base}/email/ctr-logo.png`;
-  return `<div style="margin:0;padding:40px 16px;background:#f7f2ee;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a">
-  <div style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #eadfd6;border-radius:16px;overflow:hidden">
-    <div style="height:6px;background-color:#c43725;background-image:linear-gradient(90deg,#c43725,#e05b45)"></div>
-    <div style="padding:36px 40px 6px;text-align:center">
-      <img src="${logo}" alt="CTR Food Works" width="150" style="display:inline-block;width:150px;max-width:60%;height:auto" />
+  return `<div style="margin:0;padding:40px 16px;background:#f4f6fa;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1c2130">
+  <div style="max-width:540px;margin:0 auto;background:#ffffff;border:1px solid #e4e8f1;border-radius:16px;overflow:hidden">
+    <div style="padding:32px 36px 0">
+      <img src="${logo}" alt="CTR Food Works" width="150" style="display:block;width:150px;max-width:60%;height:auto" />
+      <div style="margin-top:20px;font-size:13px;color:#828b9e">CTR Food Works</div>
+      <h1 style="margin:6px 0 0;font-size:22px;line-height:1.35;font-weight:600;letter-spacing:-0.2px;color:#1c2130">${escapeHtml(title)}</h1>
     </div>
-    <div style="padding:18px 40px 36px">
-      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#c43725;font-weight:700;margin-bottom:10px;text-align:center">CTR Food Works</div>
-      <h1 style="margin:0 0 14px;font-size:24px;line-height:1.25;font-weight:800;color:#1a1a1a;text-align:center">${escapeHtml(title)}</h1>
-      <div style="width:48px;height:2px;background:#c43725;margin:0 auto 26px"></div>
-      <div style="font-size:15px;line-height:1.7;color:#4a4038">${bodyHtml}</div>
-    </div>
-    <div style="padding:26px 40px;background:#221712;text-align:center">
-      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#ffffff;font-weight:700;margin-bottom:8px">CTR Food Works</div>
-      <div style="font-size:12px;line-height:1.7;color:rgba(255,255,255,0.55)">Downtown Atlanta</div>
-      <a href="${base}" style="display:inline-block;margin-top:8px;font-size:12px;color:#e8a89d;text-decoration:none;font-weight:600">ctrfoodworks.com</a>
+    <div style="padding:18px 36px 30px;font-size:15px;line-height:1.7;color:#4a5264">${bodyHtml}</div>
+    <div style="border-top:1px solid #eef1f7;padding:20px 36px 26px">
+      <div style="font-size:13px;font-weight:600;color:#1c2130">CTR Food Works</div>
+      <div style="margin-top:4px;font-size:12px;line-height:1.6;color:#828b9e">Downtown Atlanta</div>
+      <a href="${base}" style="display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:#c43725;text-decoration:none">ctrfoodworks.com</a>
     </div>
   </div>
 </div>`;

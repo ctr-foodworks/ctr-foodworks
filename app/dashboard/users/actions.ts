@@ -36,16 +36,14 @@ function inviteHtml(email: string, tempPw: string): string {
     : "/dashboard";
   return emailLayout(
     "You've been invited to CTR Food Works",
-    `<p style="margin:0 0 22px;font-size:15px;line-height:1.7;color:#4a4038;text-align:center">An account was created for you. Sign in with the email and temporary password below &mdash; you&rsquo;ll set your own password on first login.</p>
-     <div style="margin:0 0 26px;padding:18px 20px;background:#faf4ef;border:1px solid #eadfd6;border-radius:12px;text-align:center">
-       <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#a89a8e;margin-bottom:6px">Email</div>
-       <div style="font-size:15px;font-weight:600;color:#1a1a1a;margin-bottom:16px">${escapeHtml(email)}</div>
-       <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#a89a8e;margin-bottom:6px">Temporary password</div>
-       <div style="font-family:Menlo,Consolas,monospace;font-size:17px;font-weight:700;letter-spacing:1px;color:#c43725">${escapeHtml(tempPw)}</div>
+    `<p style="margin:0 0 20px;font-size:15px;line-height:1.7;color:#4a5264">An account was created for you. Sign in with the email and temporary password below &mdash; you&rsquo;ll set your own password on first login.</p>
+     <div style="margin:0 0 24px;padding:16px 18px;background:#f4f6fa;border:1px solid #e4e8f1;border-radius:12px">
+       <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:#828b9e;margin-bottom:4px">Email</div>
+       <div style="font-size:14px;font-weight:600;color:#1c2130;margin-bottom:14px">${escapeHtml(email)}</div>
+       <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:#828b9e;margin-bottom:4px">Temporary password</div>
+       <div style="font-family:Menlo,Consolas,monospace;font-size:16px;font-weight:700;color:#c43725">${escapeHtml(tempPw)}</div>
      </div>
-     <div style="text-align:center">
-       <a href="${escapeHtml(url)}" style="display:inline-block;background-color:#c43725;background-image:linear-gradient(180deg,#d84a35,#c43725);color:#ffffff;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px 32px;border-radius:10px">Sign In to the Dashboard</a>
-     </div>`,
+     <a href="${escapeHtml(url)}" style="display:inline-block;background:#c43725;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 22px;border-radius:12px">Sign in to the dashboard</a>`,
   );
 }
 
