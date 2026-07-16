@@ -6,9 +6,9 @@ import { PasswordChecklist } from "@/components/admin/password-checklist";
 import { validatePassword } from "@/lib/validation";
 
 const inputClass =
-  "h-12 w-full rounded-lg border border-[var(--border-light)] bg-white px-4 text-[14px] text-[var(--text-dark)] outline-none focus:border-[var(--primary)]";
+  "h-10 w-full rounded-xl border border-[#e4e8f1] bg-white px-3.5 text-sm text-[#1c2130] focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/25";
 const labelClass =
-  "text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)]";
+  "mb-1.5 text-xs font-semibold uppercase tracking-wide text-[#828b9e]";
 
 export function SetPasswordForm({ defaultName }: { defaultName: string }) {
   const [next, setNext] = useState("");
@@ -79,14 +79,14 @@ export function SetPasswordForm({ defaultName }: { defaultName: string }) {
           <img
             src={preview}
             alt="Profile"
-            className="h-14 w-14 rounded-full border border-[var(--border-light)] object-cover"
+            className="h-14 w-14 rounded-full border border-[#e4e8f1] object-cover"
           />
         ) : (
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--text-dark)]/10 text-[18px] font-semibold text-[var(--text-dark)]">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#eef1f7] text-[18px] font-semibold text-[#1c2130]">
             {initial}
           </span>
         )}
-        <label className="inline-flex cursor-pointer items-center rounded-lg border border-[var(--text-dark)] px-4 py-2 text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white">
+        <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-xl border border-[#e4e8f1] bg-white px-4 text-[13px] font-medium text-[#1c2130] transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]">
           {uploading ? "Uploading…" : preview ? "Change photo" : "Add photo"}
           <input
             type="file"
@@ -97,12 +97,12 @@ export function SetPasswordForm({ defaultName }: { defaultName: string }) {
         </label>
       </div>
 
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col">
         <span className={labelClass}>Display name</span>
         <input name="name" defaultValue={defaultName} className={inputClass} />
       </label>
 
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col">
         <span className={labelClass}>New password</span>
         <input
           type="password"
@@ -117,7 +117,7 @@ export function SetPasswordForm({ defaultName }: { defaultName: string }) {
 
       <PasswordChecklist value={next} />
 
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col">
         <span className={labelClass}>Confirm new password</span>
         <input
           type="password"
@@ -131,7 +131,7 @@ export function SetPasswordForm({ defaultName }: { defaultName: string }) {
       </label>
 
       {error && (
-        <p className="text-[13px] font-light text-[var(--primary)]" role="alert">
+        <p className="text-[13px] text-[#e4524e]" role="alert">
           {error}
         </p>
       )}
@@ -139,7 +139,7 @@ export function SetPasswordForm({ defaultName }: { defaultName: string }) {
       <button
         type="submit"
         disabled={submitting || uploading}
-        className="mt-1 inline-flex h-12 items-center justify-center rounded-lg bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d] disabled:cursor-wait disabled:opacity-60"
+        className="mt-1 inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-[13px] font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
       >
         {submitting ? "Saving…" : "Finish setup"}
       </button>

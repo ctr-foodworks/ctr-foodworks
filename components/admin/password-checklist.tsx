@@ -12,15 +12,15 @@ export function PasswordChecklist({ value }: { value: string }) {
         return (
           <li
             key={rule.label}
-            className={`flex items-center gap-2 text-[12px] transition-colors duration-200 ${
-              ok ? "text-[#16a34a]" : "text-[var(--text-muted-dark)]"
+            className={`flex items-center gap-2 text-[13px] transition-colors duration-200 ${
+              ok ? "text-[#35b57c]" : "text-[#828b9e]"
             }`}
           >
             <span
               className={`flex h-4 w-4 items-center justify-center rounded-full border transition-all duration-200 ${
                 ok
-                  ? "border-[#16a34a] bg-[#16a34a] text-white"
-                  : "border-[var(--text-dark)]/25 text-transparent"
+                  ? "border-[#35b57c] bg-[#35b57c] text-white"
+                  : "border-[#e4e8f1] text-transparent"
               }`}
             >
               <Check className="h-3 w-3" strokeWidth={3} />

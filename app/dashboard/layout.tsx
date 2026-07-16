@@ -30,20 +30,20 @@ export default async function AdminLayout({
     return (
       <ToastProvider>
         <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6 text-center">
-          <p className="text-[11px] font-semibold tracking-[3px] uppercase text-[var(--primary)]">
+          <p className="text-[13px] font-semibold text-[var(--primary)]">
             Access removed
           </p>
-          <h1 className="mt-3 font-display text-[36px] font-black uppercase leading-[0.95] tracking-[-1px] text-[var(--text-dark)]">
+          <h1 className="mt-3 text-2xl font-semibold tracking-tight text-[#1c2130]">
             Your account is no longer active.
           </h1>
-          <p className="mt-4 max-w-[420px] text-[14px] font-light text-[var(--text-muted-dark)]">
+          <p className="mt-3 max-w-[420px] text-sm text-[#828b9e]">
             Please sign out. Contact an administrator if you think this is a
             mistake.
           </p>
           <form action={adminSignOut} className="mt-7">
             <button
               type="submit"
-              className="inline-flex h-[48px] items-center justify-center bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d]"
+              className="inline-flex h-10 items-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-[13px] font-medium text-white transition-opacity hover:opacity-90"
             >
               Sign out
             </button>
@@ -79,7 +79,7 @@ export default async function AdminLayout({
       <Suspense>
         <FlashToasts />
       </Suspense>
-      <div className="min-h-screen bg-[#f4f6fa] text-[var(--text-dark)]">
+      <div className="min-h-screen bg-white text-[var(--text-dark)]">
         {me && (
           <AdminChrome
             counts={counts}

@@ -5,9 +5,9 @@ import { changePassword } from "./actions";
 import { PasswordChecklist } from "@/components/admin/password-checklist";
 
 const inputClass =
-  "h-[44px] w-full max-w-[420px] border border-[var(--border-light)] bg-white px-3 text-[14px] text-[var(--text-dark)] outline-none focus:border-[var(--primary)]";
+  "h-10 w-full max-w-[420px] rounded-xl border border-[#e4e8f1] bg-white px-3.5 text-sm text-[#1c2130] focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/25";
 const labelClass =
-  "text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-muted-dark)]";
+  "mb-1.5 text-xs font-semibold uppercase tracking-wide text-[#828b9e]";
 
 export function AccountForm() {
   const [state, formAction, isPending] = useActionState(
@@ -18,7 +18,7 @@ export function AccountForm() {
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col">
         <span className={labelClass}>Current password</span>
         <input
           type="password"
@@ -28,7 +28,7 @@ export function AccountForm() {
           className={inputClass}
         />
       </label>
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col">
         <span className={labelClass}>New password</span>
         <input
           type="password"
@@ -46,7 +46,7 @@ export function AccountForm() {
         <PasswordChecklist value={next} />
       </div>
 
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col">
         <span className={labelClass}>Confirm new password</span>
         <input
           type="password"
@@ -59,7 +59,7 @@ export function AccountForm() {
       </label>
 
       {state?.error && (
-        <p className="text-[13px] font-light text-[var(--primary)]" role="alert">
+        <p className="text-[13px] text-[#e4524e]" role="alert">
           {state.error}
         </p>
       )}
@@ -67,7 +67,7 @@ export function AccountForm() {
       <button
         type="submit"
         disabled={isPending}
-        className="inline-flex h-[48px] w-fit items-center justify-center bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d] disabled:cursor-wait disabled:opacity-60"
+        className="inline-flex h-10 w-fit items-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-[13px] font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
       >
         {isPending ? "Saving…" : "Update password"}
       </button>

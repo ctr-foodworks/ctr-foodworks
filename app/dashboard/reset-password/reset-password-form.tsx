@@ -6,9 +6,9 @@ import { resetPasswordAction } from "./actions";
 import { PasswordChecklist } from "@/components/admin/password-checklist";
 
 const inputClass =
-  "h-12 w-full rounded-lg border border-[var(--border-light)] bg-white px-4 text-[14px] text-[var(--text-dark)] outline-none transition-colors placeholder:text-[var(--text-muted-dark)]/50 focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/15";
+  "h-10 w-full rounded-xl border border-[#e4e8f1] bg-white px-3.5 text-sm text-[#1c2130] transition-colors placeholder:text-[#828b9e]/50 focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/25";
 const labelClass =
-  "text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)]";
+  "mb-1.5 text-xs font-semibold uppercase tracking-wide text-[#828b9e]";
 
 export function ResetPasswordForm({ token }: { token: string }) {
   const [error, formAction, isPending] = useActionState(
@@ -23,7 +23,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
     <form action={formAction} className="flex flex-col gap-5">
       <input type="hidden" name="token" value={token} />
 
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col">
         <span className={labelClass}>New password</span>
         <div className="relative">
           <input
@@ -39,7 +39,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
             type="button"
             onClick={() => setShow((s) => !s)}
             aria-label={show ? "Hide password" : "Show password"}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted-dark)] transition-colors hover:text-[var(--text-dark)]"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#828b9e] transition-colors hover:text-[#1c2130]"
           >
             {show ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
           </button>
@@ -48,7 +48,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
 
       <PasswordChecklist value={next} />
 
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col">
         <span className={labelClass}>Confirm new password</span>
         <input
           type="password"
@@ -62,7 +62,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
       </label>
 
       {error && (
-        <p className="text-[13px] font-light text-[var(--primary)]" role="alert">
+        <p className="text-[13px] text-[#e4524e]" role="alert">
           {error}
         </p>
       )}
@@ -70,7 +70,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
       <button
         type="submit"
         disabled={isPending}
-        className="mt-1 inline-flex h-12 items-center justify-center rounded-lg bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d] disabled:cursor-wait disabled:opacity-60"
+        className="mt-1 inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-[13px] font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
       >
         {isPending ? "Saving…" : "Set new password"}
       </button>

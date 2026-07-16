@@ -2,7 +2,6 @@ import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/current-user";
 import { listUsers } from "@/lib/users-db";
 import { canManageUsers, creatableRoles, canManageTarget, ROLE_LABELS } from "@/lib/roles";
-import { Eyebrow } from "@/components/ui/Eyebrow";
 import { CreateUserForm } from "./create-user-form";
 import { UserRowActions } from "./user-row-actions";
 
@@ -16,62 +15,63 @@ export default async function UsersPage() {
   const users = await listUsers();
 
   return (
-    <main className="mx-auto max-w-[1100px] px-6 py-12">
-      <div className="mb-8">
-        <Eyebrow tone="primary">Team</Eyebrow>
-        <h1 className="mt-3 font-display text-[36px] font-black uppercase leading-[1] tracking-[-0.5px]">
+    <main className="mx-auto max-w-[1100px] px-6 py-8">
+      <div className="mb-6">
+        <h1 className="text-2xl font-semibold tracking-tight text-[#1c2130]">
           Users
-          <span className="ml-3 align-middle text-[16px] font-medium text-[var(--text-muted-dark)]">
+          <span className="ml-3 align-middle text-base font-medium text-[#828b9e]">
             {users.length}
           </span>
         </h1>
-        <div className="mt-3 h-[2px] w-12 bg-[var(--primary)]" />
+        <p className="mt-1 text-sm text-[#828b9e]">Team</p>
       </div>
 
-      <div className="mb-10">
+      <div className="mb-8">
         <CreateUserForm allowedRoles={creatableRoles(me.role)} />
       </div>
 
-      <ul className="flex flex-col border-t border-[var(--text-dark)]/10">
-        {users.map((u) => {
-          const isSelf = u.id === me.id;
-          return (
-            <li
-              key={u.id}
-              className="flex flex-wrap items-center gap-4 border-b border-[var(--text-dark)]/10 py-4"
-            >
-              <span
-                className={`shrink-0 px-2 py-1 text-[9px] font-semibold tracking-[2px] uppercase ${
-                  u.role === "super_admin"
-                    ? "bg-[var(--primary)] text-white"
-                    : u.role === "admin"
-                      ? "bg-[var(--text-dark)] text-white"
-                      : "bg-[var(--text-dark)]/10 text-[var(--text-dark)]"
+      <div className="overflow-hidden rounded-2xl border border-[#e4e8f1] bg-white">
+        <ul className="flex flex-col">
+          {users.map((u, i) => {
+            const isSelf = u.id === me.id;
+            return (
+              <li
+                key={u.id}
+                className={`flex flex-wrap items-center gap-4 px-5 py-3.5 ${
+                  i > 0 ? "border-t border-[#eef1f7]" : ""
                 }`}
               >
-                {ROLE_LABELS[u.role]}
-              </span>
-              <span className="min-w-[200px] flex-1 text-[14px] font-medium text-[var(--text-dark)]">
-                {u.name || "—"}{" "}
-                <span className="font-light text-[var(--text-muted-dark)]">
-                  · {u.email}
+                <span
+                  className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
+                    u.role === "super_admin" || u.role === "admin"
+                      ? "bg-[#fbeeeb] text-[var(--primary)]"
+                      : "bg-[#eef1f7] text-[#828b9e]"
+                  }`}
+                >
+                  {ROLE_LABELS[u.role]}
                 </span>
-                {isSelf && (
-                  <span className="ml-2 text-[10px] font-semibold tracking-[2px] uppercase text-[var(--text-muted-dark)]">
-                    (you)
+                <span className="min-w-[200px] flex-1 text-sm font-medium text-[#1c2130]">
+                  {u.name || "—"}{" "}
+                  <span className="font-normal text-[#828b9e]">
+                    · {u.email}
                   </span>
-                )}
-              </span>
-              <UserRowActions
-                id={u.id}
-                email={u.email}
-                canManage={!isSelf && canManageTarget(me.role, u.role)}
-                canDelete={!isSelf && canManageTarget(me.role, u.role)}
-              />
-            </li>
-          );
-        })}
-      </ul>
+                  {isSelf && (
+                    <span className="ml-2 text-[11px] font-medium text-[#828b9e]">
+                      (you)
+                    </span>
+                  )}
+                </span>
+                <UserRowActions
+                  id={u.id}
+                  email={u.email}
+                  canManage={!isSelf && canManageTarget(me.role, u.role)}
+                  canDelete={!isSelf && canManageTarget(me.role, u.role)}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </main>
   );
 }

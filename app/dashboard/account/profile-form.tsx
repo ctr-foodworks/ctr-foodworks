@@ -9,9 +9,9 @@ import {
 import { updateProfileAction } from "./actions";
 
 const inputClass =
-  "h-[44px] w-full max-w-[420px] border border-[var(--border-light)] bg-white px-3 text-[14px] text-[var(--text-dark)] outline-none focus:border-[var(--primary)]";
+  "h-10 w-full max-w-[420px] rounded-xl border border-[#e4e8f1] bg-white px-3.5 text-sm text-[#1c2130] focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/25";
 const labelClass =
-  "text-[10px] font-semibold tracking-[3px] uppercase text-[var(--text-muted-dark)]";
+  "mb-1.5 text-xs font-semibold uppercase tracking-wide text-[#828b9e]";
 
 export function ProfileForm({
   name,
@@ -77,31 +77,31 @@ export function ProfileForm({
           <img
             src={preview}
             alt="Profile"
-            className="h-16 w-16 rounded-full border border-[var(--border-light)] object-cover"
+            className="h-16 w-16 rounded-full border border-[#e4e8f1] object-cover"
           />
         ) : (
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--text-dark)]/10 text-[20px] font-semibold text-[var(--text-dark)]">
+          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#eef1f7] text-[20px] font-semibold text-[#1c2130]">
             {initial}
           </span>
         )}
-        <label className="inline-flex cursor-pointer items-center border border-[var(--text-dark)] px-4 py-2 text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white">
+        <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-xl border border-[#e4e8f1] bg-white px-4 text-[13px] font-medium text-[#1c2130] transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]">
           {preview ? "Change photo" : "Upload photo"}
           <input type="file" accept="image/*" onChange={onFile} className="hidden" />
         </label>
       </div>
 
-      <label className="flex flex-col gap-2">
+      <label className="flex flex-col">
         <span className={labelClass}>Display name</span>
         <input name="name" defaultValue={name ?? ""} className={inputClass} />
       </label>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col">
         <span className={labelClass}>Email</span>
-        <p className="text-[14px] text-[var(--text-muted-dark)]">{email}</p>
+        <p className="text-sm text-[#828b9e]">{email}</p>
       </div>
 
       {error && (
-        <p className="text-[13px] font-light text-[var(--primary)]" role="alert">
+        <p className="text-[13px] text-[#e4524e]" role="alert">
           {error}
         </p>
       )}
@@ -109,7 +109,7 @@ export function ProfileForm({
       <button
         type="submit"
         disabled={isPending}
-        className="inline-flex h-[48px] w-fit items-center justify-center bg-[var(--primary)] px-7 text-[12px] font-semibold tracking-[3px] uppercase text-white transition-colors hover:bg-[#a82d1d] disabled:cursor-wait disabled:opacity-60"
+        className="inline-flex h-10 w-fit items-center gap-2 rounded-xl bg-[var(--primary)] px-4 text-[13px] font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-wait disabled:opacity-60"
       >
         {isPending ? "Saving…" : "Save profile"}
       </button>

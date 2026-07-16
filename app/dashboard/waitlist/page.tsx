@@ -2,7 +2,6 @@ import { Download } from "lucide-react";
 import { isDbConfigured } from "@/lib/db";
 import { getWaitlistSignups } from "@/lib/submissions-db";
 import { markWaitlistReadAction } from "../actions";
-import { Eyebrow } from "@/components/ui/Eyebrow";
 
 export const dynamic = "force-dynamic";
 
@@ -16,12 +15,12 @@ function fmt(d: Date) {
 export default async function WaitlistPage() {
   if (!isDbConfigured()) {
     return (
-      <main className="mx-auto max-w-[1100px] px-6 py-12">
-        <Eyebrow tone="primary">Setup needed</Eyebrow>
-        <h1 className="mt-3 font-display text-[32px] font-black uppercase leading-[1] tracking-[-0.5px]">
+      <main className="mx-auto max-w-[1100px] px-6 py-8">
+        <h1 className="text-2xl font-semibold tracking-tight text-[#1c2130]">
           Database not connected
         </h1>
-        <p className="mt-4 text-[15px] font-light text-[var(--text-muted-dark)]">
+        <p className="mt-1 text-sm text-[#828b9e]">Setup needed</p>
+        <p className="mt-4 text-sm text-[#828b9e]">
           Set <code className="font-mono text-[13px]">DATABASE_URL</code> (see SETUP.md) to view submissions.
         </p>
       </main>
@@ -32,24 +31,23 @@ export default async function WaitlistPage() {
   const unread = rows.filter((r) => !r.read).length;
 
   return (
-    <main className="mx-auto max-w-[1100px] px-6 py-12">
-      <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
+    <main className="mx-auto max-w-[1100px] px-6 py-8">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <Eyebrow tone="primary">Submissions</Eyebrow>
-          <h1 className="mt-3 font-display text-[36px] font-black uppercase leading-[1] tracking-[-0.5px]">
+          <h1 className="text-2xl font-semibold tracking-tight text-[#1c2130]">
             Waitlist
-            <span className="ml-3 align-middle text-[16px] font-medium text-[var(--text-muted-dark)]">
+            <span className="ml-3 align-middle text-base font-medium text-[#828b9e]">
               {rows.length}
             </span>
           </h1>
-          <div className="mt-3 h-[2px] w-12 bg-[var(--primary)]" />
+          <p className="mt-1 text-sm text-[#828b9e]">Submissions</p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {unread > 0 && (
             <form action={markWaitlistReadAction}>
               <button
                 type="submit"
-                className="inline-flex h-[40px] items-center justify-center border border-[var(--text-dark)]/20 px-5 text-[11px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)] transition-colors hover:bg-[var(--text-dark)] hover:text-white"
+                className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#e4e8f1] bg-white px-4 text-[13px] font-medium text-[#1c2130] transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
               >
                 Mark all as read ({unread})
               </button>
@@ -57,7 +55,7 @@ export default async function WaitlistPage() {
           )}
           <a
             href="/api/admin/export/waitlist"
-            className="inline-flex h-[40px] items-center gap-2 border border-[var(--text-dark)]/20 px-5 text-[11px] font-semibold tracking-[2px] uppercase transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-[#e4e8f1] bg-white px-4 text-[13px] font-medium text-[#1c2130] transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]"
           >
             <Download className="h-4 w-4" />
             Export Excel
@@ -66,39 +64,43 @@ export default async function WaitlistPage() {
       </div>
 
       {rows.length === 0 ? (
-        <p className="text-[15px] font-light text-[var(--text-muted-dark)]">
+        <p className="text-sm text-[#828b9e]">
           No signups yet.
         </p>
       ) : (
-        <ul className="flex flex-col border-t border-[var(--text-dark)]/10">
-          {rows.map((r) => (
-            <li
-              key={r.id}
-              className="flex flex-wrap items-center gap-4 border-b border-[var(--text-dark)]/10 py-3"
-            >
-              <span
-                className={`h-2 w-2 flex-shrink-0 rounded-full ${
-                  r.read ? "bg-transparent" : "bg-[var(--primary)]"
+        <div className="overflow-hidden rounded-2xl border border-[#e4e8f1] bg-white">
+          <ul className="flex flex-col">
+            {rows.map((r, i) => (
+              <li
+                key={r.id}
+                className={`flex flex-wrap items-center gap-4 px-5 py-3.5 ${
+                  i > 0 ? "border-t border-[#eef1f7]" : ""
                 }`}
-                title={r.read ? undefined : "Unread"}
-              />
-              <a
-                href={`mailto:${r.email}`}
-                className="min-w-[240px] flex-1 text-[14px] font-medium text-[var(--text-dark)] hover:text-[var(--primary)]"
               >
-                {r.email}
-              </a>
-              {r.source && (
-                <span className="shrink-0 bg-[var(--text-dark)]/10 px-2 py-1 text-[9px] font-semibold tracking-[2px] uppercase text-[var(--text-dark)]">
-                  {r.source}
+                <span
+                  className={`h-2 w-2 flex-shrink-0 rounded-full ${
+                    r.read ? "bg-transparent" : "bg-[var(--primary)]"
+                  }`}
+                  title={r.read ? undefined : "Unread"}
+                />
+                <a
+                  href={`mailto:${r.email}`}
+                  className="min-w-[240px] flex-1 text-sm font-medium text-[#1c2130] hover:text-[var(--primary)]"
+                >
+                  {r.email}
+                </a>
+                {r.source && (
+                  <span className="shrink-0 rounded-full bg-[#eef1f7] px-2.5 py-0.5 text-[11px] font-semibold text-[#828b9e]">
+                    {r.source}
+                  </span>
+                )}
+                <span className="w-[180px] shrink-0 text-right font-mono text-[13px] tabular-nums text-[#828b9e]">
+                  {fmt(r.createdAt)}
                 </span>
-              )}
-              <span className="w-[180px] shrink-0 text-right font-mono text-[12px] text-[var(--text-muted-dark)]">
-                {fmt(r.createdAt)}
-              </span>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </main>
   );

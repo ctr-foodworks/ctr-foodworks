@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import { getDashboardMetrics, type RangeDays } from "@/lib/metrics-db";
 import { CountUp } from "@/components/admin/count-up";
-import { AutoRefresh } from "@/components/admin/auto-refresh";
 
 // Live analytics — always fresh.
 export const dynamic = "force-dynamic";
@@ -513,6 +512,7 @@ export default async function ReportsPage({
   const m = await getDashboardMetrics(range);
 
   return (
+    <div className="min-h-[calc(100vh-60px)] bg-[#f4f6fa]">
     <main className="mx-auto max-w-[1200px] px-6 py-8" style={{ color: FG }}>
       <style>{`
         @keyframes glFadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
@@ -531,7 +531,6 @@ export default async function ReportsPage({
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <AutoRefresh />
           <div className="flex items-center gap-1.5">
             {RANGES.map((r) => (
               <Link
@@ -763,5 +762,6 @@ export default async function ReportsPage({
         </Panel>
       </div>
     </main>
+    </div>
   );
 }
