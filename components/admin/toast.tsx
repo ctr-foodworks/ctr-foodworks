@@ -49,13 +49,11 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={t.id}
             role="status"
-            className="pointer-events-auto flex animate-[fadeUp_0.3s_ease-out] items-center gap-3 border border-[var(--text-dark)]/10 bg-white px-4 py-3 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.25)]"
+            className="pointer-events-auto flex animate-[fadeUp_0.3s_ease-out] items-center gap-3 rounded-2xl border border-[#e4e8f1] bg-white px-4 py-3 shadow-[0_16px_40px_-12px_rgba(16,24,40,0.18)]"
           >
             <span
               className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full text-white ${
-                t.tone === "success"
-                  ? "bg-[#16a34a]"
-                  : "bg-[var(--primary)]"
+                t.tone === "success" ? "bg-[#35b57c]" : "bg-[#e4524e]"
               }`}
             >
               {t.tone === "success" ? (
@@ -64,14 +62,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 <AlertCircle className="h-3.5 w-3.5" />
               )}
             </span>
-            <span className="flex-1 text-[13px] font-medium text-[var(--text-dark)]">
+            <span className="flex-1 text-[13px] font-medium text-[#1c2130]">
               {t.message}
             </span>
             <button
               type="button"
               onClick={() => dismiss(t.id)}
               aria-label="Dismiss"
-              className="text-[var(--text-muted-dark)] transition-colors hover:text-[var(--text-dark)]"
+              className="text-[#828b9e] transition-colors hover:text-[#1c2130]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -88,6 +86,8 @@ const FLASH_MESSAGES: Record<string, string> = {
   "event-deleted": "Event deleted.",
   "password-updated": "Password updated.",
   "user-deleted": "User removed.",
+  "user-deactivated": "User deactivated.",
+  "user-activated": "User activated.",
   "password-reset": "Temporary password emailed.",
   "profile-updated": "Profile updated.",
 };

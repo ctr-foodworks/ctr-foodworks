@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/current-user";
-import { listUsers } from "@/lib/users-db";
+import { listUsers, purgeExpiredDeactivated } from "@/lib/users-db";
 import { canManageUsers, creatableRoles, canManageTarget, ROLE_LABELS } from "@/lib/roles";
 import { CreateUserForm } from "./create-user-form";
 import { UserRowActions } from "./user-row-actions";
@@ -11,6 +11,10 @@ export default async function UsersPage() {
   const me = await getCurrentUser();
   if (!me) redirect("/dashboard/login");
   if (!canManageUsers(me.role)) redirect("/dashboard");
+
+  // Best-effort GDPR retention sweep: purge accounts deactivated past the
+  // retention window. Runs opportunistically on each Users page load.
+  await purgeExpiredDeactivated().catch(() => {});
 
   const users = await listUsers();
 
@@ -34,12 +38,13 @@ export default async function UsersPage() {
         <ul className="flex flex-col">
           {users.map((u, i) => {
             const isSelf = u.id === me.id;
+            const active = !u.deactivatedAt;
             return (
               <li
                 key={u.id}
                 className={`flex flex-wrap items-center gap-4 px-5 py-3.5 ${
                   i > 0 ? "border-t border-[#eef1f7]" : ""
-                }`}
+                } ${active ? "" : "bg-[#faf5f4]"}`}
               >
                 <span
                   className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${
@@ -60,12 +65,17 @@ export default async function UsersPage() {
                       (you)
                     </span>
                   )}
+                  {!active && (
+                    <span className="ml-2 rounded-full bg-[#fdf1e3] px-2 py-0.5 text-[10px] font-semibold text-[#b45309]">
+                      Deactivated
+                    </span>
+                  )}
                 </span>
                 <UserRowActions
                   id={u.id}
                   email={u.email}
+                  active={active}
                   canManage={!isSelf && canManageTarget(me.role, u.role)}
-                  canDelete={!isSelf && canManageTarget(me.role, u.role)}
                 />
               </li>
             );

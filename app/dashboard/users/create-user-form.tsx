@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { createUserAction, type CreateUserState } from "./actions";
+import { useToast } from "@/components/admin/toast";
 import { ROLE_LABELS } from "@/lib/roles";
 import type { UserRole } from "@/lib/db/schema";
 
@@ -15,6 +16,15 @@ export function CreateUserForm({ allowedRoles }: { allowedRoles: UserRole[] }) {
     CreateUserState,
     FormData
   >(createUserAction, undefined);
+
+  const show = useToast();
+  const lastToast = useRef<string | undefined>(undefined);
+  useEffect(() => {
+    if (state?.success && state.success !== lastToast.current) {
+      lastToast.current = state.success;
+      show("User created and invited.", "success");
+    }
+  }, [state, show]);
 
   return (
     <form

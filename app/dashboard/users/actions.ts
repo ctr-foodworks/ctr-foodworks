@@ -8,7 +8,8 @@ import { getCurrentUser } from "@/lib/current-user";
 import {
   createUser,
   getUserById,
-  deleteUser,
+  deactivateUser,
+  reactivateUser,
   resetUserPassword,
 } from "@/lib/users-db";
 import { canManageUsers, creatableRoles, canManageTarget } from "@/lib/roles";
@@ -91,16 +92,29 @@ export async function createUserAction(
   };
 }
 
-export async function deleteUserAction(formData: FormData): Promise<void> {
+export async function deactivateUserAction(formData: FormData): Promise<void> {
   const me = await getCurrentUser();
   if (!me || !canManageUsers(me.role)) return;
   const id = Number(str(formData, "id"));
-  if (!Number.isFinite(id) || id === me.id) return; // never delete self
+  if (!Number.isFinite(id) || id === me.id) return; // never deactivate self
   const target = await getUserById(id);
   if (!target || !canManageTarget(me.role, target.role)) return;
-  await deleteUser(id);
+  if (target.role === "super_admin") return; // super admins are protected
+  await deactivateUser(id);
   revalidatePath("/dashboard/users");
-  redirect("/dashboard/users?flash=user-deleted");
+  redirect("/dashboard/users?flash=user-deactivated");
+}
+
+export async function activateUserAction(formData: FormData): Promise<void> {
+  const me = await getCurrentUser();
+  if (!me || !canManageUsers(me.role)) return;
+  const id = Number(str(formData, "id"));
+  if (!Number.isFinite(id)) return;
+  const target = await getUserById(id);
+  if (!target || !canManageTarget(me.role, target.role)) return;
+  await reactivateUser(id);
+  revalidatePath("/dashboard/users");
+  redirect("/dashboard/users?flash=user-activated");
 }
 
 export async function resetUserPasswordAction(

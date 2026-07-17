@@ -1,44 +1,51 @@
 "use client";
 
-import { deleteUserAction, resetUserPasswordAction } from "./actions";
+import {
+  activateUserAction,
+  deactivateUserAction,
+  resetUserPasswordAction,
+} from "./actions";
 
 export function UserRowActions({
   id,
   email,
+  active,
   canManage,
-  canDelete,
 }: {
   id: number;
   email: string;
+  active: boolean;
   canManage: boolean;
-  canDelete: boolean;
 }) {
-  if (!canManage && !canDelete) return null;
+  if (!canManage) return null;
   return (
-    <div className="flex items-center gap-4">
-      {canManage && (
-        <form
-          action={resetUserPasswordAction}
-          onSubmit={(e) => {
-            if (!window.confirm(`Email a new temporary password to ${email}?`)) {
-              e.preventDefault();
-            }
-          }}
+    <div className="flex items-center gap-3">
+      <form
+        action={resetUserPasswordAction}
+        onSubmit={(e) => {
+          if (!window.confirm(`Email a new temporary password to ${email}?`)) {
+            e.preventDefault();
+          }
+        }}
+      >
+        <input type="hidden" name="id" value={id} />
+        <button
+          type="submit"
+          className="text-[13px] font-medium text-[var(--primary)] hover:underline"
         >
-          <input type="hidden" name="id" value={id} />
-          <button
-            type="submit"
-            className="text-[13px] font-medium text-[var(--primary)] hover:underline"
-          >
-            Reset password
-          </button>
-        </form>
-      )}
-      {canDelete && (
+          Reset password
+        </button>
+      </form>
+
+      {active ? (
         <form
-          action={deleteUserAction}
+          action={deactivateUserAction}
           onSubmit={(e) => {
-            if (!window.confirm(`Delete ${email}? This can't be undone.`)) {
+            if (
+              !window.confirm(
+                `Deactivate ${email}? They won't be able to sign in until reactivated.`,
+              )
+            ) {
               e.preventDefault();
             }
           }}
@@ -48,7 +55,17 @@ export function UserRowActions({
             type="submit"
             className="rounded-lg px-2 py-1 text-[13px] font-medium text-[#e4524e] transition-colors hover:bg-[#fdeceb]"
           >
-            Delete
+            Deactivate
+          </button>
+        </form>
+      ) : (
+        <form action={activateUserAction}>
+          <input type="hidden" name="id" value={id} />
+          <button
+            type="submit"
+            className="rounded-lg px-2 py-1 text-[13px] font-medium text-[#35b57c] transition-colors hover:bg-[#e7f6ef]"
+          >
+            Activate
           </button>
         </form>
       )}

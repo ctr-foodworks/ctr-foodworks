@@ -26,7 +26,7 @@ export default async function AdminLayout({
 
   // Session exists but the user was deleted/disabled mid-session → block all
   // access and force a sign-out (the JWT is otherwise valid until it expires).
-  if (session?.user && !me) {
+  if (session?.user && (!me || me.deactivatedAt)) {
     return (
       <ToastProvider>
         <div className="flex min-h-screen flex-col items-center justify-center bg-white px-6 text-center">

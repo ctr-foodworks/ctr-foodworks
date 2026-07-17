@@ -119,6 +119,9 @@ export const users = pgTable("users", {
   imageUrl: text("image_url"),
   /** Set for invited users — forces a password reset on first login. */
   mustChangePassword: boolean("must_change_password").notNull().default(false),
+  /** When set, the account is deactivated: login is blocked and the row is
+   *  purged after the retention window. Null means active. */
+  deactivatedAt: timestamp("deactivated_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 });

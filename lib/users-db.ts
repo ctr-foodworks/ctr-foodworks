@@ -1,8 +1,12 @@
 import "server-only";
-import { asc, eq } from "drizzle-orm";
+import { and, asc, eq, isNotNull, lt, ne } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 import { getDb, schema } from "./db";
 import type { UserRow, UserRole } from "./db/schema";
+
+/** How long a deactivated account is retained before it is permanently
+ *  purged from the database (GDPR-style right to erasure). */
+export const DEACTIVATED_RETENTION_DAYS = 90;
 
 /**
  * Admin user data access. Auth now lives in Neon (the `users` table) rather
@@ -33,6 +37,8 @@ export async function verifyCredentials(
 ): Promise<UserRow | null> {
   const user = await getUserByEmail(email);
   if (!user) return null;
+  // Deactivated accounts cannot sign in.
+  if (user.deactivatedAt) return null;
   const ok = await bcrypt.compare(password, user.passwordHash);
   return ok ? user : null;
 }
@@ -89,9 +95,49 @@ export async function createUser(input: {
   return row;
 }
 
-export async function deleteUser(id: number): Promise<void> {
+/** Logical deactivation: block sign-in without losing the record. Never
+ *  touches super_admins. */
+export async function deactivateUser(id: number): Promise<void> {
   const db = getDb();
-  await db.delete(schema.users).where(eq(schema.users.id, id));
+  await db
+    .update(schema.users)
+    .set({ deactivatedAt: new Date(), updatedAt: new Date() })
+    .where(
+      and(eq(schema.users.id, id), ne(schema.users.role, "super_admin")),
+    );
+}
+
+/** Reverse a logical deactivation. */
+export async function reactivateUser(id: number): Promise<void> {
+  const db = getDb();
+  await db
+    .update(schema.users)
+    .set({ deactivatedAt: null, updatedAt: new Date() })
+    .where(eq(schema.users.id, id));
+}
+
+/**
+ * Permanently delete accounts that have been deactivated longer than the
+ * retention window. Super_admins are never purged. Best-effort: callers run
+ * this opportunistically (e.g. when the Users page loads) so no cron is needed.
+ * Returns the number of rows removed.
+ */
+export async function purgeExpiredDeactivated(
+  retentionDays: number = DEACTIVATED_RETENTION_DAYS,
+): Promise<number> {
+  const db = getDb();
+  const cutoff = new Date(Date.now() - retentionDays * 24 * 60 * 60 * 1000);
+  const removed = await db
+    .delete(schema.users)
+    .where(
+      and(
+        isNotNull(schema.users.deactivatedAt),
+        lt(schema.users.deactivatedAt, cutoff),
+        ne(schema.users.role, "super_admin"),
+      ),
+    )
+    .returning({ id: schema.users.id });
+  return removed.length;
 }
 
 /** Reset a user's password to a new (hashed) temp and force a change. */
