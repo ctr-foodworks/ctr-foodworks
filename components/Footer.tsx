@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Instagram, Facebook, MapPin } from "lucide-react";
+import { Instagram, MapPin } from "lucide-react";
 import { vendors } from "@/lib/vendors";
 import { hours } from "@/lib/hours";
 
 const visitLinks = [
   { href: "/visit", label: "Hours & Location" },
   { href: "/visit#getting-here", label: "Getting Here" },
-  { href: "/visit#private-events", label: "Private Events" },
+  { href: "/private-events", label: "Private Events" },
   { href: "/visit#accessibility", label: "Accessibility" },
 ];
 
@@ -110,27 +110,27 @@ export function Footer() {
       <div className="border-t border-white/[0.08] px-6 py-6 text-[11px] font-light text-white/35 lg:px-[60px]">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-5 lg:flex-row lg:items-center lg:justify-between xl:max-w-[1600px]">
         <p>
-          © {new Date().getFullYear()} The Center Food Works, Atlanta. All rights reserved.
+          © {new Date().getFullYear()} CTR Food Works, Atlanta. All rights reserved.
         </p>
         <div className="flex items-center gap-6">
           <Link
-            href="#"
+            href="/privacy"
             className="tracking-[1px] transition-colors hover:text-white/75"
           >
             Privacy
           </Link>
           <Link
-            href="#"
+            href="/terms"
             className="tracking-[1px] transition-colors hover:text-white/75"
           >
             Terms
           </Link>
-          <Link
-            href="#"
+          <a
+            href="/sitemap.xml"
             className="tracking-[1px] transition-colors hover:text-white/75"
           >
             Sitemap
-          </Link>
+          </a>
         </div>
         <div className="flex items-center gap-5">
           <a
@@ -141,13 +141,6 @@ export function Footer() {
             className="transition-colors hover:text-white"
           >
             <Instagram className="h-[18px] w-[18px]" />
-          </a>
-          <a
-            href="https://facebook.com"
-            aria-label="Facebook"
-            className="transition-colors hover:text-white"
-          >
-            <Facebook className="h-[18px] w-[18px]" />
           </a>
         </div>
         </div>
