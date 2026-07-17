@@ -7,9 +7,9 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About — Inside the Former CNN Center",
   description:
-    "CTR Food Works transforms the former CNN Center into a chef-driven food hall at the heart of downtown Atlanta.",
+    "The story of CTR Food Works: the former CNN Center reborn as a downtown Atlanta food hall with 11 chef-driven kitchens, a full bar, and communal gathering space.",
 };
 
 export default function AboutPage() {
@@ -66,6 +66,8 @@ export default function AboutPage() {
           <img
             src="/images/S_Entry_02_hires-scaled.jpeg"
             alt="CTR Food Works entrance rendering"
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover"
           />
         </div>

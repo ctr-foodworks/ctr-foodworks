@@ -55,7 +55,9 @@ export function About() {
       <div className="relative min-h-[360px] w-full overflow-hidden lg:min-h-0">
         <img
           src="/images/260218 Food Hall Rendering_View_002 (1).webp"
-          alt="The Center atrium"
+          alt="CTR Food Works atrium rendering"
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover"
         />
       </div>

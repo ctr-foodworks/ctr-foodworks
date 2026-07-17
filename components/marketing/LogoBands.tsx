@@ -17,7 +17,7 @@ export function LogoBands() {
 
   return (
     <section
-      aria-hidden="true"
+      aria-label="Meet the kitchens"
       className="w-full overflow-hidden bg-[#f9f4f0] py-8 lg:py-10"
     >
       <div className="flex flex-col gap-6 lg:gap-8">
@@ -45,11 +45,19 @@ function Band({ vendors, direction }: BandProps) {
           animationDirection: direction === "right" ? "reverse" : "normal",
         }}
       >
-        {doubled.map((v, i) => (
+        {doubled.map((v, i) => {
+          // The marquee duplicates each vendor for a seamless loop. Only the
+          // first copy is a real, focusable, crawlable link; the duplicate half
+          // (i >= vendors.length) is hidden from assistive tech and the tab
+          // order so focus never lands on invisible content (WCAG).
+          const isDuplicate = i >= vendors.length;
+          return (
           <Link
             key={`${v.slug}-${i}`}
             href={`/food-and-drinks/${v.slug}`}
             aria-label={v.name}
+            aria-hidden={isDuplicate || undefined}
+            tabIndex={isDuplicate ? -1 : undefined}
             className="flex flex-shrink-0 items-center gap-4 rounded-md bg-[var(--primary)] px-5 py-4 shadow-[0_10px_24px_-12px_rgba(196,55,37,0.45)] transition-all hover:-translate-y-0.5 hover:bg-[#a82d1d] lg:gap-5 lg:px-6 lg:py-5"
           >
             <VendorLogo
@@ -67,7 +75,8 @@ function Band({ vendors, direction }: BandProps) {
               </span>
             </div>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

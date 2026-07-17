@@ -22,7 +22,9 @@ export function SignupBreak() {
       <div className="relative min-h-[360px] w-full overflow-hidden lg:min-h-0 lg:order-1">
         <img
           src="/images/S_Entry_02_hires-scaled.jpeg"
-          alt="The Center atrium rendering"
+          alt="CTR Food Works entrance rendering"
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover"
         />
       </div>
@@ -32,7 +34,7 @@ export function SignupBreak() {
       <div className="flex justify-start px-6 py-16 lg:order-2 lg:px-[60px] lg:py-[100px] xl:px-[80px]">
         <div className="flex w-full flex-col gap-7 lg:max-w-[640px] xl:max-w-[720px]">
           <span className="text-[11px] font-semibold tracking-[6px] uppercase text-white/60">
-            Atlanta · Spring 2026
+            Downtown Atlanta · Now Open
           </span>
           <h2 className="break-words font-display text-[48px] font-black leading-[0.9] tracking-[-1px] text-white sm:text-[56px] lg:text-[72px] xl:text-[88px]">
             ENTERTAINMENT.
@@ -52,7 +54,7 @@ export function SignupBreak() {
               Join Us
             </span>
             <p className="max-w-[440px] text-[13px] font-light leading-[1.7] text-white/70">
-              Opening events, brand activations, dining previews, and your invitation to opening night.
+              Events, brand activations, dining news, and first word on what&apos;s next at the hall.
             </p>
             <WaitlistForm
               variant="dark"

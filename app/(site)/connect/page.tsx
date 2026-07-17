@@ -15,9 +15,9 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
 
 export const metadata: Metadata = {
-  title: "Connect",
+  title: "Contact — Press, Partnerships & Careers",
   description:
-    "Get in touch with CTR Food Works — general inquiries, press, partnerships, and careers.",
+    "Get in touch with CTR Food Works in downtown Atlanta — general questions, press and media, partnership and vendor inquiries, and careers at the food hall.",
 };
 
 // Category legend on the left of the contact section. The form itself
@@ -51,7 +51,7 @@ const categories: Category[] = [
     icon: Briefcase,
     label: "Careers",
     detail:
-      "Opening-team roles across kitchens, the bar, and front-of-house.",
+      "Roles across our kitchens, the bar, and front-of-house.",
   },
 ];
 

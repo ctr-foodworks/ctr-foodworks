@@ -8,7 +8,7 @@ export function Countdown() {
   return (
     <section className="w-full bg-[var(--bg-cream)] flex flex-col items-center gap-12 py-[80px] px-6 lg:gap-16 lg:py-[120px] lg:px-[120px]">
       <span className="text-[11px] font-medium tracking-[6px] text-[var(--text-muted-dark)]">
-        SPRING 2026
+        NOW OPEN
       </span>
 
       <h2 className="font-display text-[30px] font-light leading-[1.3] text-center text-[var(--text-dark)] max-w-[800px] lg:text-[36px]">

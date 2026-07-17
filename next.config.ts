@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
         destination: "/dashboard/:path*",
         permanent: false,
       },
+      // Pre-rename URL structure (/dining → /food-and-drinks). 301 so any old
+      // shared/bookmarked links and residual index entries land correctly.
+      { source: "/dining", destination: "/food-and-drinks", permanent: true },
+      {
+        source: "/dining/:slug",
+        destination: "/food-and-drinks/:slug",
+        permanent: true,
+      },
     ];
   },
 };

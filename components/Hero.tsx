@@ -17,7 +17,7 @@ export function Hero() {
         <div className="relative flex min-h-[100svh] flex-col justify-between bg-[var(--bg-warm-white)] px-6 pb-14 pt-[110px] lg:min-h-0 lg:px-[60px] lg:pb-20 lg:pt-[140px] xl:px-[80px]">
           {/* Top — eyebrow */}
           <div className="flex flex-col gap-2 lg:ml-auto lg:w-full lg:max-w-[480px] xl:max-w-[560px]">
-            <Eyebrow tone="primary">Opening Spring 2026</Eyebrow>
+            <Eyebrow tone="primary">Now Open · Downtown Atlanta</Eyebrow>
             <div className="h-[2px] w-12 bg-[var(--primary)]" />
           </div>
 
@@ -60,6 +60,8 @@ export function Hero() {
           <img
             src="/images/260218 Food Hall Rendering_View_002 (1).webp"
             alt="CTR Food Works atrium rendering"
+            fetchPriority="high"
+            decoding="async"
             className="absolute inset-0 h-full w-full object-cover"
           />
           {/* Gradient — light at the very top (let the photo breathe) and
@@ -79,7 +81,7 @@ export function Hero() {
                 near the column boundary instead of drifting into the middle
                 of the right two-thirds. */}
             <div className="flex flex-col gap-5 lg:w-full lg:max-w-[560px] xl:max-w-[640px]">
-              <Eyebrow tone="light">Opening Spring 2026</Eyebrow>
+              <Eyebrow tone="light">Now Open · Downtown Atlanta</Eyebrow>
               <DisplayHeading
                 as="h2"
                 size="lg"
@@ -89,7 +91,7 @@ export function Hero() {
               </DisplayHeading>
               <div className="h-[2px] w-12 bg-[var(--primary)]" />
               <p className="max-w-[440px] text-[15px] font-normal leading-[1.7] text-white/95 drop-shadow-[0_1px_6px_rgba(0,0,0,0.85)] lg:text-[16px]">
-                Get exclusive access to opening events, dining previews, and brand activations at Atlanta&apos;s reimagined landmark.
+                Get first word on events, dining news, and brand activations at Atlanta&apos;s reimagined landmark.
               </p>
             </div>
 

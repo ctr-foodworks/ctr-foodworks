@@ -5,6 +5,13 @@ export type Vendor = {
   name: string;
   tagline: string;
   description: string;
+  /** Clean cuisine vocabulary for Restaurant JSON-LD `servesCuisine` (e.g.
+   *  ["Szechuan", "Chinese"]). Taglines are marketing strings, not cuisine
+   *  terms, so this is a dedicated field. */
+  cuisine?: string[];
+  /** Hand-written ~150-char meta description (cuisine + location). Falls back
+   *  to a sentence-boundary truncation of `description` when absent. */
+  metaDescription?: string;
   accent: VendorAccent;
   imageUrl: string;
   /** Path under public/logos/vendors/. Optional — VendorLogo renders a

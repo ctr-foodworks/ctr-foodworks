@@ -62,6 +62,8 @@ export function VendorLogo({
       ref={imgRef}
       src={logoUrl}
       alt={`${name} logo`}
+      loading="lazy"
+      decoding="async"
       onError={() => setFailed(true)}
       className={`rounded-md bg-[#f9f4f0] object-contain p-2.5 ${dims} ${className}`}
     />

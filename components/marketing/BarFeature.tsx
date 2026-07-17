@@ -21,6 +21,8 @@ export function BarFeature() {
         <img
           src="/images/CNN_Atrium Rendering_2026-01-09.jpg"
           alt="CTR Food Works atrium with the central bar"
+          loading="lazy"
+          decoding="async"
           className="absolute inset-0 h-full w-full object-cover"
         />
         <div

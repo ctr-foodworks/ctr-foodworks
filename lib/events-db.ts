@@ -48,10 +48,22 @@ export async function getAllEvents(): Promise<Event[]> {
   return rows.map(rowToEvent);
 }
 
-/** Public events only, chronological — drives the carousel. */
+/**
+ * Public, upcoming events only, chronological — drives the "Upcoming at CTR"
+ * carousel. Past events are filtered out so the open venue never shows a stale
+ * calendar. "Today" is computed in the venue's timezone (America/New_York) and
+ * compared against each event's end date (multi-day events stay listed until
+ * they finish). Admin lists (getAllEventRows) are unaffected.
+ */
 export async function getPublicEvents(): Promise<Event[]> {
   const all = await getAllEvents();
-  return all.filter((e) => e.category === "public");
+  const today = new Date().toLocaleDateString("en-CA", {
+    timeZone: "America/New_York",
+  }); // YYYY-MM-DD
+  return all.filter(
+    (e) =>
+      e.category === "public" && (e.endDate ?? e.date).slice(0, 10) >= today,
+  );
 }
 
 // ── Admin (DB required) ──────────────────────────────────────────────────────

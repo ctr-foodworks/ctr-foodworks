@@ -31,7 +31,7 @@ export function Footer() {
       <div className="border-b border-white/10 px-6 py-5 lg:px-[60px]">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-2 sm:flex-row sm:items-center sm:justify-between xl:max-w-[1600px]">
           <span className="text-[10px] font-semibold tracking-[4px] uppercase text-white/75">
-            Opening Spring 2026 · Downtown Atlanta
+            Now Open · Downtown Atlanta
           </span>
           <span className="text-[10px] font-light tracking-[3px] uppercase text-white/35">
             190 Marietta St. NW · Atlanta, GA 30303

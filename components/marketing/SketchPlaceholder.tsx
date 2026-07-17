@@ -55,6 +55,8 @@ export function SketchPlaceholder({
         ref={imgRef}
         src={src}
         alt={alt}
+        loading="lazy"
+        decoding="async"
         onError={() => setFailed(true)}
         className={`${aspectClass[aspect]} w-full object-cover ${className}`}
       />

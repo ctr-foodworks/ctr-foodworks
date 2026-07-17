@@ -9,9 +9,9 @@ import { DisplayHeading } from "@/components/ui/DisplayHeading";
 import { vendors } from "@/lib/vendors";
 
 export const metadata: Metadata = {
-  title: "Dining",
+  title: "Food Hall & Restaurants in Downtown Atlanta",
   description:
-    "Eleven chef-driven kitchens and one extraordinary bar. Meet the lineup at CTR Food Works.",
+    "Eleven chef-driven restaurants and the largest bar in Georgia under one roof in downtown Atlanta — from fried chicken and tacos to sushi, Szechuan, Cuban, and Italian.",
 };
 
 export default function DiningPage() {

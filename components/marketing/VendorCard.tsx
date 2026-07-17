@@ -34,6 +34,8 @@ export function VendorCard({ vendor, index }: Props) {
           <img
             src={vendor.imageUrl}
             alt={vendor.name}
+            loading="lazy"
+            decoding="async"
             className={
               isLogoImage
                 ? "absolute inset-0 h-full w-full object-contain p-10 lg:p-14"

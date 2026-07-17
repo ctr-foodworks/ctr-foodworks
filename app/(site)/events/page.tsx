@@ -10,11 +10,19 @@ import { DisplayHeading } from "@/components/ui/DisplayHeading";
 import { getPublicEvents } from "@/lib/events-db";
 import { catering } from "@/lib/catering";
 import { BookingModal } from "@/components/marketing/BookingModal";
+import { JsonLd } from "@/components/seo/JsonLd";
+import {
+  SITE_URL,
+  BUSINESS,
+  BUSINESS_ID,
+  absoluteUrl,
+  postalAddress,
+} from "@/lib/business";
 
 export const metadata: Metadata = {
-  title: "Events",
+  title: "Events & Private Event Venue, Downtown Atlanta",
   description:
-    "Buyouts, brand activations, and the calendar of what's happening at CTR Food Works in downtown Atlanta.",
+    "A private event venue and public event calendar at CTR Food Works in downtown Atlanta — full buyouts, game-day takeovers, brand activations, and private dining.",
 };
 
 // Rebuild at most every 5 minutes; the admin also calls revalidatePath('/events')
@@ -27,8 +35,58 @@ export default async function EventsPage() {
   // section below (with the Tripleseat booking form).
   const publicEvents = await getPublicEvents();
 
+  // Event structured data — one node per upcoming public event, located at the
+  // hall (referencing the FoodEstablishment @id from the site layout). Free-form
+  // time strings aren't machine-parseable, so startDate is the (all-day) date to
+  // avoid emitting a wrong UTC offset. Offers appear only when a ticket/RSVP URL
+  // exists.
+  const eventsJsonLd =
+    publicEvents.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@graph": publicEvents.map((evt) => ({
+            "@type": "Event",
+            name: evt.title,
+            startDate: evt.date,
+            ...(evt.endDate ? { endDate: evt.endDate } : {}),
+            description: evt.description,
+            ...(evt.imageUrl
+              ? {
+                  image: evt.imageUrl.startsWith("http")
+                    ? evt.imageUrl
+                    : absoluteUrl(evt.imageUrl),
+                }
+              : {}),
+            eventStatus: "https://schema.org/EventScheduled",
+            eventAttendanceMode:
+              "https://schema.org/OfflineEventAttendanceMode",
+            location: {
+              "@type": "FoodEstablishment",
+              "@id": BUSINESS_ID,
+              name: BUSINESS.name,
+              address: postalAddress(),
+            },
+            organizer: {
+              "@type": "Organization",
+              name: BUSINESS.name,
+              url: SITE_URL,
+            },
+            ...(evt.ctaUrl
+              ? {
+                  offers: {
+                    "@type": "Offer",
+                    url: evt.ctaUrl,
+                    availability: "https://schema.org/InStock",
+                  },
+                }
+              : {}),
+          })),
+        }
+      : null;
+
   return (
     <main className="flex flex-col w-full">
+      {eventsJsonLd && <JsonLd data={eventsJsonLd} />}
       {/* §1 — Hero */}
       <PageHero
         eyebrow="Events · Atlanta"
@@ -157,6 +215,10 @@ export default async function EventsPage() {
                 <img
                   src={catering.logoUrl}
                   alt={`${catering.name} logo`}
+                  width={800}
+                  height={800}
+                  loading="lazy"
+                  decoding="async"
                   className="h-auto w-full max-w-[180px]"
                 />
               </div>

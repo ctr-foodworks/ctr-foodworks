@@ -187,6 +187,13 @@ export function EventsCarousel({ events }: Props) {
                     src={evt.imageUrl}
                     alt=""
                     aria-hidden="true"
+                    // Admin-uploaded Vercel Blob images are served raw; constrain
+                    // the intrinsic size (16:9) so the browser reserves space and
+                    // never lays out at the original multi-thousand-px width.
+                    width={1600}
+                    height={900}
+                    loading="lazy"
+                    decoding="async"
                     className="absolute inset-0 h-full w-full object-cover"
                   />
                 ) : (

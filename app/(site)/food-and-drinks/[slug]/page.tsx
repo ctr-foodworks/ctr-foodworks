@@ -4,15 +4,39 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Instagram, ExternalLink, MapPin, Clock } from "lucide-react";
 import { CTAStrip } from "@/components/marketing/CTAStrip";
 import { VendorLogo } from "@/components/marketing/VendorLogo";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
 import { vendors } from "@/lib/vendors";
 import { hours } from "@/lib/hours";
+import {
+  SITE_URL,
+  BUSINESS,
+  BUSINESS_ID,
+  absoluteUrl,
+  postalAddress,
+} from "@/lib/business";
+import type { Vendor } from "@/lib/types";
 
 type Params = { slug: string };
 
 export function generateStaticParams(): Params[] {
   return vendors.map((v) => ({ slug: v.slug }));
+}
+
+/** Sentence-boundary truncation for SERP-length descriptions (fallback when a
+ *  vendor has no hand-written metaDescription). */
+function truncate(text: string, max = 155): string {
+  if (text.length <= max) return text;
+  const slice = text.slice(0, max);
+  const period = slice.lastIndexOf(". ");
+  if (period > max * 0.5) return slice.slice(0, period + 1);
+  const space = slice.lastIndexOf(" ");
+  return `${slice.slice(0, space > 0 ? space : max).trimEnd()}…`;
+}
+
+function vendorDescription(vendor: Vendor): string {
+  return vendor.metaDescription ?? truncate(vendor.description);
 }
 
 export async function generateMetadata({
@@ -23,9 +47,26 @@ export async function generateMetadata({
   const { slug } = await params;
   const vendor = vendors.find((v) => v.slug === slug);
   if (!vendor) return { title: "Not Found" };
+  const description = vendorDescription(vendor);
+  const path = `/food-and-drinks/${slug}`;
   return {
-    title: vendor.name,
-    description: vendor.description,
+    title: `${vendor.name} — ${vendor.tagline}`,
+    description,
+    alternates: { canonical: path },
+    openGraph: {
+      title: `${vendor.name} at CTR Food Works`,
+      description,
+      url: path,
+      siteName: "CTR Food Works",
+      locale: "en_US",
+      type: "website",
+      images: [
+        {
+          url: absoluteUrl(vendor.heroImage ?? vendor.imageUrl),
+          alt: `${vendor.name} at CTR Food Works, downtown Atlanta`,
+        },
+      ],
+    },
   };
 }
 
@@ -43,14 +84,63 @@ export default async function VendorDetailPage({
     ? vendor.website.replace(/^https?:\/\//, "").replace(/\/$/, "")
     : null;
 
+  const vendorUrl = `${SITE_URL}/food-and-drinks/${slug}`;
+  // Restaurant + breadcrumb structured data. The Restaurant is contained in the
+  // hall's FoodEstablishment (@id from the site layout). comingSoon vendors omit
+  // the image (their imageUrl is a placeholder logo, not a food photo).
+  const vendorJsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Restaurant",
+        "@id": `${vendorUrl}#restaurant`,
+        name: vendor.name,
+        description: vendor.description,
+        url: vendorUrl,
+        ...(vendor.comingSoon
+          ? {}
+          : { image: absoluteUrl(vendor.imageUrl) }),
+        ...(vendor.cuisine ? { servesCuisine: vendor.cuisine } : {}),
+        priceRange: BUSINESS.priceRange,
+        address: postalAddress(),
+        containedInPlace: {
+          "@type": "FoodEstablishment",
+          "@id": BUSINESS_ID,
+          name: BUSINESS.name,
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Food & Drinks",
+            item: `${SITE_URL}/food-and-drinks`,
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: vendor.name,
+            item: vendorUrl,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <main className="flex flex-col w-full">
+      <JsonLd data={vendorJsonLd} />
       {/* §1 — Hero */}
       <section className="relative w-full overflow-hidden bg-[var(--bg-dark)] pt-[72px] text-white lg:pt-[80px]">
         <div className="absolute inset-0 top-[72px] lg:top-[80px]">
           <img
             src={heroSrc}
             alt={vendor.name}
+            fetchPriority="high"
+            decoding="async"
             className="h-full w-full object-cover opacity-50"
           />
         </div>
@@ -99,6 +189,8 @@ export default async function VendorDetailPage({
               <img
                 src={vendor.logoLargeUrl}
                 alt={`${vendor.name} logo`}
+                loading="lazy"
+                decoding="async"
                 className="h-16 w-auto max-w-[420px] object-contain lg:h-24"
               />
             ) : (

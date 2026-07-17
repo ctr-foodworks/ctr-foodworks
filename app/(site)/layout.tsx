@@ -3,6 +3,9 @@ import { NavBar } from "@/components/NavBar";
 import { Footer } from "@/components/Footer";
 import { CookieNotice } from "@/components/CookieNotice";
 import { WelcomeModal } from "@/components/WelcomeModal";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { siteJsonLd } from "@/lib/business";
 
 /**
  * Layout for the public marketing site — wraps every route except /dashboard and
@@ -14,6 +17,11 @@ export default function SiteLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
+      {/* Sitewide FoodEstablishment + WebSite structured data. Scoped to the
+          public site (this route group) so /dashboard stays schema-free. Events
+          and vendor pages reference the #business @id emitted here. */}
+      <JsonLd data={siteJsonLd()} />
+
       {/* Google tag (Google Ads AW-18316984603). Scoped to the public site so
           it doesn't run on the admin dashboard. The lead-form conversion event
           fires from ContactForm on a successful submit (the form is AJAX and
@@ -29,6 +37,9 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'AW-18316984603');`}
       </Script>
+
+      {/* GA4 — renders only when NEXT_PUBLIC_GA_MEASUREMENT_ID is configured. */}
+      <GoogleAnalytics />
 
       <NavBar />
       {children}

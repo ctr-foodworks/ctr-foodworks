@@ -9,9 +9,9 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { DisplayHeading } from "@/components/ui/DisplayHeading";
 
 export const metadata: Metadata = {
-  title: "Visit",
+  title: "Visit — Hours, Parking & Directions",
   description:
-    "190 Marietta St. NW, Atlanta, GA — inside the reimagined former CNN Center. Hours, getting here, private events, and accessibility.",
+    "Visit CTR Food Works at 190 Marietta St NW in downtown Atlanta — hours, parking, MARTA and directions, steps from Mercedes-Benz Stadium and State Farm Arena.",
 };
 
 const SKETCH_BUILDING_PROMPT = `Architectural pencil sketch of a large multi-story modern building exterior, the reimagined former CNN Center in downtown Atlanta. Glass and steel facade with horizontal banding, a wide atrium entrance, set against a clean white background. Fine pencil lines, structural shading on the facade, no human figures, no text, no signage, no color. Hand-drawn architectural rendering style, like a vintage architect's perspective sketch. White background. 4:5 portrait aspect.`;
@@ -84,7 +84,7 @@ export default function VisitPage() {
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16 xl:max-w-[1600px] xl:gap-20">
         <div className="order-1 lg:order-1">
           <SketchPlaceholder
-            src="/images/sketches/building-exterior.png"
+            src="/images/sketches/building-exterior.jpg"
             alt="Hand-drawn sketch of the CTR Food Works building exterior"
             prompt={SKETCH_BUILDING_PROMPT}
             aspect="portrait"
@@ -260,7 +260,7 @@ export default function VisitPage() {
         </div>
         <div className="order-1 lg:order-2">
           <SketchPlaceholder
-            src="/images/sketches/atrium-interior.png"
+            src="/images/sketches/atrium-interior.jpg"
             alt="Hand-drawn sketch of the CTR Food Works atrium interior"
             prompt={SKETCH_ATRIUM_PROMPT}
             aspect="landscape"

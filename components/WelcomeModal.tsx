@@ -133,7 +133,7 @@ export function WelcomeModal() {
         <div className="grid grid-cols-1 items-stretch lg:grid-cols-[1.3fr_1fr]">
           {/* Left — copy + form */}
           <div className="flex flex-col gap-5 p-8 lg:p-12">
-            <Eyebrow tone="light">Opening Spring 2026</Eyebrow>
+            <Eyebrow tone="light">Now Open · Downtown Atlanta</Eyebrow>
             <h2
               id="welcome-modal-title"
               className="font-display text-[40px] font-black uppercase leading-[0.95] tracking-[-1px] text-white lg:text-[56px]"
@@ -144,7 +144,7 @@ export function WelcomeModal() {
             </h2>
             <div className="h-[2px] w-12 bg-white/50" />
             <p className="max-w-[440px] text-[14px] font-light leading-[1.7] text-white/85 lg:text-[15px]">
-              Get first access to opening events, vendor reveals, and exclusive previews at downtown Atlanta&apos;s newest food hall.
+              Get first word on events, vendor news, and what&apos;s pouring at downtown Atlanta&apos;s newest food hall.
             </p>
             <WaitlistForm
               variant="dark"

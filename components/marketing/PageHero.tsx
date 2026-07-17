@@ -19,6 +19,8 @@ export function PageHero({ eyebrow, title, description, imageUrl, imageAlt }: Pr
             <img
               src={imageUrl}
               alt={imageAlt ?? ""}
+              fetchPriority="high"
+              decoding="async"
               className="h-full w-full object-cover opacity-40"
             />
           </div>
